@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
-        // This is the part that actually changes the fragments displayed
+        // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
