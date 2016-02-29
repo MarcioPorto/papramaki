@@ -1,17 +1,22 @@
 package com.papramaki.papramaki.ui;
 
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
+import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.models.History;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    public static History mHistory = new History();
+    public static Budget mBudget = new Budget(0);
 
     // Creates an instance of the MainFragmentAdapter and one
     // ViewPager (which basically is what allows you to flip

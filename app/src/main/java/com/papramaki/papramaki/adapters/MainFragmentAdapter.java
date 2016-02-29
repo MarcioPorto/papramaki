@@ -5,8 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.papramaki.papramaki.ui.AnotherFragment;
-import com.papramaki.papramaki.ui.MainActivityFragment;
+import com.papramaki.papramaki.ui.AnalysisFragment;
+import com.papramaki.papramaki.ui.BudgetFragment;
+import com.papramaki.papramaki.ui.HistoryFragment;
 
 /**
  * This is the file that handles all the fragments we will
@@ -35,9 +36,11 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new MainActivityFragment();
+                return new BudgetFragment();
             case 1:
-                return new AnotherFragment();
+                return new AnalysisFragment();
+            case 2:
+                return new HistoryFragment();
         }
 
         return null;
@@ -49,7 +52,7 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
      */
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     /**
