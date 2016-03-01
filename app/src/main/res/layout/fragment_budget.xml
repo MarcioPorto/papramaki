@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/another_fragment_text"
-        android:text="@string/hello_world"
+        android:text="Your Budget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,5 +23,35 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/button2"
+        android:layout_above="@+id/FAB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="49dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/budget"
+        android:layout_above="@+id/button2"
+        android:layout_toRightOf="@+id/another_fragment_text"
+        android:layout_toStartOf="@+id/FAB"
+        android:inputType="numberDecimal"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/FAB" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0.0"
+        android:id="@+id/budgetDisplay"
+        android:layout_above="@+id/budget"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="95dp" />
 
 </RelativeLayout>

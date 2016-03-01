@@ -27,7 +27,7 @@ public class AnalysisFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
-        mTextView.setText("Papramaki rocks!!!!!");
+        //mTextView.setText("Papramaki rocks!!!!!");
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mFAB.setOnClickListener(new View.OnClickListener() {

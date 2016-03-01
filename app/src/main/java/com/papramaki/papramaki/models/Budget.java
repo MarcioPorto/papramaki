@@ -16,4 +16,8 @@ public class Budget {
         this.budget = budget;
     }
 
+    @Override
+    public String toString() {
+        return Float.toString(budget);
+    }
 }
