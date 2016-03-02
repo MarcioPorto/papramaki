@@ -7,6 +7,7 @@ public class History {
 
     private List<Expenditure> expenditures;
 
+
     public History() {
         this.expenditures = new ArrayList<>();
     }
@@ -18,5 +19,6 @@ public class History {
     public void setExpenditures(List<Expenditure> expenditures) {
         this.expenditures = expenditures;
     }
+
 
 }

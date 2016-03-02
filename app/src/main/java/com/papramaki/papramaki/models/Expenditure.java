@@ -14,6 +14,7 @@ public class Expenditure {
         this.date = date;
     }
 
+
     public float getAmount() {
         return amount;
     }
@@ -37,4 +38,6 @@ public class Expenditure {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String toString() { return "$" + amount + ", " + date.toString() + ", " + category.toString(); }
 }

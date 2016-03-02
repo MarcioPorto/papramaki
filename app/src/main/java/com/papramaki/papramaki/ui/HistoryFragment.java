@@ -7,27 +7,44 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.models.History;
+
+import java.util.List;
 
 public class HistoryFragment extends ListFragment {
 
-    private static final String TAG = BudgetFragment.class.getSimpleName();
+    private static final String TAG = HistoryFragment.class.getSimpleName();
 
-    protected TextView mTextView;
+    protected List<Expenditure> expenditureHistory;
+    protected String[] expenditureArray;
     protected FloatingActionButton mFAB;
 
-    public HistoryFragment() {
-    }
+    public HistoryFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-        mTextView = (TextView)rootView.findViewById(R.id.main_fragment_text);
-        mTextView.setText("Sup?");
+
+        expenditureHistory = MainActivity.mHistory.getExpenditures();
+        expenditureArray = new String[expenditureHistory.size()];
+        for (int i=0; i < expenditureHistory.size(); i++) {
+            String expenditureString = expenditureHistory.get(i).toString();
+            expenditureArray[i] = expenditureString;
+        }
+
+
+        ArrayAdapter<String> histAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, expenditureArray);
+        ListView myList=(ListView) rootView.findViewById(R.id.list);
+        myList.setAdapter(histAdapter);
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -38,8 +55,8 @@ public class HistoryFragment extends ListFragment {
             }
         });
 
+
         return rootView;
     }
-
 
 }
