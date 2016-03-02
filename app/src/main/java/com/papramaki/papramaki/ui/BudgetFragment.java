@@ -56,8 +56,10 @@ public class BudgetFragment extends Fragment {
             public void onClick(View v) {
 
                 float amount = Float.valueOf(mBudget.getText().toString());
-                Budget budget = new Budget(amount);
-                mBudgetDisplay.setText(budget.toString());
+                //Budget budget = new Budget(amount);
+                MainActivity.mBudget.setBudget(amount);
+                mBudgetDisplay.setText(MainActivity.mBudget.toString());
+                mBudget.getText().clear();
 
 
             }
