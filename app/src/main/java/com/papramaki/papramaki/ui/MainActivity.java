@@ -15,9 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    public static History mHistory = new History();
-    public static Budget mBudget = new Budget(0);
-
     // Creates an instance of the MainFragmentAdapter and one
     // ViewPager (which basically is what allows you to flip
     // left and right

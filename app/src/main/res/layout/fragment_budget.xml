@@ -11,6 +11,8 @@
     <TextView
         android:id="@+id/another_fragment_text"
         android:text="Your Budget"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -34,15 +36,13 @@
         android:layout_marginBottom="49dp" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/budget"
         android:layout_above="@+id/button2"
-        android:layout_toRightOf="@+id/another_fragment_text"
-        android:layout_toStartOf="@+id/FAB"
+        android:hint="Enter your budget"
         android:inputType="numberDecimal"
-        android:layout_centerHorizontal="true"
-        android:layout_toLeftOf="@+id/FAB" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"

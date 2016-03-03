@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.utils.LocalData;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,19 +34,16 @@ public class BudgetFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
-
         mTextView = (TextView)rootView.findViewById(R.id.main_fragment_text);
         mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
 
         mBudget = (EditText) rootView.findViewById(R.id.budget);
-        //mBudgetDisplay.setText("0.0");
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getContext(), DeductionActivity.class);
                 startActivity(intent);
             }
@@ -54,20 +52,20 @@ public class BudgetFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                float amount = Float.valueOf(mBudget.getText().toString());
-                //Budget budget = new Budget(amount);
-                MainActivity.mBudget.setBudget(amount);
-                mBudgetDisplay.setText(MainActivity.mBudget.toString());
+                double amount = Double.valueOf(mBudget.getText().toString());
+                LocalData.budget.setBudget(amount);
+                mBudgetDisplay.setText(LocalData.budget.toString());
                 mBudget.getText().clear();
-
-
             }
         });
 
-
-
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBudgetDisplay.setText(LocalData.budget.toString());
     }
 
 }

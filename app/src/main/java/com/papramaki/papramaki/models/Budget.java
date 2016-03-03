@@ -2,22 +2,23 @@ package com.papramaki.papramaki.models;
 
 public class Budget {
 
-    private float budget;
+    private double budget;
 
     public Budget(float budget) {
         this.budget = budget;
     }
 
-    public float getBudget() {
+    public double getBudget() {
         return budget;
     }
 
-    public void setBudget(float budget) {
+    public void setBudget(double budget) {
         this.budget = budget;
     }
 
     @Override
     public String toString() {
-        return Float.toString(budget);
+        return Double.toString(budget)+"0";
     }
+
 }

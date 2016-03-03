@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.History;
+import com.papramaki.papramaki.utils.LocalData;
 
 import java.util.List;
 
@@ -29,18 +30,15 @@ public class HistoryFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-
-        expenditureHistory = MainActivity.mHistory.getExpenditures();
+        expenditureHistory = LocalData.history.getExpenditures();
         expenditureArray = new String[expenditureHistory.size()];
         for (int i=0; i < expenditureHistory.size(); i++) {
             String expenditureString = expenditureHistory.get(i).toString();
             expenditureArray[i] = expenditureString;
         }
-
 
         ArrayAdapter<String> histAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, expenditureArray);
         ListView myList=(ListView) rootView.findViewById(R.id.list);
@@ -54,7 +52,6 @@ public class HistoryFragment extends ListFragment {
                 startActivity(intent);
             }
         });
-
 
         return rootView;
     }

@@ -3,6 +3,7 @@ package com.papramaki.papramaki.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,10 +12,13 @@ import android.widget.EditText;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.utils.LocalData;
 
 import java.util.Date;
 
 public class DeductionActivity extends AppCompatActivity {
+
+    private static final String TAG = DeductionActivity.class.getSimpleName();
 
     protected EditText mAmount;
     protected EditText mCategory;
@@ -32,9 +36,12 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Date date = new Date();
-                float amount = Float.valueOf(mAmount.getText().toString());
+                double amount = Double.valueOf(mAmount.getText().toString());
                 Expenditure expenditure = new Expenditure(amount, mCategory.getText().toString(), date);
-                MainActivity.mHistory.getExpenditures().add(expenditure);
+                LocalData.history.getExpenditures().add(expenditure);
+                LocalData.budget.setBudget(LocalData.budget.getBudget() - amount);
+
+                Log.i(TAG, LocalData.budget.toString());
 
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);

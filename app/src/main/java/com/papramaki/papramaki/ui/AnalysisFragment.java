@@ -24,7 +24,7 @@ public class AnalysisFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         //mTextView.setText("Papramaki rocks!!!!!");
