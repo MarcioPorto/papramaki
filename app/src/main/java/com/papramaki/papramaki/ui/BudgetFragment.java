@@ -1,6 +1,7 @@
 package com.papramaki.papramaki.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -28,7 +29,6 @@ public class BudgetFragment extends Fragment {
     protected Button mButton;
     protected FloatingActionButton mFAB;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class BudgetFragment extends Fragment {
         mBudgetDisplay.setText("$ " + LocalData.budget.toString());
         if (LocalData.budget.getBudget() < 0.0) {
             mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        } else {
+            mBudgetDisplay.setTextColor(Color.parseColor("black"));
         }
 
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +63,8 @@ public class BudgetFragment extends Fragment {
                 mBudgetDisplay.setText("$ " + LocalData.budget.toString());
                 if (LocalData.budget.getBudget() < 0.0) {
                     mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                } else {
+                    mBudgetDisplay.setTextColor(Color.parseColor("black"));
                 }
                 mBudget.getText().clear();
             }
@@ -75,6 +79,8 @@ public class BudgetFragment extends Fragment {
         mBudgetDisplay.setText("$ " + LocalData.budget.toString());
         if (LocalData.budget.getBudget() < 0.0) {
             mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        } else {
+            mBudgetDisplay.setTextColor(Color.parseColor("black"));
         }
     }
 

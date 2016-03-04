@@ -73,7 +73,7 @@ public class AnalysisFragment extends Fragment {
             public void onClick(int index) {
                 Toast.makeText(getActivity(),
                         "You spent $" + String.valueOf(expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
-                        Toast.LENGTH_SHORT)
+                        Toast.LENGTH_LONG)
                         .show();
             }
         });
