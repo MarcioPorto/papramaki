@@ -55,7 +55,7 @@ public class BudgetFragment extends Fragment {
             public void onClick(View v) {
                 double amount = Double.valueOf(mBudget.getText().toString());
                 LocalData.budget.setBudget(amount);
-                mBudgetDisplay.setText(LocalData.budget.toString());
+                mBudgetDisplay.setText("$ " + LocalData.budget.toString());
                 mBudget.getText().clear();
             }
         });
