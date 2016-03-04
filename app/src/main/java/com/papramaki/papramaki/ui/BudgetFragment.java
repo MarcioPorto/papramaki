@@ -41,6 +41,9 @@ public class BudgetFragment extends Fragment {
         mBudget = (EditText) rootView.findViewById(R.id.budget);
 
         mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+        if (LocalData.budget.getBudget() < 0.0) {
+            mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +59,9 @@ public class BudgetFragment extends Fragment {
                 double amount = Double.valueOf(mBudget.getText().toString());
                 LocalData.budget.setBudget(amount);
                 mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+                if (LocalData.budget.getBudget() < 0.0) {
+                    mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                }
                 mBudget.getText().clear();
             }
         });

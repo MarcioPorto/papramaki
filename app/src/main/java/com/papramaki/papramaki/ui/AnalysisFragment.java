@@ -50,6 +50,7 @@ public class AnalysisFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
 
         mPieGraph = (PieGraph) rootView.findViewById(R.id.piegraph);
+
         // mAnimateButton = (Button) rootView.findViewById(R.id.animatePieButton);
 
         final LinkedHashMap<String, Double> expensesMap = organizeHistory();
