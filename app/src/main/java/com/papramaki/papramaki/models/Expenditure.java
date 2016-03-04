@@ -1,5 +1,6 @@
 package com.papramaki.papramaki.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Expenditure {
@@ -39,5 +40,12 @@ public class Expenditure {
         this.date = date;
     }
 
-    public String toString() { return "$" + amount + ", " + date.toString() + ", " + category.toString(); }
+    public String toString() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        if (category.equals("")) {
+            return "$" + amount + " on " + simpleDateFormat.format(date) + ".";
+        } else {
+            return "$" + amount + " on " + category.toString() + " on " + simpleDateFormat.format(date) + ".";
+        }
+    }
 }

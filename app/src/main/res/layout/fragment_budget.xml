@@ -36,11 +36,11 @@
         android:layout_marginBottom="49dp" />
 
     <EditText
-        android:layout_width="200dp"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:id="@+id/budget"
         android:layout_above="@+id/button2"
-        android:hint="Enter your budget"
+        android:hint="Enter or edit your budget"
         android:inputType="numberDecimal"
         android:layout_centerHorizontal="true" />
 
@@ -53,15 +53,5 @@
         android:layout_above="@+id/budget"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="95dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="$"
-        android:id="@+id/dollar"
-        android:layout_alignTop="@+id/budgetDisplay"
-        android:layout_toLeftOf="@+id/budgetDisplay"
-        android:layout_toStartOf="@+id/budgetDisplay" />
 
 </RelativeLayout>

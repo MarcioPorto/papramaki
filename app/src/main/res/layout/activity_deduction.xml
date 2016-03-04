@@ -28,6 +28,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
+    <!--<Spinner-->
+        <!--android:id="@+id/spinner"-->
+        <!--android:layout_below="@+id/amount_input"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:drawable/btn_dropdown"-->
+        <!--android:spinnerMode="dropdown" />-->
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

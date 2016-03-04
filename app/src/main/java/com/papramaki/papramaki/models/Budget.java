@@ -18,7 +18,7 @@ public class Budget {
 
     @Override
     public String toString() {
-        return Double.toString(budget)+"0";
+        return Double.toString(budget) + "0";
     }
 
 }

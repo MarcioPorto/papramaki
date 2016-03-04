@@ -1,9 +1,10 @@
 package com.papramaki.papramaki.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.papramaki.papramaki.R;
-import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.utils.LocalData;
 
 /**
@@ -34,12 +34,13 @@ public class BudgetFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
-        mTextView = (TextView)rootView.findViewById(R.id.main_fragment_text);
+        mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
-
         mBudget = (EditText) rootView.findViewById(R.id.budget);
+
+        mBudgetDisplay.setText("$ " + LocalData.budget.toString());
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +66,10 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mBudgetDisplay.setText(LocalData.budget.toString());
+        mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+        if (LocalData.budget.getBudget() < 0.0) {
+            mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
     }
 
 }

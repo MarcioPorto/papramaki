@@ -1,27 +1,89 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/lib/com.echo.holographlibrary.PieGraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
                 tools:context=".MainActivityFragment">
 
     <TextView
-        android:id="@+id/main_fragment_text"
-        android:text="@string/hello_world"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Spending Analysis"
+        android:layout_gravity="center"/>
+
+    <com.echo.holographlibrary.PieGraph
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_margin="12dip"
+        android:id="@+id/piegraph"
+        app:pieInnerCircleRatio="128"
+        app:pieSlicePadding="0dip" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Inner Circle Ratio"
+            android:layout_weight="1"/>
+
+        <SeekBar
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:progress="128"
+            android:max="240"
+            android:id="@+id/seekBarRatio"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Padding"
+            android:layout_weight="1"/>
+
+        <SeekBar
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            android:max="10"
+            android:id="@+id/seekBarPadding"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Animate to random values"-->
+        <!--android:id="@+id/animatePieButton"-->
+        <!--android:layout_weight="0"/>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/FAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/ic_add_white_24dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:src="@drawable/ic_attach_money_white_24dp"
+        android:layout_gravity="end"/>
 
-</RelativeLayout>
+</LinearLayout>
