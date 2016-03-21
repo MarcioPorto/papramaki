@@ -1,6 +1,6 @@
 package com.papramaki.papramaki.models;
 
-public class Budget {
+public class  Budget {
 
     private double budget;
 

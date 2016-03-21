@@ -1,5 +1,7 @@
 package com.papramaki.papramaki.ui;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,8 @@ import android.view.MenuItem;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
+import com.papramaki.papramaki.database.BudgetContract;
+import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.History;
 
@@ -20,12 +24,17 @@ public class MainActivity extends AppCompatActivity {
     // left and right
     MainFragmentAdapter mMainFragmentAdapter;
     ViewPager mViewPager;
+    DatabaseHelper mDbHelper;
+    //SQLiteDatabase mDatabase;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         // Creates an adapter that will return a fragment for each section
         mMainFragmentAdapter = new MainFragmentAdapter(this, getSupportFragmentManager());
@@ -41,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
             }
         });
+        mDbHelper = new DatabaseHelper(mViewPager.getContext());
+        //mDatabase = mDbHelper.getWritableDatabase();
 
     }
 
@@ -65,5 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

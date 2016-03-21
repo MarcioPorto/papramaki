@@ -1,5 +1,6 @@
 package com.papramaki.papramaki.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.database.BudgetContract;
+import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.utils.LocalData;
 
 /**
@@ -28,11 +31,12 @@ public class BudgetFragment extends Fragment {
     protected EditText mBudget;
     protected Button mButton;
     protected FloatingActionButton mFAB;
+    DatabaseHelper mDbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
@@ -40,6 +44,7 @@ public class BudgetFragment extends Fragment {
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mBudget = (EditText) rootView.findViewById(R.id.budget);
 
+        mDbHelper = new DatabaseHelper(getContext());
         mBudgetDisplay.setText("$ " + LocalData.budget.toString());
         if (LocalData.budget.getBudget() < 0.0) {
             mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
@@ -58,9 +63,17 @@ public class BudgetFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double amount = Double.valueOf(mBudget.getText().toString());
-                LocalData.budget.setBudget(amount);
-                mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+                String strAmount = mBudget.getText().toString();
+                if(!strAmount.equals("")) {
+                    Double amount = Double.valueOf(strAmount);
+                    LocalData.budget.setBudget(amount);
+
+                    mDbHelper.addBudget(amount);
+                    mBudgetDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBudget()));
+                }
+                //PREVIOUS VERSION
+                //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+
                 if (LocalData.budget.getBudget() < 0.0) {
                     mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 } else {
