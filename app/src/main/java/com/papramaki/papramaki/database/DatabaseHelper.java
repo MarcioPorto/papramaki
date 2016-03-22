@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.papramaki.papramaki.models.Budget;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +37,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void addBudget(double budget){
+    public void addBudget(Budget budget){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(BudgetContract.Budget.COLUMN_NAME_AMOUNT, budget); // budget amount
+        values.put(BudgetContract.Budget.COLUMN_NAME_AMOUNT, budget.getBudget());// budget amount
+        values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, budget.getBalance()); // budget balance
+
 
         if(values != null) {
             // Inserting Row
@@ -49,8 +53,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public double viewLatestBudget(){
         String LATEST_BUDGET =
-            "SELECT * FROM " + BudgetContract.Budget.TABLE_NAME +
-                    " WHERE _id = (SELECT MAX(_id) FROM " +
+            "SELECT " + BudgetContract.Budget.COLUMN_NAME_AMOUNT +
+                    " FROM " + BudgetContract.Budget.TABLE_NAME +
+                    " WHERE id = (SELECT MAX(id) FROM " +
                     BudgetContract.Budget.TABLE_NAME + ");";
 
 
@@ -58,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(LATEST_BUDGET, null);
         cursor.moveToLast();
         //why does second index work? what is in index 1?
-        return cursor.getDouble(2);
+        return cursor.getDouble(0);
     }
 
     public List<Double> viewBudgets() {
@@ -82,4 +87,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return budgetList;
     }
 
+  /*  public void addBalance(double balance){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, balance); // budget amount
+
+        if(values != null) {
+            db.insert(BudgetContract.Budget.TABLE_NAME, null, values);
+        }
+        db.close(); // Closing database connection
+    }*/
+
+    public double viewLatestBalance(){
+        String LATEST_BALANCE =
+                "SELECT " + BudgetContract.Budget.COLUMN_NAME_BALANCE +
+                        " FROM " + BudgetContract.Budget.TABLE_NAME +
+                        " WHERE id = (SELECT MAX(id) FROM " +
+                        BudgetContract.Budget.TABLE_NAME + ");";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(LATEST_BALANCE, null);
+        cursor.moveToLast();
+        //why does second index work? what is in index 1?
+        return cursor.getDouble(0);
+    }
+
+    public void updateBalance(double balance){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, balance);
+        String selection = "id = (SELECT MAX(id) FROM " + BudgetContract.Budget.TABLE_NAME + ")";
+        db.update(BudgetContract.Budget.TABLE_NAME, values, selection , null);
+    }
 }

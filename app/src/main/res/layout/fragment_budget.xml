@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Your Balance"
-        android:id="@+id/balanceDisplay"
+        android:id="@+id/another_fragment_text1"
         android:layout_below="@+id/budgetDisplay"
         android:layout_centerHorizontal="true"
         android:paddingTop="100px"/>
@@ -68,8 +68,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="0.0"
-        android:id="@+id/balance"
-        android:layout_below="@+id/balanceDisplay"
+        android:id="@+id/balanceDisplay"
+        android:layout_below="@+id/another_fragment_text1"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

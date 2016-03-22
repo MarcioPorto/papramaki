@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     MainFragmentAdapter mMainFragmentAdapter;
     ViewPager mViewPager;
     DatabaseHelper mDbHelper;
-    //SQLiteDatabase mDatabase;
 
 
 
