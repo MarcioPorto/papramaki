@@ -80,19 +80,18 @@ public class BudgetFragment extends Fragment {
                 String strAmount = mBudget.getText().toString();
                 if(!strAmount.equals("")) {
                     Double amount = Double.valueOf(strAmount);
-                    LocalData.budget.setBudget(amount);
 
                     Budget budget = new Budget(amount);
                     budget.setBalance(amount);
                     mDbHelper.addBudget(budget);
                     mBudgetDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBudget()));
                     mBalanceDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBalance()));
+
                 }
                 //PREVIOUS VERSION
                 //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
 
                 if (Double.valueOf(mDbHelper.viewLatestBalance()) < 0) {
-                    System.out.print("1");
                     mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 } else {
                     mBalanceDisplay.setTextColor(Color.parseColor("black"));

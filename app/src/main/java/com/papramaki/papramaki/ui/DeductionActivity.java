@@ -44,10 +44,9 @@ public class DeductionActivity extends AppCompatActivity {
                 Date date = new Date();
                 double amount = Double.valueOf(mAmount.getText().toString());
                 Expenditure expenditure = new Expenditure(amount, mCategory.getText().toString(), date);
-                //LocalData.history.getExpenditures().add(expenditure);
-                //LocalData.budget.setBudget(LocalData.budget.getBudget() - amount);
 
-                mDbHelper.updateBalance(mDbHelper.viewLatestBalance() - amount);
+                mDbHelper.addExpenditure(expenditure.getAmount(), expenditure.getCategory());
+                mDbHelper.updateBalance(mDbHelper.viewLatestBalance() - expenditure.getAmount());
 
                 Log.i(TAG, LocalData.budget.toString());
 

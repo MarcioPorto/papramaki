@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
@@ -36,6 +37,7 @@ public class AnalysisFragment extends Fragment {
     protected PieGraph mPieGraph;
     protected SeekBar mSeekBar;
     protected FloatingActionButton mFAB;
+    protected DatabaseHelper mDbHelper;
 
     private String[] mColors = { "red", "blue", "green", "black", "white", "gray", "cyan", "magenta",
             "yellow", "lightgray", "darkgray", "grey", "lightgrey", "darkgrey", "aqua", "fuchsia", "lime",
@@ -50,6 +52,7 @@ public class AnalysisFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
 
         mPieGraph = (PieGraph) rootView.findViewById(R.id.piegraph);
+        mDbHelper = new DatabaseHelper(getContext());
 
         // mAnimateButton = (Button) rootView.findViewById(R.id.animatePieButton);
 
@@ -177,14 +180,26 @@ public class AnalysisFragment extends Fragment {
 
     public LinkedHashMap<String, Double> organizeHistory() {
         LinkedHashMap<String, Double> expensesMap = new LinkedHashMap<>();
-        List<Expenditure> expenditures = LocalData.history.getExpenditures();
-        for (Expenditure expenditure : expenditures){
+        //List<Expenditure> expenditures = LocalData.history.getExpenditures();
+        List<Double> expenditures = mDbHelper.getExpenditures();
+        List<String> categories = mDbHelper.getCategories();
+        for(int i = 0; i < expenditures.size(); i++){
+            String category = categories.get(i);
+            Double amount = expenditures.get(i);
+
+            if (!expensesMap.containsKey(category)){
+                expensesMap.put(category , amount);
+            } else {
+                expensesMap.put(category, expensesMap.get(category) + amount);
+            }
+        }
+        /*for (Double expenditure : expenditures){
             if (!expensesMap.containsKey(expenditure.getCategory())) {
                 expensesMap.put(expenditure.getCategory(), expenditure.getAmount());
             } else {
                 expensesMap.put(expenditure.getCategory(), expensesMap.get(expenditure.getCategory()) + expenditure.getAmount());
             }
-        }
+        }*/
         return expensesMap;
     }
 
