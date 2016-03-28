@@ -7,15 +7,15 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.adapters.HistoryListAdapter;
 import com.papramaki.papramaki.models.Expenditure;
-import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.utils.LocalData;
 
+import java.util.Date;
 import java.util.List;
 
 public class HistoryFragment extends ListFragment {
@@ -23,7 +23,6 @@ public class HistoryFragment extends ListFragment {
     private static final String TAG = HistoryFragment.class.getSimpleName();
 
     protected List<Expenditure> expenditureHistory;
-    protected String[] expenditureArray;
     protected FloatingActionButton mFAB;
 
     public HistoryFragment() {}
@@ -34,15 +33,11 @@ public class HistoryFragment extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
         expenditureHistory = LocalData.history.getExpenditures();
-        expenditureArray = new String[expenditureHistory.size()];
-        for (int i=0; i < expenditureHistory.size(); i++) {
-            String expenditureString = expenditureHistory.get(i).toString();
-            expenditureArray[i] = expenditureString;
-        }
+        expenditureHistory.add(new Expenditure(25.0, "des", new Date(1, 2, 3)));
 
-        ArrayAdapter<String> histAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, expenditureArray);
-        ListView myList=(ListView) rootView.findViewById(R.id.list);
-        myList.setAdapter(histAdapter);
+//        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
+//        ListView myList=(ListView) rootView.findViewById(android.R.id.list);
+//        myList.setAdapter(histAdapter);
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +48,21 @@ public class HistoryFragment extends ListFragment {
             }
         });
 
+
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        expenditureHistory = LocalData.history.getExpenditures();
+
+        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
+        setListAdapter(histAdapter);
+
+        expenditureHistory.add(new Expenditure(25.0, "ex", new Date(1, 2, 3)));
+
     }
 
 }

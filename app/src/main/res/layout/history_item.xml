@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Example Title"
-        android:id="@+id/titleTextView" />
+        android:id="@+id/titleTextView"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

@@ -8,11 +8,13 @@ public class Expenditure {
     private double amount;
     private String category;
     private Date date;
+    private String itemTitle;
 
     public Expenditure(double amount, String category, Date date) {
         this.amount = amount;
         this.category = category;
         this.date = date;
+        this.itemTitle = "$" + amount;   // default itemTitle is expenditure amount
     }
 
 
@@ -40,6 +42,20 @@ public class Expenditure {
         this.date = date;
     }
 
+    public String getItemTitle() { return itemTitle; }
+
+    public void setItemTitle(String itemTitle) {
+        this.itemTitle = itemTitle;
+    }
+
+    /**
+     * Lets user set itemTitle to a String other than default assigned in constructor
+     * @param title
+     */
+    public Expenditure(String title) {
+        this.itemTitle = title;
+    }
+
     public String toString() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         if (category.equals("")) {
@@ -48,4 +64,5 @@ public class Expenditure {
             return "$" + amount + " on " + category.toString() + " on " + simpleDateFormat.format(date) + ".";
         }
     }
+
 }
