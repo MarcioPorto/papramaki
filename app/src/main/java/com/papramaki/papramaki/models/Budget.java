@@ -1,10 +1,11 @@
 package com.papramaki.papramaki.models;
 
-public class Budget {
+public class  Budget {
 
     private double budget;
+    private double balance;
 
-    public Budget(float budget) {
+    public Budget(double budget) {
         this.budget = budget;
     }
 
@@ -14,6 +15,14 @@ public class Budget {
 
     public void setBudget(double budget) {
         this.budget = budget;
+    }
+
+    public double getBalance(){
+        return balance;
+    }
+
+    public void setBalance(double balance){
+        this.balance = balance;
     }
 
     @Override

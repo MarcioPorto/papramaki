@@ -1,6 +1,8 @@
 package com.papramaki.papramaki.ui;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.DatabaseUtils;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.database.BudgetContract;
+import com.papramaki.papramaki.database.DatabaseHelper;
+import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.utils.LocalData;
 
 /**
@@ -25,27 +30,41 @@ public class BudgetFragment extends Fragment {
 
     protected TextView mTextView;
     protected TextView mBudgetDisplay;
+    protected TextView mBalanceDisplay;
     protected EditText mBudget;
     protected Button mButton;
     protected FloatingActionButton mFAB;
+    protected DatabaseHelper mDbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
+        mBalanceDisplay = (TextView) rootView.findViewById(R.id.balanceDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mBudget = (EditText) rootView.findViewById(R.id.budget);
 
-        mBudgetDisplay.setText("$ " + LocalData.budget.toString());
-        if (LocalData.budget.getBudget() < 0.0) {
-            mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-        } else {
-            mBudgetDisplay.setTextColor(Color.parseColor("black"));
+        mDbHelper = new DatabaseHelper(getContext());
+        if(DatabaseUtils.queryNumEntries(mDbHelper.getReadableDatabase(), BudgetContract.Budget.TABLE_NAME) > 0 ) {
+            mBudgetDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBudget()));
+            mBalanceDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBalance()));
+            if (Double.valueOf(mDbHelper.viewLatestBalance()) < 0) {
+                System.out.print("1");
+                mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+            } else {
+                mBalanceDisplay.setTextColor(Color.parseColor("black"));
+            }
         }
+        else{
+            mBudgetDisplay.setText("$ 0.0");
+            mBalanceDisplay.setText("$ 0.0");
+        }
+
+
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,13 +77,24 @@ public class BudgetFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double amount = Double.valueOf(mBudget.getText().toString());
-                LocalData.budget.setBudget(amount);
-                mBudgetDisplay.setText("$ " + LocalData.budget.toString());
-                if (LocalData.budget.getBudget() < 0.0) {
-                    mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                String strAmount = mBudget.getText().toString();
+                if(!strAmount.equals("")) {
+                    Double amount = Double.valueOf(strAmount);
+
+                    Budget budget = new Budget(amount);
+                    budget.setBalance(amount);
+                    mDbHelper.addBudget(budget);
+                    mBudgetDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBudget()));
+                    mBalanceDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBalance()));
+
+                }
+                //PREVIOUS VERSION
+                //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
+
+                if (Double.valueOf(mDbHelper.viewLatestBalance()) < 0) {
+                    mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                 } else {
-                    mBudgetDisplay.setTextColor(Color.parseColor("black"));
+                    mBalanceDisplay.setTextColor(Color.parseColor("black"));
                 }
                 mBudget.getText().clear();
             }
@@ -76,12 +106,16 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mBudgetDisplay.setText("$ " + LocalData.budget.toString());
-        if (LocalData.budget.getBudget() < 0.0) {
-            mBudgetDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-        } else {
-            mBudgetDisplay.setTextColor(Color.parseColor("black"));
+        if(DatabaseUtils.queryNumEntries(mDbHelper.getReadableDatabase(), BudgetContract.Budget.TABLE_NAME) > 0 ) {
+            mBudgetDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBudget()));
+            mBalanceDisplay.setText("$ " + Double.toString(mDbHelper.viewLatestBalance()));
+            if (Double.valueOf(mDbHelper.viewLatestBalance()) < 0) {
+                mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+            } else {
+                mBalanceDisplay.setTextColor(Color.parseColor("black"));
+            }
         }
+
     }
 
 }

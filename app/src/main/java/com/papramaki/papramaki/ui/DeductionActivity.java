@@ -1,6 +1,7 @@
 package com.papramaki.papramaki.ui;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
@@ -23,6 +25,7 @@ public class DeductionActivity extends AppCompatActivity {
     protected EditText mAmount;
     protected EditText mCategory;
     protected Button mButton;
+    protected DatabaseHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +35,18 @@ public class DeductionActivity extends AppCompatActivity {
         mAmount = (EditText)findViewById(R.id.amount_input);
         mCategory = (EditText)findViewById(R.id.category_input);
         mButton = (Button)findViewById(R.id.button);
+        mDbHelper = new DatabaseHelper(this);
+
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date date = new Date();
                 double amount = Double.valueOf(mAmount.getText().toString());
                 Expenditure expenditure = new Expenditure(amount, mCategory.getText().toString(), date);
-                LocalData.history.getExpenditures().add(expenditure);
-                LocalData.budget.setBudget(LocalData.budget.getBudget() - amount);
+
+                mDbHelper.addExpenditure(expenditure);
+                mDbHelper.updateBalance(mDbHelper.viewLatestBalance() - expenditure.getAmount());
 
                 Log.i(TAG, LocalData.budget.toString());
 
