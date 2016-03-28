@@ -37,7 +37,7 @@ public class DeductionActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.button);
         mDbHelper = new DatabaseHelper(this);
 
-        //mDbHelper.getReadableDatabase().delete("budget", null, null);
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +45,7 @@ public class DeductionActivity extends AppCompatActivity {
                 double amount = Double.valueOf(mAmount.getText().toString());
                 Expenditure expenditure = new Expenditure(amount, mCategory.getText().toString(), date);
 
-                mDbHelper.addExpenditure(expenditure.getAmount(), expenditure.getCategory());
+                mDbHelper.addExpenditure(expenditure);
                 mDbHelper.updateBalance(mDbHelper.viewLatestBalance() - expenditure.getAmount());
 
                 Log.i(TAG, LocalData.budget.toString());

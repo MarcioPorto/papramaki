@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.models.Expenditure;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -161,11 +163,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(BudgetContract.Budget.TABLE_NAME, values, selection , null);
     }
 
-    public void addExpenditure(double expenditure, String category){
+    public void addExpenditure(Expenditure expenditure){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_AMOUNT, expenditure);// expenditure amount
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_CATEGORY, category);
+        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_AMOUNT, expenditure.getAmount());// expenditure amount
+        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_CATEGORY, expenditure.getCategory());
+        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_DATE, expenditure.getDate().toString());
         values.put(ExpenditureContract.Expenditure.COLUMN_NAME_BUDGET_ID, this.getLatestBudgetId());
 
 

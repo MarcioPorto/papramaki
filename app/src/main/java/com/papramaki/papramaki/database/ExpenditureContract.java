@@ -22,6 +22,7 @@ public class ExpenditureContract {
         public static final String COLUMN_NAME_BUDGET_ID = "budget";
         public static final String COLUMN_NAME_AMOUNT = "amount";
         public static final String COLUMN_NAME_CATEGORY = "category";
+        public static final String COLUMN_NAME_DATE = "date";
         //public static final String COLUMN_NAME_CREATION_DATE = "date";
         //public static final String COLUMN_NAME_HISTORY = "history";
         public static final String COLUMN_NAME_NULLABLE = "NULLHACK";
@@ -40,6 +41,7 @@ public class ExpenditureContract {
                         Expenditure.COLUMN_NAME_BUDGET_ID + INT + COMMA_SEP +
                         Expenditure.COLUMN_NAME_AMOUNT + REAL_TYPE + COMMA_SEP +
                         Expenditure.COLUMN_NAME_CATEGORY + TEXT_TYPE + COMMA_SEP +
+                        Expenditure.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
                         "FOREIGN KEY (" + Expenditure.COLUMN_NAME_BUDGET_ID + ") REFERENCES " + BudgetContract.Budget.TABLE_NAME + "(" +
                         BudgetContract.Budget.COLUMN_NAME_BUDGET_ID + ")"+
                         ");";
