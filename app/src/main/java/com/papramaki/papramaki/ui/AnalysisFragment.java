@@ -181,9 +181,9 @@ public class AnalysisFragment extends Fragment {
     public LinkedHashMap<String, Double> organizeHistory() {
         LinkedHashMap<String, Double> expensesMap = new LinkedHashMap<>();
         //List<Expenditure> expenditures = LocalData.history.getExpenditures();
-        List<Double> expenditures = mDbHelper.getExpenditures();
-        List<String> categories = mDbHelper.getCategories();
-        for(int i = 0; i < expenditures.size(); i++){
+        List<Expenditure> expenditures = mDbHelper.getLatestExpenditures();
+        //List<String> categories = mDbHelper.getCategories();
+        /*for(int i = 0; i < expenditures.size(); i++){
             String category = categories.get(i);
             Double amount = expenditures.get(i);
 
@@ -192,14 +192,14 @@ public class AnalysisFragment extends Fragment {
             } else {
                 expensesMap.put(category, expensesMap.get(category) + amount);
             }
-        }
-        /*for (Double expenditure : expenditures){
+        }*/
+        for (Expenditure expenditure : expenditures){
             if (!expensesMap.containsKey(expenditure.getCategory())) {
                 expensesMap.put(expenditure.getCategory(), expenditure.getAmount());
             } else {
                 expensesMap.put(expenditure.getCategory(), expensesMap.get(expenditure.getCategory()) + expenditure.getAmount());
             }
-        }*/
+        }
         return expensesMap;
     }
 

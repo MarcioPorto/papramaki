@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.HistoryListAdapter;
+import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
@@ -24,6 +25,7 @@ public class HistoryFragment extends ListFragment {
 
     protected List<Expenditure> expenditureHistory;
     protected FloatingActionButton mFAB;
+    protected DatabaseHelper mDbHelper;
 
     public HistoryFragment() {}
 
@@ -37,6 +39,7 @@ public class HistoryFragment extends ListFragment {
 //        myList.setAdapter(histAdapter);
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
+        mDbHelper = new DatabaseHelper(getContext());
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,8 +56,8 @@ public class HistoryFragment extends ListFragment {
     public void onResume() {
         super.onResume();
 
-        expenditureHistory = LocalData.history.getExpenditures();
-
+        //expenditureHistory = LocalData.history.getExpenditures();
+        expenditureHistory = mDbHelper.getLatestExpenditures();
         ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
         setListAdapter(histAdapter);
 

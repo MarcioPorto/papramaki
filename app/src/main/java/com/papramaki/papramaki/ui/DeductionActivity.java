@@ -42,11 +42,12 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Date date = new Date();
+
                 double amount = Double.valueOf(mAmount.getText().toString());
                 Expenditure expenditure = new Expenditure(amount, mCategory.getText().toString(), date);
 
                 mDbHelper.addExpenditure(expenditure);
-                mDbHelper.updateBalance(mDbHelper.viewLatestBalance() - expenditure.getAmount());
+                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance()- expenditure.getAmount());
 
                 Log.i(TAG, LocalData.budget.toString());
 

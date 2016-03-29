@@ -41,7 +41,7 @@ public class ExpenditureContract {
                         Expenditure.COLUMN_NAME_BUDGET_ID + INT + COMMA_SEP +
                         Expenditure.COLUMN_NAME_AMOUNT + REAL_TYPE + COMMA_SEP +
                         Expenditure.COLUMN_NAME_CATEGORY + TEXT_TYPE + COMMA_SEP +
-                        Expenditure.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
+                        Expenditure.COLUMN_NAME_DATE + INT + COMMA_SEP +
                         "FOREIGN KEY (" + Expenditure.COLUMN_NAME_BUDGET_ID + ") REFERENCES " + BudgetContract.Budget.TABLE_NAME + "(" +
                         BudgetContract.Budget.COLUMN_NAME_BUDGET_ID + ")"+
                         ");";
