@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.models.Expenditure;
-
 import java.util.List;
 
 
@@ -20,7 +19,7 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
     private Context context;
     private List<Expenditure> items;
 
-    public HistoryListAdapter(Context context, List items) {
+    public HistoryListAdapter(Context context, List<Expenditure> items) {
         super(context, R.layout.history_item, items);
         this.context = context;
         this.items = items;
@@ -49,7 +48,7 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
         Expenditure expenditure = items.get(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.history_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.history_item, parent, false);
             holder = new ViewHolder();
             holder.titleText = (TextView)convertView.findViewById(R.id.titleTextView);
             convertView.setTag(holder);

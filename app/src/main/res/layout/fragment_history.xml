@@ -23,6 +23,7 @@
         android:layout_gravity="bottom|right"/>
 
     <TextView
+        android:id="@android:id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -37,7 +38,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="1022dp" />
+        android:layout_marginTop="40dp" />
 
 
 </FrameLayout>

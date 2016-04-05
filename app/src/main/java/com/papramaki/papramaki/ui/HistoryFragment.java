@@ -34,6 +34,7 @@ public class HistoryFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
+//        expenditureHistory = mDbHelper.getLatestExpenditures();
 //        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
 //        ListView myList=(ListView) rootView.findViewById(android.R.id.list);
 //        myList.setAdapter(histAdapter);
@@ -55,14 +56,9 @@ public class HistoryFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //expenditureHistory = LocalData.history.getExpenditures();
         expenditureHistory = mDbHelper.getLatestExpenditures();
         ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
         setListAdapter(histAdapter);
-
-        expenditureHistory.add(new Expenditure(25.0, "ex", new Date(1, 2, 3)));
-
     }
 
 }
