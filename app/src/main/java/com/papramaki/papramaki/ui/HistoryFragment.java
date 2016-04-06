@@ -34,11 +34,6 @@ public class HistoryFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
-//        expenditureHistory = mDbHelper.getLatestExpenditures();
-//        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
-//        ListView myList=(ListView) rootView.findViewById(android.R.id.list);
-//        myList.setAdapter(histAdapter);
-
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mDbHelper = new DatabaseHelper(getContext());
         mFAB.setOnClickListener(new View.OnClickListener() {

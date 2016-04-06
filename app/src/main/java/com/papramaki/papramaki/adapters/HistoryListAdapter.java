@@ -34,6 +34,7 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
      */
     private class ViewHolder{
         TextView titleText;
+        TextView dateText;
     }
 
     /**
@@ -51,12 +52,20 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
             convertView = LayoutInflater.from(context).inflate(R.layout.history_item, parent, false);
             holder = new ViewHolder();
             holder.titleText = (TextView)convertView.findViewById(R.id.titleTextView);
+            holder.dateText = (TextView)convertView.findViewById(R.id.date_and_category_text);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         holder.titleText.setText(expenditure.getItemTitle());
+        if (expenditure.getCategory()!=null) {
+            holder.dateText.setText(expenditure.getDate().toString() + ", " + expenditure.getCategory());
+        }
+        else {
+            holder.dateText.setText(expenditure.getDate().toString());
+        }
+
         return convertView;
     }
 }
