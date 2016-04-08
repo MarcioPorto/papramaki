@@ -58,12 +58,12 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.titleText.setText(expenditure.getItemTitle());
-        if (expenditure.getCategory()!=null) {
-            holder.dateText.setText(expenditure.getDate().toString() + ", " + expenditure.getCategory());
+        holder.titleText.setText(expenditure.formatAmount());
+        if (!(expenditure.getCategory().equals(""))) {
+            holder.dateText.setText(expenditure.dateToString() + ", " + expenditure.getCategory());
         }
         else {
-            holder.dateText.setText(expenditure.getDate().toString());
+            holder.dateText.setText(expenditure.dateToString() + ", Uncategorized");
         }
 
         return convertView;
