@@ -8,12 +8,17 @@ import java.util.Date;
 public class Expenditure {
 
     private double amount;
-    private String category = "";
+    private String category;
     private Date date;
 
     public Expenditure(double amount, String category, Date date) {
         this.amount = amount;
-        this.category = category;
+        if(!(category.equals(""))) {
+            this.category = category;
+        }
+        else {
+            this.category = "Uncategorized";      // assigns all expenditures not given a category by user to "uncategorized"
+        }
         this.date = date;
     }
 
@@ -26,9 +31,7 @@ public class Expenditure {
         this.amount = amount;
     }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getCategory() { return category; }
 
     public void setCategory(String category) {
         this.category = category;

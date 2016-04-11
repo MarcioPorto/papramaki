@@ -25,6 +25,7 @@ import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
@@ -44,6 +45,16 @@ public class AnalysisFragment extends Fragment {
             "maroon", "navy", "olive", "purple", "silver", "teal"};
 
     public AnalysisFragment() {
+    }
+
+    /***
+     * Helper method to properly format money values in the pop-up captions
+     * @param amount
+     * @return
+     */
+    public String formatAmount(double amount) {
+        DecimalFormat formatter = new DecimalFormat("$0.00");
+        return formatter.format(amount);
     }
 
     @Override
@@ -71,11 +82,12 @@ public class AnalysisFragment extends Fragment {
             mPieGraph.addSlice(slice);
         }
 
+
         mPieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
             @Override
             public void onClick(int index) {
                 Toast.makeText(getActivity(),
-                        "You spent $" + String.valueOf(expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
+                        "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
                         Toast.LENGTH_LONG)
                         .show();
             }
