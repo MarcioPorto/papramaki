@@ -101,6 +101,8 @@ public class AnalysisFragment extends Fragment {
         // TODO: We will change this to show the budget
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         mPieGraph.setBackgroundBitmap(bitmap);
+
+        //check if table is empty
         moneySpentView.setText("You have spent " + mDbHelper.getLatestBudget().getFormattedMoneySpent() + " this period." );
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
