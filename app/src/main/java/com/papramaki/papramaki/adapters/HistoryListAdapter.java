@@ -60,7 +60,7 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
         holder.titleText.setText(expenditure.formatAmount());
 
-        holder.dateAndCatText.setText(expenditure.dateToString() + ", " + expenditure.getCategory());
+        holder.dateAndCatText.setText(expenditure.dateToString() + ": " + expenditure.getCategory());
 
 
         return convertView;

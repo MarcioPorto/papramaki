@@ -6,9 +6,11 @@ public class  Budget {
 
     private double budget;
     private double balance;
+    private double moneySpent;
 
     public Budget(double budget) {
         this.budget = budget;
+        this.moneySpent = budget - balance;
     }
 
     public double getBudget() {
@@ -35,6 +37,16 @@ public class  Budget {
 
     public void setBalance(double balance){
         this.balance = balance;
+    }
+
+    public double getMoneySpent() {
+        this.moneySpent = this.budget - this.balance;
+        return moneySpent;
+    }
+
+    public String getFormattedMoneySpent() {
+        DecimalFormat formatter = new DecimalFormat("$0.00");
+        return formatter.format(getMoneySpent());
     }
 
     @Override

@@ -8,4 +8,13 @@
     <color name="orange">#FFFFBB33</color>
     <color name="transparent_orange">#80FFBB33</color>
     <color name="purple">#FFAA66CC</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_300">#81C784</color>
+    <color name="green_700">#388E3C</color>
+    <color name="green_900">#1B5E20</color>
+    <color name="pink_a200">#FF4081</color>
+    <color name="pink_a400">#F50057</color>
+    <color name="background_white">#FFFAFAFA</color>
+    <color name="primary_material_dark">#1b5e20</color>
+    <color name="primary_dark_material_dark">#1b5e20</color>
 </resources>

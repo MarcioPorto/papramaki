@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
+import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
@@ -36,9 +38,9 @@ public class AnalysisFragment extends Fragment {
 
     protected Button mAnimateButton;
     protected PieGraph mPieGraph;
-    protected SeekBar mSeekBar;
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
+    protected TextView moneySpentView;
 
     private String[] mColors = { "red", "blue", "green", "black", "white", "gray", "cyan", "magenta",
             "yellow", "lightgray", "darkgray", "grey", "lightgrey", "darkgrey", "aqua", "fuchsia", "lime",
@@ -63,7 +65,9 @@ public class AnalysisFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_analysis, container, false);
 
         mPieGraph = (PieGraph) rootView.findViewById(R.id.piegraph);
+        mPieGraph.setInnerCircleRatio(180);
         mDbHelper = new DatabaseHelper(getContext());
+        moneySpentView = (TextView) rootView.findViewById(R.id.moneySpent);
 
         // mAnimateButton = (Button) rootView.findViewById(R.id.animatePieButton);
 
@@ -97,44 +101,7 @@ public class AnalysisFragment extends Fragment {
         // TODO: We will change this to show the budget
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         mPieGraph.setBackgroundBitmap(bitmap);
-
-        // This is the first seek bar (inner circle radius)
-        mSeekBar = (SeekBar) rootView.findViewById(R.id.seekBarRatio);
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mPieGraph.setInnerCircleRatio(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        // This is the second seek bar (padding)
-        mSeekBar = (SeekBar) rootView.findViewById(R.id.seekBarPadding);
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mPieGraph.setPadding(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        moneySpentView.setText("You have spent " + mDbHelper.getLatestBudget().getFormattedMoneySpent() + " this period." );
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 //            mAnimateButton.setOnClickListener(new View.OnClickListener() {
