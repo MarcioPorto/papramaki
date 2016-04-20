@@ -132,11 +132,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     String category = cursor.getString(3);
                     long dateLong = cursor.getLong(4);
 
-                    System.out.println("amount: " + amount);
-                    System.out.println("category: " + category);
-                    System.out.println("date: " + dateLong);
-                    System.out.println("budget_id: " + cursor.getInt(1));
-
                     Date date = new Date();
                     date.setTime(dateLong);
                     expenditure = new Expenditure(amount,category, date);
@@ -147,6 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // return contact list
             return history;
+         //TODO: remove else
         }
         else{
             return history;
@@ -163,12 +159,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(latestBudget, null);
-        cursor.moveToLast();
-
-        double amount = cursor.getDouble(1);
-        double balance = cursor.getDouble(2);
-        Budget budget = new Budget(amount);
-        budget.setBalance(balance);
+        Budget budget = new Budget(0);
+        if(cursor != null && cursor.moveToLast()) {
+            double amount = cursor.getDouble(1);
+            double balance = cursor.getDouble(2);
+            budget.setBudget(amount);
+            budget.setBalance(balance);
+        }
         return budget;
 
 
