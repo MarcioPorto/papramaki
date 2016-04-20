@@ -159,12 +159,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(latestBudget, null);
-        cursor.moveToLast();
-
-        double amount = cursor.getDouble(1);
-        double balance = cursor.getDouble(2);
-        Budget budget = new Budget(amount);
-        budget.setBalance(balance);
+        Budget budget = new Budget(0);
+        if(cursor != null && cursor.moveToLast()) {
+            double amount = cursor.getDouble(1);
+            double balance = cursor.getDouble(2);
+            budget.setBudget(amount);
+            budget.setBalance(balance);
+        }
         return budget;
 
 
