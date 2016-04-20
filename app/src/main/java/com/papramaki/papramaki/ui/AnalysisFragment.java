@@ -41,6 +41,7 @@ public class AnalysisFragment extends Fragment {
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
     protected TextView moneySpentView;
+    protected TextView amountRemView;
 
     private String[] mColors = { "red", "blue", "green", "black", "white", "gray", "cyan", "magenta",
             "yellow", "lightgray", "darkgray", "grey", "lightgrey", "darkgrey", "aqua", "fuchsia", "lime",
@@ -68,6 +69,7 @@ public class AnalysisFragment extends Fragment {
         mPieGraph.setInnerCircleRatio(180);
         mDbHelper = new DatabaseHelper(getContext());
         moneySpentView = (TextView) rootView.findViewById(R.id.moneySpent);
+        amountRemView = (TextView) rootView.findViewById(R.id.textView3);
 
         // mAnimateButton = (Button) rootView.findViewById(R.id.animatePieButton);
 
@@ -97,11 +99,9 @@ public class AnalysisFragment extends Fragment {
             }
         });
 
-        // This is the thing that shows up in the middle of the chart
-        // TODO: We will change this to show the budget
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        mPieGraph.setBackgroundBitmap(bitmap);
-        moneySpentView.setText("You have spent " + mDbHelper.getLatestBudget().getFormattedMoneySpent() + " this period." );
+        // This shows up in the middle of the chart
+        moneySpentView.setText("You've spent " + mDbHelper.getLatestBudget().getFormattedMoneySpent());
+        amountRemView.setText("You have " + mDbHelper.getLatestBudget().getFormattedBalance() + " left in this month's budget.");
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 //            mAnimateButton.setOnClickListener(new View.OnClickListener() {

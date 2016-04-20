@@ -6,6 +6,7 @@
     <color name="green">#FF00FF00</color>
     <color name="green_light">#FF99CC00</color>
     <color name="orange">#FFFFBB33</color>
+    <color name="black">#000000</color>
     <color name="transparent_orange">#80FFBB33</color>
     <color name="purple">#FFAA66CC</color>
     <color name="green_500">#4CAF50</color>
