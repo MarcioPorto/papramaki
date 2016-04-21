@@ -10,41 +10,33 @@ import android.widget.EditText;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
 
-public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+public class SignUpActivity extends AppCompatActivity {
+    private static final String TAG = SignUpActivity.class.getSimpleName();
 
     protected EditText mUsername;
     protected EditText mPassword;
-    protected Button mLogInButton;
+    protected EditText mPasswordConfirmation;
     protected Button mSignUpButton;
     protected DatabaseHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
 
         mUsername = (EditText)findViewById(R.id.emailInput);
         mPassword = (EditText)findViewById(R.id.password);
-        mLogInButton = (Button)findViewById(R.id.login);
-        mSignUpButton = (Button)findViewById(R.id.signUp);
+        mPasswordConfirmation = (EditText)findViewById(R.id.password_confirmation);
+        mSignUpButton = (Button)findViewById(R.id.sign_up_button);
         mDbHelper = new DatabaseHelper(this);
 
-        mLogInButton.setOnClickListener(new View.OnClickListener() {
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
-
-        mSignUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
+
 }
