@@ -17,9 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
         android:text="Your Spending History"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:paddingBottom="7dp"/>
 
     <ListView
         android:id="@android:id/list"
