@@ -10,4 +10,5 @@
     <string name="title_activity_deduction">New Expenditure</string>
     <string name="title_activity_sign_up">Papramaki</string>
     <string name="title_activity_log_in">Papramaki</string>
+    <string name="categories_prompt">Choose a category</string>
 </resources>

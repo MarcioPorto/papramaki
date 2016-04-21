@@ -17,7 +17,8 @@
         </activity>
         <activity
             android:name=".ui.DeductionActivity"
-            android:label="@string/title_activity_deduction" >
+            android:label="@string/title_activity_deduction"
+            android:parentActivityName=".ui.MainActivity" >
         </activity>
         <activity
             android:name=".ui.LoginActivity"

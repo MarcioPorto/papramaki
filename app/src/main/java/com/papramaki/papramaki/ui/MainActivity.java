@@ -1,7 +1,6 @@
 package com.papramaki.papramaki.ui;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +9,7 @@ import android.view.MenuItem;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
-import com.papramaki.papramaki.database.BudgetContract;
 import com.papramaki.papramaki.database.DatabaseHelper;
-import com.papramaki.papramaki.models.Budget;
-import com.papramaki.papramaki.models.History;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,14 +22,10 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mViewPager;
     DatabaseHelper mDbHelper;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         // Creates an adapter that will return a fragment for each section
         mMainFragmentAdapter = new MainFragmentAdapter(this, getSupportFragmentManager());
@@ -41,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
+
+        mViewPager.setCurrentItem(1);
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -69,7 +63,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log_out) {
+            // TODO: Actually log the user out
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 

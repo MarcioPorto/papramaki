@@ -39,7 +39,7 @@
         android:hint="Email"
         android:ems="13"
         android:id="@+id/emailInput"
-        android:layout_above="@+id/password"
+        android:paddingTop="180dp"
         android:layout_alignLeft="@+id/password"
         android:layout_alignStart="@+id/password" />
 
@@ -50,6 +50,7 @@
         android:hint="Password"
         android:ems="13"
         android:id="@+id/password"
+        android:layout_below="@+id/emailInput"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -63,7 +64,7 @@
         android:layout_marginTop="10dp"
         android:ems="13"
         android:textColor="@color/background_white"
-        android:background="@color/pink_a400"/>
+        android:background="@color/pink_a200"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -74,7 +75,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="7dp"
         android:textColor="@color/background_white"
-        android:background="@color/pink_a400" />
+        android:background="@color/pink_a200" />
 
     <TextView
         android:layout_width="wrap_content"
