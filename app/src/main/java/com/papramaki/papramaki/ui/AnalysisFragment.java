@@ -42,6 +42,7 @@ public class AnalysisFragment extends Fragment {
     protected DatabaseHelper mDbHelper;
     protected TextView moneySpentView;
     protected TextView balanceView;
+    protected TextView budgetView;
 
     private String[] mColors = { "red", "blue", "green", "black", "white", "gray", "cyan", "magenta",
             "yellow", "lightgray", "darkgray", "grey", "lightgrey", "darkgrey", "aqua", "fuchsia", "lime",
@@ -70,6 +71,7 @@ public class AnalysisFragment extends Fragment {
         mDbHelper = new DatabaseHelper(getContext());
         moneySpentView = (TextView) rootView.findViewById(R.id.moneySpent);
         balanceView = (TextView) rootView.findViewById(R.id.textView3);
+        budgetView = (TextView) rootView.findViewById(R.id.ofBudget);
 
         // mAnimateButton = (Button) rootView.findViewById(R.id.animatePieButton);
 
@@ -101,7 +103,8 @@ public class AnalysisFragment extends Fragment {
 
 
         moneySpentView.setText("You've spent " + mDbHelper.getLatestBudget().getFormattedMoneySpent());
-        balanceView.setText("You have " + mDbHelper.getLatestBudget().getFormattedBalance() + " left in this month's budget.");
+        budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
+        balanceView.setText("You have " + mDbHelper.getLatestBudget().getFormattedBalance() + " left in your budget.");
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 //            mAnimateButton.setOnClickListener(new View.OnClickListener() {

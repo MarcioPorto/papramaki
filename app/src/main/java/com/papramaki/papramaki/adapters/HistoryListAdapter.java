@@ -34,7 +34,8 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
      */
     private class ViewHolder{
         TextView titleText;
-        TextView dateAndCatText;
+        TextView catText;
+        TextView dateText;
     }
 
     /**
@@ -52,15 +53,16 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
             convertView = LayoutInflater.from(context).inflate(R.layout.history_item, parent, false);
             holder = new ViewHolder();
             holder.titleText = (TextView)convertView.findViewById(R.id.titleTextView);
-            holder.dateAndCatText = (TextView)convertView.findViewById(R.id.date_and_category_text);
+            holder.dateText = (TextView)convertView.findViewById(R.id.date_text);
+            holder.catText = (TextView)convertView.findViewById(R.id.category_text);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         holder.titleText.setText(expenditure.formatAmount());
-
-        holder.dateAndCatText.setText(expenditure.dateToString() + ": " + expenditure.getCategory());
+        holder.catText.setText(expenditure.getCategory());
+        holder.dateText.setText(expenditure.dateToString());
 
 
         return convertView;

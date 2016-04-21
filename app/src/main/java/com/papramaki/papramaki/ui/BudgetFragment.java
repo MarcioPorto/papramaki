@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -45,7 +46,6 @@ public class BudgetFragment extends Fragment {
 
     protected TextView mTextView;
     protected TextView mBudgetDisplay;
-    protected TextView mBalanceDisplay;
     protected EditText mBudget;
     protected Button mButton;
     protected FloatingActionButton mFAB;
@@ -58,7 +58,6 @@ public class BudgetFragment extends Fragment {
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
-        mBalanceDisplay = (TextView) rootView.findViewById(R.id.balanceDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mBudget = (EditText) rootView.findViewById(R.id.budget);
@@ -66,16 +65,10 @@ public class BudgetFragment extends Fragment {
         mDbHelper = new DatabaseHelper(getContext());
         if(DatabaseUtils.queryNumEntries(mDbHelper.getReadableDatabase(), BudgetContract.Budget.TABLE_NAME) > 0 ) {
             mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-            mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
-            if (Double.valueOf(mDbHelper.getLatestBudget().getBalance()) < 0) {
-                mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-            } else {
-                mBalanceDisplay.setTextColor(Color.parseColor("black"));
-            }
         }
         else{
-            mBudgetDisplay.setText("$ 0.0");
-            mBalanceDisplay.setText("$ 0.0");
+            DecimalFormat formatter = new DecimalFormat("$0.00");
+            mBudgetDisplay.setText(formatter.format(0.00));
         }
 
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -98,17 +91,11 @@ public class BudgetFragment extends Fragment {
                     budget.setBalance(amount);
                     mDbHelper.addBudget(budget);
                     mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-                    mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
 
                 }
                 //PREVIOUS VERSION
                 //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
 
-                if (Double.valueOf(mDbHelper.getLatestBudget().getBalance()) < 0) {
-                    mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-                } else {
-                    mBalanceDisplay.setTextColor(Color.parseColor("black"));
-                }
                 mBudget.getText().clear();
             }
         });
@@ -123,12 +110,6 @@ public class BudgetFragment extends Fragment {
         super.onResume();
         if(DatabaseUtils.queryNumEntries(mDbHelper.getReadableDatabase(), BudgetContract.Budget.TABLE_NAME) > 0 ) {
             mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-            mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
-            if (Double.valueOf(mDbHelper.getLatestBudget().getBalance()) < 0) {
-                mBalanceDisplay.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-            } else {
-                mBalanceDisplay.setTextColor(Color.parseColor("black"));
-            }
         }
     }
 
