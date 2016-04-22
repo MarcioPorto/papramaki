@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DatabaseUtils;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,7 +127,12 @@ public class BudgetFragment extends Fragment {
                 @Override
                 public void onFailure(Request request, IOException e) {
                     // TODO: Handle this later
-                    Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
                 @Override

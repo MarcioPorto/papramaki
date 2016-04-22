@@ -3,8 +3,6 @@ package com.papramaki.papramaki.ui;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,17 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
-import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
-import com.papramaki.papramaki.utils.LocalData;
 
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
