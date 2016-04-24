@@ -7,10 +7,19 @@ public class  Budget {
     private double budget;
     private double balance;
     private double moneySpent;
+    private int duration;
 
     public Budget(double budget) {
         this.budget = budget;
         this.moneySpent = budget - balance;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public double getBudget() {

@@ -3,11 +3,13 @@ package com.papramaki.papramaki.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.models.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -167,7 +169,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             budget.setBalance(balance);
         }
         return budget;
+    }
 
+
+    public void addUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(UserContract.User.UID, user.getUid());
+        values.put(UserContract.User.ACCESS_TOKEN, user.getAccessToken());
+        values.put(UserContract.User.CLIENT, user.getClient());
+
+        if(values != null) {
+            // Inserting Row
+            db.insert(UserContract.User.TABLE_NAME, null, values);
+        }
+        db.close(); // Closing database connection
+
+    }
+    public User getUser(){
+        String query =
+                "SELECT * FROM " + UserContract.User.TABLE_NAME +
+                        " WHERE id = (SELECT MAX(id) FROM " +
+                        UserContract.User.TABLE_NAME + ");";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        User user = new User();
+        if(cursor != null && cursor.moveToLast()){
+            String uid = cursor.getString(1);
+            String accessToken = cursor.getString(2);
+            String client = cursor.getString(3);
+            user.setAccessToken(accessToken);
+            user.setClient(client);
+            user.setUid(uid);
+
+        }
+        return user;
 
     }
 

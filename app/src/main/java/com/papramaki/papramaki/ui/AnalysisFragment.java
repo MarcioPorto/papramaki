@@ -25,8 +25,19 @@ import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,6 +53,7 @@ public class AnalysisFragment extends Fragment {
     protected DatabaseHelper mDbHelper;
     protected TextView moneySpentView;
     protected TextView balanceView;
+    protected APIHelper mAPIHelper;
 
     private String[] mColors = { "red", "blue", "green", "black", "white", "gray", "cyan", "magenta",
             "yellow", "lightgray", "darkgray", "grey", "lightgrey", "darkgrey", "aqua", "fuchsia", "lime",
@@ -180,6 +192,109 @@ public class AnalysisFragment extends Fragment {
             }
         }
         return expensesMap;
+    }
+
+
+    private void getHerokuInfo() {
+        String apiBalanceUrl = "https://papramakiapi.herokuapp.com/api/balances";
+        String apiBudgetUrl = "https://papramakiapi.herokuapp.com/api/balances";
+//        String budgetsEndpoint = "budgets";
+//        String finalUrl = apiUrl + budgetsEndpoint;
+        mAPIHelper = new APIHelper(getContext(), getActivity());
+
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiBalanceUrl)
+                    //.post("")
+                    .addHeader("Accept", "application/json")
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // TODO: Handle this later
+                    Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+//                            final String budgetsValue = getBudgetsValue(jsonData);
+                            final int spending = getBudgetsValue(jsonData);
+                            final int balance = getBalanceValue(jsonData);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+                                    updateDisplay(spending, balance);
+                                }
+                            });
+                        } else {
+                            mAPIHelper.alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private void updateDisplay(int spending, int balance) {
+        // TODO: We update the view here
+        moneySpentView.setText(String.valueOf(spending));
+        balanceView.setText(String.valueOf(balance));
+    }
+
+
+    private int getBudgetsValue(String jsonData) throws JSONException {
+
+        JSONArray response = new JSONArray(jsonData);
+        String returnString = "";
+
+        int value = 0;
+
+        for (int i = 0; i < 1; i++) {
+            JSONObject currentBudget = response.getJSONObject(i);
+            int budgetAmount = currentBudget.getInt("amount");
+            value = budgetAmount;
+            int duration = currentBudget.getInt("duration");
+            JSONArray expenditures = currentBudget.getJSONArray("expenditures");
+
+            for (int j = 0; j < expenditures.length(); j++) {
+                JSONObject currentExp = expenditures.getJSONObject(j);
+                Double amount = currentExp.getDouble("amount");
+                returnString += Double.toString(amount) + " ";
+            }
+        }
+
+        return value;
+    }
+
+    private int getBalanceValue(String jsonData) throws JSONException {
+
+        JSONArray response = new JSONArray(jsonData);
+        String returnString = "";
+
+        int value = 0;
+
+        for (int i = 0; i < 1; i++) {
+            JSONObject currentBalance = response.getJSONObject(i);
+            int balanceAmount = currentBalance.getInt("amount");
+            value = balanceAmount;
+        }
+
+        return value;
     }
 
 }
