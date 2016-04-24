@@ -1,15 +1,29 @@
 package com.papramaki.papramaki.models;
 
+import android.content.Intent;
+
 import java.text.DecimalFormat;
 
 public class  Budget {
 
     private double budget;
     private double balance;
+    private Integer duration;
     private double moneySpent;
 
     public Budget(double budget) {
         this.budget = budget;
+        this.moneySpent = budget - balance;
+    }
+
+    /**
+     * Option to create a budget with a duration (in weeks)
+     * @param budget
+     * @param duration
+     */
+    public Budget(double budget, Integer duration) {
+        this.budget = budget;
+        this.duration = duration;
         this.moneySpent = budget - balance;
     }
 

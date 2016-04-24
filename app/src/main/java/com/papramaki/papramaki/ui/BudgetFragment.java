@@ -13,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 
 /**
@@ -45,6 +48,7 @@ public class BudgetFragment extends Fragment {
     protected TextView mTextView;
     protected TextView mBudgetDisplay;
     protected EditText mBudget;
+    protected Spinner mSpinner;
     protected Button mButton;
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
@@ -55,10 +59,11 @@ public class BudgetFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
-        mBudgetDisplay = (TextView) rootView.findViewById(R.id.budgetDisplay);
+        mBudgetDisplay = (TextView)rootView.findViewById(R.id.budgetDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
-        mBudget = (EditText) rootView.findViewById(R.id.budget);
+        mBudget = (EditText)rootView.findViewById(R.id.budget);
+        mSpinner = (Spinner)rootView.findViewById(R.id.spinner);
 
         mDbHelper = new DatabaseHelper(getContext());
         if(DatabaseUtils.queryNumEntries(mDbHelper.getReadableDatabase(), BudgetContract.Budget.TABLE_NAME) > 0 ) {
@@ -76,6 +81,11 @@ public class BudgetFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // set up dropdown menu for user to select budget's duration
+        Integer[] durationOptions = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
+        ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
+        mSpinner.setAdapter(spinAdapter);
 
 
         mButton.setOnClickListener(new View.OnClickListener() {
