@@ -1,9 +1,13 @@
 package com.papramaki.papramaki.ui;
 
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,23 +18,27 @@ import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
-import com.papramaki.papramaki.database.BudgetContract;
 import com.papramaki.papramaki.database.DatabaseHelper;
+
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.History;
+import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,13 +51,13 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mViewPager;
     DatabaseHelper mDbHelper;
     APIHelper mAPIHelper;
+    protected User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         // Creates an adapter that will return a fragment for each section
@@ -59,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
+        mViewPager.setCurrentItem(1);
+
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -66,9 +76,23 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
             }
         });
-        mDbHelper = new DatabaseHelper(mViewPager.getContext());
-        //mDatabase = mDbHelper.getWritableDatabase();
 
+        mDbHelper = new DatabaseHelper(this);
+
+        Intent intentGetter = getIntent();
+        final String Caller = intentGetter.getStringExtra("caller");
+//        final String AccessToken = intentGetter.getStringExtra("Access-Token");
+//        final String Client = intentGetter.getStringExtra("Client");
+//        final String Uid = intentGetter.getStringExtra("Uid");
+
+//        if(Caller.equals("LoginActivity") || Caller.equals("SignUpActivity")) {
+//            user = new User(Uid, Client, AccessToken);
+//            mDbHelper.addUser(user);
+//            Toast.makeText(this, AccessToken + " " + Client + " " + Uid, Toast.LENGTH_LONG).show();
+//            //mDatabase = mDbHelper.getWritableDatabase();
+//        }else{
+        user = mDbHelper.getUser();
+//        }
         mAPIHelper = new APIHelper(mViewPager.getContext(), this);
 
         getBudgetsRequest();
@@ -76,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         getExpendituresRequest();
 
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        user = mDbHelper.getUser();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,7 +122,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log_out) {
+            // TODO: Actually log the user out
+            //remove user from database
+            mDbHelper.userLogout();
+            LocalData.balance = 0;
+            LocalData.budget = null;
+            LocalData.history.getExpenditures().clear();
+            LocalData.category = null;
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -106,13 +145,14 @@ public class MainActivity extends AppCompatActivity {
 //        String budgetsEndpoint = "budgets";
 //        String finalUrl = apiUrl + budgetsEndpoint;
         //mAPIHelper = new APIHelper(getContext(), getActivity());
-
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    //.post("")
                     .addHeader("Accept", "application/json")
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
                     .build();
             Call call = client.newCall(request);
             call.enqueue(new Callback() {
@@ -167,6 +207,9 @@ public class MainActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(apiUrl)
                     //.post("")
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
                     .addHeader("Accept", "application/json")
                     .build();
             Call call = client.newCall(request);
@@ -215,12 +258,14 @@ public class MainActivity extends AppCompatActivity {
 //        String budgetsEndpoint = "budgets";
 //        String finalUrl = apiUrl + budgetsEndpoint;
         //mAPIHelper = new APIHelper(getContext(), getActivity());
-
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(apiUrl)
                     //.post("")
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
                     .addHeader("Accept", "application/json")
                     .build();
             Call call = client.newCall(request);
@@ -262,4 +307,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
+
 }

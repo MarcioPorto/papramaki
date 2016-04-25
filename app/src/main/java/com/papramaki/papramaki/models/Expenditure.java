@@ -22,6 +22,8 @@ public class Expenditure {
         this.date = date;
     }
 
+    public Expenditure(){}
+
 
     public double getAmount() {
         return amount;

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.SystemClock;
 
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Expenditure;
@@ -32,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database){
         database.execSQL(BudgetContract.Budget.SQL_CREATE_ENTRIES);
         database.execSQL(ExpenditureContract.Expenditure.SQL_CREATE_ENTRIES);
+        database.execSQL(UserContract.User.SQL_CREATE_ENTRIES);
 
     }
     @Override
@@ -42,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL(BudgetContract.Budget.SQL_DELETE_ENTRIES);
         db.execSQL(ExpenditureContract.Expenditure.SQL_DELETE_ENTRIES);
+        db.execSQL(UserContract.User.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
     @Override
@@ -64,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor != null && cursor.moveToLast()){
             id = cursor.getInt(0);
         }
+        db.close();
         return id;
     }
 
@@ -88,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, balance);
         String selection = "id = (SELECT MAX(id) FROM " + BudgetContract.Budget.TABLE_NAME + ")";
         db.update(BudgetContract.Budget.TABLE_NAME, values, selection, null);
+        db.close();
     }
 
     public void addExpenditure(Expenditure expenditure){
@@ -112,6 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor mCursor = db.rawQuery(count, null);
         mCursor.moveToFirst();
         int iCount = mCursor.getInt(0);
+        db.close();
         return iCount;
     }
 
@@ -136,21 +142,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                     Date date = new Date();
                     date.setTime(dateLong);
-                    expenditure = new Expenditure(amount,category, date);
+                    expenditure = new Expenditure(amount, category, date);
 
                     history.add(expenditure);
                 } while (cursor.moveToNext());
             }
-
-            // return contact list
-            return history;
-         //TODO: remove else
-        }
-        else{
-            return history;
+            db.close();
         }
 
-
+        return history;
     }
     public Budget getLatestBudget(){
         String latestBudget =
@@ -161,13 +161,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(latestBudget, null);
-        Budget budget = new Budget(0);
+        Budget budget = new Budget(0,0);
         if(cursor != null && cursor.moveToLast()) {
             double amount = cursor.getDouble(1);
             double balance = cursor.getDouble(2);
             budget.setBudget(amount);
             budget.setBalance(balance);
         }
+        db.close();
         return budget;
     }
 
@@ -196,15 +197,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User user = new User();
         if(cursor != null && cursor.moveToLast()){
             String uid = cursor.getString(1);
+            System.out.println("////////////////////////UID: " + uid);
             String accessToken = cursor.getString(2);
+            System.out.println("////////////////////////ACCESSTOKEN: " + accessToken);
             String client = cursor.getString(3);
+            System.out.println("////////////////////////CLIENT: " + client);
             user.setAccessToken(accessToken);
             user.setClient(client);
             user.setUid(uid);
 
         }
+        db.close();
         return user;
 
+    }
+
+    public void userLogout(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(UserContract.User.TABLE_NAME, UserContract.User.ID + "=(SELECT MAX(id) FROM " +
+                UserContract.User.TABLE_NAME, null);
+        db.close();
     }
 
 

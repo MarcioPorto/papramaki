@@ -18,14 +18,15 @@ public class UserContract {
         public static final String CLIENT = "client";
         public static final String UID = "uid";
         private static final String TEXT_TYPE = " TEXT";
+        private static final String INT_TYPE = " INTEGER";
         private static final String COMMA_SEP = ", ";
 
         public static final String SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + TABLE_NAME + " (" +
-                        ID + " INTEGER PRIMARY KEY, " +
-                        UID + TEXT_TYPE + COMMA_SEP +
-                        ACCESS_TOKEN + TEXT_TYPE + COMMA_SEP +
-                        CLIENT + TEXT_TYPE + ");";
+                "CREATE TABLE " + User.TABLE_NAME + " (" +
+                        User.ID + " INTEGER PRIMARY KEY, " +
+                        User.UID + TEXT_TYPE + COMMA_SEP +
+                        User.ACCESS_TOKEN + TEXT_TYPE + COMMA_SEP +
+                        User.CLIENT + TEXT_TYPE + ");";
 
         public static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;

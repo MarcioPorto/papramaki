@@ -62,15 +62,19 @@ public class APIHelper {
 
     public Budget getLatestBudget(String jsonData) throws JSONException {
 
-        JSONArray response = new JSONArray(jsonData);
+        Budget budget = new Budget();
+        if(!jsonData.equals("[]")) {
+            JSONArray response = new JSONArray(jsonData);
 
-        JSONObject currentBudget = response.getJSONObject(0);
-        int amount = currentBudget.getInt("amount");
-        int duration = currentBudget.getInt("duration");
+            JSONObject currentBudget = response.getJSONObject(0);
+            int amount = currentBudget.getInt("amount");
+            int duration = currentBudget.getInt("duration");
+            int budgetId = currentBudget.getInt("id");
 
-        Budget budget = new Budget(amount);
-        budget.setDuration(duration);
-
+            budget.setBudget(amount);
+            budget.setId(budgetId);
+            budget.setDuration(duration);
+        }
         return budget;
     }
 
@@ -92,10 +96,11 @@ public class APIHelper {
                 double amount = currentExp.getDouble("amount");
                 String category = currentExp.getString("category");
                 String dateString = currentExp.getString("created_at");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date date = sdf.parse(dateString, new ParsePosition(0));
                 expenditure = new Expenditure(amount,category,date);
                 history.add(expenditure);
+
             }
         }
         return history;
@@ -104,12 +109,17 @@ public class APIHelper {
 
     public double getLatestBalance(String jsonData) throws JSONException {
 
-        JSONArray response = new JSONArray(jsonData);
+        JSONObject object = new JSONObject(jsonData);
+        return object.getDouble("amount");
 
-        JSONObject currentBalance = response.getJSONObject(0);
-        double amount = currentBalance.getDouble("amount");
+    }
 
-        return amount;
+    public JSONObject getUserInfoFromResponse(String jsonData) throws JSONException {
+
+        JSONObject response = new JSONObject(jsonData);
+        JSONObject data = response.getJSONObject("data");
+
+        return data;
     }
 
 

@@ -11,11 +11,43 @@
 
     <TextView
         android:id="@+id/another_fragment_text"
-        android:text="Your Budget"
+        android:text="Your Current Budget"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
         android:layout_centerHorizontal="true"
+        android:paddingTop="110dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0.0"
+        android:id="@+id/budgetDisplay"
+        android:layout_below="@+id/another_fragment_text"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/budget"
+        android:layout_above="@+id/button2"
+        android:hint="Enter or edit your budget"
+        android:inputType="numberDecimal"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/pink_a400"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:textColor="@color/background_white"
+        android:id="@+id/button2"
+        android:layout_above="@+id/FAB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="49dp"
+        android:background="@color/pink_a200"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/FAB"
@@ -27,51 +59,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         app:backgroundTint="@color/pink_a400"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/button2"
-        android:layout_above="@+id/FAB"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="49dp" />
-
-    <EditText
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/budget"
-        android:layout_above="@+id/button2"
-        android:hint="Enter or edit your budget"
-        android:inputType="numberDecimal"
-        android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="0.0"
-        android:id="@+id/budgetDisplay"
-        android:layout_below="@+id/another_fragment_text"
-        android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Your Balance"
-        android:id="@+id/another_fragment_text1"
-        android:layout_below="@+id/budgetDisplay"
-        android:layout_centerHorizontal="true"
-        android:paddingTop="100px"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="0.0"
-        android:id="@+id/balanceDisplay"
-        android:layout_below="@+id/another_fragment_text1"
-        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

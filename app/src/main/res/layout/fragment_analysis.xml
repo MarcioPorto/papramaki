@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
         android:text="Monthly Spending Analysis"
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
@@ -24,24 +25,29 @@
         android:id="@+id/piegraph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="75dp"
         app:pieInnerCircleRatio="180"
         app:pieSlicePadding="0dip" />
 
     <TextView
         android:id="@+id/moneySpent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/piegraph"
-        android:layout_alignTop="@+id/piegraph"
-        android:layout_alignRight="@+id/piegraph"
-        android:layout_alignLeft="@+id/piegraph"
-        android:layout_marginTop="256dp"
-        android:layout_marginLeft="96dp"
-        android:text="Money Spent"
         android:textColor="@color/black"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="205dp"
+        android:text="Money Spent"/>
+
+    <TextView
+        android:id="@+id/ofBudget"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/moneySpent"
+        android:text="of Budget"/>
 
     <LinearLayout
             android:layout_width="wrap_content"
@@ -77,14 +83,14 @@
         <!--android:layout_weight="0"/>-->
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Amount Remaining"
         android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="90dp"
         android:textColor="@color/black" />
 
     <android.support.design.widget.FloatingActionButton

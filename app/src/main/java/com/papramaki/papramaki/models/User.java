@@ -9,8 +9,17 @@ public class User {
     private String client;
     private String accessToken;
 
-    public User(){
+
+    public User(String uid, String client, String accessToken){
+        this.uid = uid;
+        this.client = client;
+        this.accessToken = accessToken;
+
     }
+
+    public User(){}
+
+
 
     public String getUid() {
         return uid;

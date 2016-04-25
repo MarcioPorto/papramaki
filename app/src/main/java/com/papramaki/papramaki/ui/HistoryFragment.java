@@ -49,6 +49,11 @@ public class HistoryFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
+        expenditureHistory = LocalData.history.getExpenditures();
+        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
+        setListAdapter(histAdapter);
+        histAdapter.notifyDataSetChanged();
+
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mDbHelper = new DatabaseHelper(getContext());
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -66,9 +71,11 @@ public class HistoryFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        expenditureHistory = mDbHelper.getLatestExpenditures();
+//        expenditureHistory = mDbHelper.getLatestExpenditures();
+        expenditureHistory = LocalData.history.getExpenditures();
         ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
         setListAdapter(histAdapter);
+        histAdapter.notifyDataSetChanged();
     }
 
 //    private void getHerokuInfo() {

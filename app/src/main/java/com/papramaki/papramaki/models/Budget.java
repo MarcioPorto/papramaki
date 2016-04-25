@@ -8,10 +8,24 @@ public class  Budget {
     private double balance;
     private double moneySpent;
     private int duration;
+    private int id;
 
-    public Budget(double budget) {
+    public Budget(double budget, int id) {
         this.budget = budget;
         this.moneySpent = budget - balance;
+        this.id = id;
+    }
+    public Budget(){
+        this.budget = 0;
+        this.duration = 0;
+        this.id = 0;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getDuration() {
