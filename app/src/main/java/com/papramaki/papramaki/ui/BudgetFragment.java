@@ -35,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 
 /**
@@ -123,8 +122,6 @@ public class BudgetFragment extends Fragment {
 
     private void getHerokuInfo() {
         String apiUrl = "https://papramakiapi.herokuapp.com/budgets";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
 
         if (isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
