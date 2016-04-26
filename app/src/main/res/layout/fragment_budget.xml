@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:paddingTop="110dp"
+        android:layout_marginTop="110dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -30,15 +30,47 @@
         android:layout_centerHorizontal="true"/>
 
     <EditText
-        android:layout_width="220dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:ems="13"
         android:id="@+id/budget"
-        android:layout_above="@+id/button2"
         android:hint="Enter or edit your budget"
         android:inputType="numberDecimal"
+        android:layout_below="@+id/budgetDisplay"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
         android:backgroundTint="@color/pink_a400"/>
+
+    <LinearLayout
+        android:id="@+id/linearDurationLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/budget">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Duration:"
+            android:id="@+id/textView5"/>
+
+        <Spinner
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/spinner"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="week(s)"
+            android:textColor="@color/black"
+            android:id="@+id/textView6"
+            android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -46,7 +78,8 @@
         android:text="@string/save"
         android:textColor="@color/background_white"
         android:id="@+id/button2"
-        android:layout_above="@+id/FAB"
+        android:layout_below="@+id/linearDurationLayout"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="29dp"
         android:background="@color/pink_a200"/>
@@ -60,36 +93,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/button2"
         app:backgroundTint="@color/pink_a400"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Duration:"
-        android:id="@+id/textView5"
-        android:layout_alignLeft="@+id/budget"
-        android:layout_alignStart="@+id/budget"
-        android:layout_alignTop="@+id/budget"
-        android:layout_marginTop="50dp"/>
-
-    <Spinner
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/spinner"
-        android:layout_toRightOf="@+id/textView5"
-        android:layout_alignTop="@+id/budget"
-        android:layout_marginTop="38dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="week(s)"
-        android:textColor="@color/black"
-        android:id="@+id/textView6"
-        android:layout_toRightOf="@+id/spinner"
-        android:layout_alignTop="@id/budget"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="5dp"/>
 </RelativeLayout>

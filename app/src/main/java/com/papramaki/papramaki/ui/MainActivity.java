@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
+        // Makes the Analysis fragment the default view
+        // TODO: Lead to BydgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
