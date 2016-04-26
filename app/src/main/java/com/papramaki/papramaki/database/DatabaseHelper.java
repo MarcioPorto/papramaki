@@ -214,8 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void userLogout(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(UserContract.User.TABLE_NAME, UserContract.User.ID + "=(SELECT MAX(id) FROM " +
-                UserContract.User.TABLE_NAME, null);
+        db.delete(UserContract.User.TABLE_NAME, null, null);
         db.close();
     }
 

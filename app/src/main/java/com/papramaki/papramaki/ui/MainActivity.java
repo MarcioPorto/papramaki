@@ -21,6 +21,7 @@ import com.papramaki.papramaki.adapters.MainFragmentAdapter;
 import com.papramaki.papramaki.database.DatabaseHelper;
 
 import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.models.User;
@@ -37,6 +38,7 @@ import com.squareup.okhttp.Response;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         getBudgetsRequest();
         getBalancesRequest();
         getExpendituresRequest();
+        getCategoriesRequest();
 
     }
 
@@ -105,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
 //    public void onResume() {
 //        super.onResume();
 //        user = mDbHelper.getUser();
+//        getBudgetsRequest();
+//        getBalancesRequest();
+//        getExpendituresRequest();
 //    }
 
     @Override
@@ -125,13 +131,17 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_log_out) {
             // TODO: Actually log the user out
             //remove user from database
+            makeLogoutRequest();
             mDbHelper.userLogout();
             LocalData.balance = 0;
-            LocalData.budget = null;
+            LocalData.budget = new Budget();
             LocalData.history.getExpenditures().clear();
-            LocalData.category = null;
+            LocalData.categories = new ArrayList<Category>();
+
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            finish();
+
             return true;
         }
 
@@ -178,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
                                     //mBudgetDisplay.setText(String.valueOf(budget.getBudget()));
                                     LocalData.budget = budget;
+                                    BudgetFragment.mBudgetDisplay.setText(budget.getFormattedBudget());
 
                                 }
                             });
@@ -262,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    //.post("")
                     .addHeader("Access-Token", user.getAccessToken())
                     .addHeader("Uid", user.getUid())
                     .addHeader("Client", user.getClient())
@@ -307,5 +317,107 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void getCategoriesRequest(){
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/categories";
+//        String budgetsEndpoint = "budgets";
+//        String finalUrl = apiUrl + budgetsEndpoint;
+        //mAPIHelper = new APIHelper(getContext(), getActivity());
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
+                    .addHeader("Accept", "application/json")
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // TODO: Handle this later
+
+                    //put in getActivity.runUiThread()
+                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+//                            final String budgetsValue = getBudgetsValue(jsonData);
+                            final List<Category> categories = mAPIHelper.getCategories(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+                                    LocalData.categories = categories;
+                                }
+                            });
+                        } else {
+                            mAPIHelper.alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+    private void makeLogoutRequest(){
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_out";
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
+                    .addHeader("Accept", "application/json")
+                    .delete()
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // TODO: Handle this later
+
+                    //put in getActivity.runUiThread()
+                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this, jsonData, Toast.LENGTH_LONG).show();
+
+                                }
+                            });
+                        } else {
+                            mAPIHelper.alertUserAboutError();
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
 }

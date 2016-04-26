@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.echo.holographlibrary.PieGraph;
 import com.echo.holographlibrary.PieSlice;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
+import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
@@ -175,7 +177,8 @@ public class AnalysisFragment extends Fragment {
         LinkedHashMap<String, Double> expensesMap = new LinkedHashMap<>();
         //List<Expenditure> expenditures = LocalData.history.getExpenditures();
         //List<Expenditure> expenditures = mDbHelper.getLatestExpenditures();
-        List<Expenditure> expenditures = LocalData.history.getExpenditures();
+        //List<Expenditure> expenditures = LocalData.history.getExpenditures();
+        List<Category> categories = LocalData.categories;
         //List<String> categories = mDbHelper.getCategories();
         /*for(int i = 0; i < expenditures.size(); i++){
             String category = categories.get(i);
@@ -187,18 +190,22 @@ public class AnalysisFragment extends Fragment {
                 expensesMap.put(category, expensesMap.get(category) + amount);
             }
         }*/
-        for (Expenditure expenditure : expenditures){
-            if (!expensesMap.containsKey(expenditure.getCategory())) {
-                expensesMap.put(expenditure.getCategory(), expenditure.getAmount());
+//        for (Expenditure expenditure : expenditures){
+//            if (!expensesMap.containsKey(expenditure.getCategory())) {
+//                expensesMap.put(expenditure.getCategory(), expenditure.getAmount());
+//            } else {
+//                expensesMap.put(expenditure.getCategory(), expensesMap.get(expenditure.getCategory()) + expenditure.getAmount());
+//            }
+//        }
+        for (Category category : categories){
+            if (!expensesMap.containsKey(category.getName())) {
+                System.out.println("//////////////////////////////////ANALYSIS1= " + category.getSumCategory());
+                expensesMap.put(category.getName(), category.getSumCategory());
             } else {
-                expensesMap.put(expenditure.getCategory(), expensesMap.get(expenditure.getCategory()) + expenditure.getAmount());
+                System.out.println("//////////////////////////////////ANALYSIS2");
+                expensesMap.put(category.getName(), expensesMap.get(category.getName()) + category.getSumCategory());
             }
         }
         return expensesMap;
     }
-
-
-
-
-
 }

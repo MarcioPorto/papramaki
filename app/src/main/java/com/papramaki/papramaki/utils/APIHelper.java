@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
 
 import org.json.JSONArray;
@@ -94,10 +95,9 @@ public class APIHelper {
             for (int j = 0; j < expenditures.length(); j++) {
                 JSONObject currentExp = expenditures.getJSONObject(j);
                 double amount = currentExp.getDouble("amount");
-                String category = currentExp.getString("category");
+                String category = currentExp.getString("category_id");
                 String dateString = currentExp.getString("created_at");
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                Date date = sdf.parse(dateString, new ParsePosition(0));
+                Date date = formatDate(dateString);
                 expenditure = new Expenditure(amount,category,date);
                 history.add(expenditure);
 
@@ -106,6 +106,39 @@ public class APIHelper {
         return history;
 
     }
+
+    public List<Category> getCategories(String jsonData) throws JSONException {
+
+        JSONArray response = new JSONArray(jsonData);
+
+        List<Category> categoryList = new ArrayList<Category>();
+        List<Expenditure> expenditureList = new ArrayList<Expenditure>();
+        Expenditure expenditure = new Expenditure();
+        Category category = new Category();
+
+
+        for (int i = 0; i < response.length(); i++) {
+            JSONObject currentCategory = response.getJSONObject(i);
+            String name = currentCategory.getString("name");
+            String color = currentCategory.getString("color");
+            JSONArray expenditures = currentCategory.getJSONArray("expenditures");
+            for(int j = 0; j < expenditures.length(); j++){
+                JSONObject currentExpenditure = expenditures.getJSONObject(j);
+                expenditure.setAmount(currentExpenditure.getDouble("amount"));
+                expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
+                expenditureList.add(expenditure);
+            }
+            category.setName(name);
+            category.setColor(color);
+            category.setExpenditures(expenditureList);
+
+            categoryList.add(category);
+
+        }
+        return categoryList;
+
+    }
+
 
     public double getLatestBalance(String jsonData) throws JSONException {
 
@@ -122,5 +155,9 @@ public class APIHelper {
         return data;
     }
 
-
+    public Date formatDate(String dateString){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date date = sdf.parse(dateString, new ParsePosition(0));
+        return date;
+    }
 }
