@@ -112,9 +112,6 @@ public class APIHelper {
         JSONArray response = new JSONArray(jsonData);
 
         List<Category> categoryList = new ArrayList<Category>();
-        List<Expenditure> expenditureList = new ArrayList<Expenditure>();
-        Expenditure expenditure = new Expenditure();
-        Category category = new Category();
 
 
         for (int i = 0; i < response.length(); i++) {
@@ -122,18 +119,19 @@ public class APIHelper {
             String name = currentCategory.getString("name");
             String color = currentCategory.getString("color");
             JSONArray expenditures = currentCategory.getJSONArray("expenditures");
+            List<Expenditure> expenditureList = new ArrayList<Expenditure>();
             for(int j = 0; j < expenditures.length(); j++){
                 JSONObject currentExpenditure = expenditures.getJSONObject(j);
+                Expenditure expenditure = new Expenditure();
                 expenditure.setAmount(currentExpenditure.getDouble("amount"));
                 expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
                 expenditureList.add(expenditure);
             }
+            Category category = new Category();
             category.setName(name);
             category.setColor(color);
             category.setExpenditures(expenditureList);
-
             categoryList.add(category);
-
         }
         return categoryList;
 

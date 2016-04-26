@@ -104,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
         getExpendituresRequest();
         getCategoriesRequest();
 
+        for(Category category: LocalData.categories) {
+            List<Expenditure> expenditures = category.getExpenditures();
+            for (Expenditure expenditure : expenditures) {
+                System.out.println("///////////category: " + category.getName() + " amount: " + expenditure.getAmount());
+            }
+        }
     }
 
 //    @Override
