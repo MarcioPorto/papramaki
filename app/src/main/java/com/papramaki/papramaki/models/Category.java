@@ -27,12 +27,21 @@ public class Category {
         this.name = name;
         this.color = color;
         this.expenditures = new ArrayList<Expenditure>();
+        this.id = id;
     }
 
     public Category(){
         this.name = "";
         this.color = "";
         expenditures = new ArrayList<Expenditure>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getSumCategory() {

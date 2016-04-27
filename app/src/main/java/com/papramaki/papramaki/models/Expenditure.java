@@ -22,7 +22,10 @@ public class Expenditure {
         this.date = date;
     }
 
-    public Expenditure(){}
+    public Expenditure(){
+        this.amount = 0;
+        this.category = "Uncategorized";
+    }
 
 
     public double getAmount() {

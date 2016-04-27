@@ -126,10 +126,12 @@ public class APIHelper {
                 List<Expenditure> expenditureList = new ArrayList<Expenditure>();
                 for (int j = 0; j < expenditures.length(); j++) {
                     JSONObject currentExpenditure = expenditures.getJSONObject(j);
-                    Expenditure expenditure = new Expenditure();
-                    expenditure.setAmount(currentExpenditure.getDouble("amount"));
-                    expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
-                    expenditureList.add(expenditure);
+                    if(currentExpenditure.getInt("budget_id") == LocalData.budget.getId()){
+                        Expenditure expenditure = new Expenditure();
+                        expenditure.setAmount(currentExpenditure.getDouble("amount"));
+                        expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
+                        expenditureList.add(expenditure);
+                    }
                 }
                 Category category = new Category();
                 category.setName(name);

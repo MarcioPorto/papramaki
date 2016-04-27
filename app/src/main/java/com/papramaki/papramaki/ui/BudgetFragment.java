@@ -26,6 +26,8 @@ import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.BudgetContract;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
+import com.papramaki.papramaki.models.Category;
+import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
@@ -43,6 +45,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -104,6 +107,7 @@ public class BudgetFragment extends Fragment {
             public void onClick(View v) {
                 LocalData.history.getExpenditures().clear();
                 LocalData.balance = 0;
+                LocalData.categories.clear();
                 String strAmount = mBudget.getText().toString();
                 String duration = mSpinner.getSelectedItem().toString();
                 if(!strAmount.equals("")) {

@@ -49,7 +49,7 @@ public class DeductionActivity extends AppCompatActivity {
     protected EditText mCategoryInput;
     protected Button mAddButton;
     protected APIHelper mAPIHelper;
-    protected int categoryId;
+    protected int mCategoryId;
 
     protected DatabaseHelper mDbHelper;
     protected List<String> mCategoriesDropdownItems = new ArrayList<String>();
@@ -70,9 +70,10 @@ public class DeductionActivity extends AppCompatActivity {
         mAPIHelper = new APIHelper(this, this);
 
         // Populates dropdown
-        mCategoriesDropdownItems.add("Item 1");
-        mCategoriesDropdownItems.add("Item 2");
-        mCategoriesDropdownItems.add("Item 3");
+        for(Category category: LocalData.categories) {
+            mCategoriesDropdownItems.add(category.getName());
+        }
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.category_spinner_item,
@@ -86,6 +87,7 @@ public class DeductionActivity extends AppCompatActivity {
 
 
                 double amount = Double.valueOf(mAmountInput.getText().toString());
+                String categoryName = mCategoryInput.getText().toString();
 
 //                Expenditure expenditure = new Expenditure(amount, mCategoryInput.getText().toString(), date);
 //
@@ -95,7 +97,9 @@ public class DeductionActivity extends AppCompatActivity {
                 Log.i(TAG, LocalData.budget.toString());
 
                 //
-                postExpenditureRequest(amount);
+                postCategoryRequest(categoryName, amount);
+
+                //postExpenditureRequest(amount);
                 postBalanceRequest(amount);
 
                 //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
@@ -144,6 +148,7 @@ public class DeductionActivity extends AppCompatActivity {
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(expenditureAmount))
                 .add("budget_id", String.valueOf(LocalData.budget.getId()))
+                .add("category_id", String.valueOf(mCategoryId))
                 .build();
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
@@ -275,21 +280,22 @@ public class DeductionActivity extends AppCompatActivity {
     }
 
 
-    private void postCategoryRequest(String categoryName) {
+    private void postCategoryRequest(String categoryName, final double expenditureAmount) {
         User user = mDbHelper.getUser();
-        String apiUrl = "https://papramakiapi.herokuapp.com/api/categories/";
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/categories";
 //        String budgetsEndpoint = "budgets";
 //        String finalUrl = apiUrl + budgetsEndpoint;
         //mAPIHelper = new APIHelper(getContext(), getActivity());
 
         RequestBody params = new FormEncodingBuilder()
                 .add("name", categoryName)
+                .add("user_id", String.valueOf(user.getUser_id()))
                 .build();
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    .put(params)
+                    .post(params)
                     .addHeader("Access-Token", user.getAccessToken())
                     .addHeader("Uid", user.getUid())
                     .addHeader("Client", user.getClient())
@@ -315,14 +321,17 @@ public class DeductionActivity extends AppCompatActivity {
                             final String categoryName = object.getString("name");
                             final String categoryColor = object.getString("color");
                             final int categoryId = object.getInt("id");
+
+                            mCategoryId = categoryId;
                             Category category = new Category(categoryName, categoryColor, categoryId);
                             LocalData.categories.add(category);
+                            postExpenditureRequest(expenditureAmount);
 ////                            final String budgetsValue = getBudgetsValue(jsonData);
 //                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
 
                                 }
                             });
