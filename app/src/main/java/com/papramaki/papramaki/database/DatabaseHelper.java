@@ -179,6 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(UserContract.User.UID, user.getUid());
         values.put(UserContract.User.ACCESS_TOKEN, user.getAccessToken());
         values.put(UserContract.User.CLIENT, user.getClient());
+        values.put(UserContract.User.ID, user.getUser_id());
 
         if(values != null) {
             // Inserting Row
@@ -202,9 +203,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             System.out.println("////////////////////////ACCESSTOKEN: " + accessToken);
             String client = cursor.getString(3);
             System.out.println("////////////////////////CLIENT: " + client);
+            int user_id = cursor.getInt(0);
             user.setAccessToken(accessToken);
             user.setClient(client);
             user.setUid(uid);
+            user.setUser_id(user_id);
 
         }
         db.close();

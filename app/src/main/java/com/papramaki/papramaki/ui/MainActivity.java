@@ -363,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
                                     LocalData.categories = categories;
+                                    AnalysisFragment.organizeHistory();
                                 }
                             });
                         } else {

@@ -23,7 +23,7 @@ public class UserContract {
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + User.TABLE_NAME + " (" +
-                        User.ID + " INTEGER PRIMARY KEY, " +
+                        User.ID + INT_TYPE + COMMA_SEP +
                         User.UID + TEXT_TYPE + COMMA_SEP +
                         User.ACCESS_TOKEN + TEXT_TYPE + COMMA_SEP +
                         User.CLIENT + TEXT_TYPE + ");";

@@ -96,8 +96,12 @@ public class SignUpActivity extends AppCompatActivity {
                         final String Client = response.header("Client");
                         final String Uid = response.header("Uid");
 
-//                        User user = new User(Uid, Client, AccessToken);
-//                        mDbHelper.addUser(user);
+                        JSONObject jsonUser = mAPIHelper.getUserInfoFromResponse(jsonData);
+                        int User_id = jsonUser.getInt("id");
+
+                        User user = new User(Uid, Client, AccessToken, User_id);
+                        mDbHelper.addUser(user);
+
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             final JSONObject resp = mAPIHelper.getUserInfoFromResponse(jsonData);
@@ -107,9 +111,9 @@ public class SignUpActivity extends AppCompatActivity {
                                     // Toast.makeText(SignUpActivity.this, resp.toString() + AccessToken + " " + Client + " " + Uid, Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                     intent.putExtra("caller", "SignUpActivity");
-                                    intent.putExtra("Access-Token", AccessToken);
-                                    intent.putExtra("Client", Client);
-                                    intent.putExtra("Uid", Uid);
+//                                    intent.putExtra("Access-Token", AccessToken);
+//                                    intent.putExtra("Client", Client);
+//                                    intent.putExtra("Uid", Uid);
                                     startActivity(intent);
                                 }
                             });
