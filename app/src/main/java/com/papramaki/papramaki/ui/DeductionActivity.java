@@ -43,8 +43,6 @@ public class DeductionActivity extends AppCompatActivity {
 
     private static final String TAG = DeductionActivity.class.getSimpleName();
 
-
-
     protected EditText mAmountInput;
     protected Spinner mUserCategoriesSpinner;
     protected EditText mCategoryInput;
@@ -62,7 +60,11 @@ public class DeductionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deduction);
 
         // Displays back button in the navbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Exception caught: ", e);
+        }
 
         mAmountInput = (EditText)findViewById(R.id.amount_input);
         mUserCategoriesSpinner = (Spinner)findViewById(R.id.user_categories_spinner);
@@ -76,7 +78,7 @@ public class DeductionActivity extends AppCompatActivity {
         for(Category category: LocalData.categories) {
             mCategoriesDropdownItems.add(category.getName());
         }
-        //mCategoriesDropdownItems.add(LocalData.categories.get(0).getName());
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.category_spinner_item,
                 mCategoriesDropdownItems);
@@ -87,7 +89,8 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (!(mAmountInput.getText().toString().equals("") || mCategoryInput.getText().toString().equals(""))){
+
+                if (!(mAmountInput.getText().toString().equals(""))){
                     double amount = Double.valueOf(mAmountInput.getText().toString());
                     String categoryName = mCategoryInput.getText().toString();
 
@@ -97,12 +100,23 @@ public class DeductionActivity extends AppCompatActivity {
     //                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
 
                     Log.i(TAG, LocalData.budget.toString());
-
-                    //
-                    postCategoryRequest(categoryName, amount);
-
+                    
                     //postExpenditureRequest(amount);
-                    postBalanceRequest(amount);
+                    putBalanceRequest(amount);
+
+                    if (!categoryName.equals("")) {
+                        postCategoryRequest(categoryName, amount);
+                    } else {
+                        String selectedCategory = mUserCategoriesSpinner.getSelectedItem().toString();
+                        for(Category category : LocalData.categories){
+                            if(selectedCategory.equals(category.getName())) {
+                                mCategoryId = category.getId();
+                                break;
+                            }
+                        }
+                        postExpenditureRequest(amount);
+                    }
+
 
                     //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
 
@@ -110,6 +124,11 @@ public class DeductionActivity extends AppCompatActivity {
                     intent.putExtra("caller", "DeductionActivity");
                     startActivity(intent);
                 }
+
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("caller", "DeductionActivity");
+                startActivity(intent);
+
             }
         });
 
@@ -126,9 +145,6 @@ public class DeductionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
 
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -154,9 +170,7 @@ public class DeductionActivity extends AppCompatActivity {
 
     private void postExpenditureRequest(double expenditureAmount) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/expenditures";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
+
         User user = mDbHelper.getUser();
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(expenditureAmount))
@@ -177,9 +191,6 @@ public class DeductionActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(DeductionActivity.this, "There was an error", Toast.LENGTH_LONG).show();
                 }
 
@@ -188,6 +199,7 @@ public class DeductionActivity extends AppCompatActivity {
                     try {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
+
                         if (response.isSuccessful()) {
                             JSONObject object = new JSONObject(jsonData);
                             final double amount = object.getDouble("amount");
@@ -197,7 +209,7 @@ public class DeductionActivity extends AppCompatActivity {
                             System.out.println("//////////////SIMPLEDATEFORMAT: "+ sdf.toString());
                             final Expenditure expenditure = new Expenditure();
                             expenditure.setAmount(amount);
-                            try{
+                            try {
                                 Date date = sdf.parse(dateString);
                                 expenditure.setDate(date);
                                 System.out.println("//////////////DATE: "+ date.toString());
@@ -229,12 +241,14 @@ public class DeductionActivity extends AppCompatActivity {
             Toast.makeText(DeductionActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
-    private void postBalanceRequest(double expenditureAmount) {
+
+    /**
+     * Subtracts the amount of the new expenditure from the balance of the current user
+     * @param expenditureAmount - value to be subtracted
+     */
+    private void putBalanceRequest(double expenditureAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances/" + String.valueOf(user.getUser_id());
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
 
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(LocalData.balance - expenditureAmount))
@@ -253,9 +267,6 @@ public class DeductionActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(DeductionActivity.this, "There was an error", Toast.LENGTH_LONG).show();
                 }
 
@@ -266,17 +277,7 @@ public class DeductionActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             JSONObject object = new JSONObject(jsonData);
-                            final double balance = object.getDouble("amount");
-                            LocalData.balance = balance;
-////                            final String budgetsValue = getBudgetsValue(jsonData);
-//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-
-                                }
-                            });
+                            LocalData.balance = object.getDouble("amount");
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -296,9 +297,6 @@ public class DeductionActivity extends AppCompatActivity {
     private void postCategoryRequest(String categoryName, final double expenditureAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/categories";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
 
         RequestBody params = new FormEncodingBuilder()
                 .add("name", categoryName)
@@ -318,9 +316,6 @@ public class DeductionActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(DeductionActivity.this, "There was an error", Toast.LENGTH_LONG).show();
                 }
 
@@ -331,23 +326,16 @@ public class DeductionActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             JSONObject object = new JSONObject(jsonData);
+                            // category attributes from response
                             final String categoryName = object.getString("name");
                             final String categoryColor = object.getString("color");
                             final int categoryId = object.getInt("id");
 
                             mCategoryId = categoryId;
+                            // create new category locally
                             Category category = new Category(categoryName, categoryColor, categoryId);
                             LocalData.categories.add(category);
                             postExpenditureRequest(expenditureAmount);
-////                            final String budgetsValue = getBudgetsValue(jsonData);
-//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-
-                                }
-                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
