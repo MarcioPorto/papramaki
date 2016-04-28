@@ -121,37 +121,24 @@ public class LoginActivity extends AppCompatActivity {
                         final String Client = response.header("Client");
                         final String Uid = response.header("Uid");
 
-                        JSONObject jsonUser = mAPIHelper.getUserInfoFromResponse(jsonData);
-                        int User_id = jsonUser.getInt("id");
-
-
-                        User user = new User(Uid, Client, AccessToken, User_id);
-                        mDbHelper.addUser(user);
-
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            final JSONObject resp = mAPIHelper.getUserInfoFromResponse(jsonData);
+                            JSONObject jsonUser = mAPIHelper.getUserInfoFromResponse(jsonData);
+                            int User_id = jsonUser.getInt("id");
+
+                            User user = new User(Uid, Client, AccessToken, User_id);
+                            mDbHelper.addUser(user);
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Toast.makeText(SignUpActivity.this, resp.toString() + AccessToken + " " + Client + " " + Uid, Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("caller", "LoginActivity");
-//                                    intent.putExtra("Access-Token", AccessToken);
-//                                    intent.putExtra("Client", Client);
-//                                    intent.putExtra("Uid", Uid);
                                     startActivity(intent);
                                 }
                             });
                         } else {
-                            //mAPIHelper.alertUserAboutError();
-                            final String errorMessage = mAPIHelper.errorIdentifier(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            mAPIHelper.showLogInErrors(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);

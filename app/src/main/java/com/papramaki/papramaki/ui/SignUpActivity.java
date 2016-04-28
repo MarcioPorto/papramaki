@@ -1,10 +1,6 @@
 package com.papramaki.papramaki.ui;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -118,14 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            // mAPIHelper.alertUserAboutError();
-                            final String errorMessage = mAPIHelper.signUpErrorIdentifier(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            mAPIHelper.showSignUpErrors(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,20 +21,9 @@ import com.echo.holographlibrary.PieSlice;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Category;
-import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -106,10 +94,15 @@ public class AnalysisFragment extends Fragment {
         mPieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
             @Override
             public void onClick(int index) {
-                Toast.makeText(getActivity(),
-                        "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
-                        Toast.LENGTH_LONG)
-                        .show();
+                try {
+                    Toast.makeText(getActivity(),
+                            "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
+                            Toast.LENGTH_LONG)
+                            .show();
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                    Log.e(TAG, "Exception caught: ", exception);
+                }
+
             }
         });
 

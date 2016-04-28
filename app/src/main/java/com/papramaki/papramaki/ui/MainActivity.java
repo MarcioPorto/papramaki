@@ -1,13 +1,7 @@
 package com.papramaki.papramaki.ui;
 
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-
-import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,20 +13,16 @@ import android.widget.Toast;
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
 import com.papramaki.papramaki.database.DatabaseHelper;
-
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
-import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
@@ -202,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -258,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -313,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -367,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -416,10 +406,12 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             });
