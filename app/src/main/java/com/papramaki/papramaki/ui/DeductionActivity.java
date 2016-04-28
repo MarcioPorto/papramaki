@@ -306,13 +306,6 @@ public class DeductionActivity extends AppCompatActivity {
                             Category category = new Category(categoryName, categoryColor, categoryId);
                             LocalData.categories.add(category);
                             postExpenditureRequest(expenditureAmount);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AnalysisFragment.updatePieChart();
-                                }
-                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
