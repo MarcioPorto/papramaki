@@ -118,7 +118,12 @@ public class AnalysisFragment extends Fragment {
         moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
         //budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
-        balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+        if(LocalData.balance >= 0) {
+            balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+        }else{
+            balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
+            balanceView.setTextColor(Color.RED);
+        }
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 //            mAnimateButton.setOnClickListener(new View.OnClickListener() {

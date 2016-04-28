@@ -72,12 +72,11 @@ public class DeductionActivity extends AppCompatActivity {
         mAPIHelper = new APIHelper(this, this);
         user = mDbHelper.getUser();
 
-        // Populates dropdown
+         //Populates dropdown
         for(Category category: LocalData.categories) {
             mCategoriesDropdownItems.add(category.getName());
         }
-
-
+        //mCategoriesDropdownItems.add(LocalData.categories.get(0).getName());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.category_spinner_item,
                 mCategoriesDropdownItems);
@@ -88,28 +87,29 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (!(mAmountInput.getText().toString().equals("") || mCategoryInput.getText().toString().equals(""))){
+                    double amount = Double.valueOf(mAmountInput.getText().toString());
+                    String categoryName = mCategoryInput.getText().toString();
 
-                double amount = Double.valueOf(mAmountInput.getText().toString());
-                String categoryName = mCategoryInput.getText().toString();
+    //                Expenditure expenditure = new Expenditure(amount, mCategoryInput.getText().toString(), date);
+    //
+    //                mDbHelper.addExpenditure(expenditure);
+    //                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
 
-//                Expenditure expenditure = new Expenditure(amount, mCategoryInput.getText().toString(), date);
-//
-//                mDbHelper.addExpenditure(expenditure);
-//                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
+                    Log.i(TAG, LocalData.budget.toString());
 
-                Log.i(TAG, LocalData.budget.toString());
+                    //
+                    postCategoryRequest(categoryName, amount);
 
-                //
-                postCategoryRequest(categoryName, amount);
+                    //postExpenditureRequest(amount);
+                    postBalanceRequest(amount);
 
-                //postExpenditureRequest(amount);
-                postBalanceRequest(amount);
+                    //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
 
-                //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
-
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                intent.putExtra("caller", "DeductionActivity");
-                startActivity(intent);
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    intent.putExtra("caller", "DeductionActivity");
+                    startActivity(intent);
+                }
             }
         });
 
