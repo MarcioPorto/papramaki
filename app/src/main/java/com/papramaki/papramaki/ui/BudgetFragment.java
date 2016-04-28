@@ -49,6 +49,7 @@ public class BudgetFragment extends Fragment {
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
     protected APIHelper mAPIHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,7 +89,6 @@ public class BudgetFragment extends Fragment {
         ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
         mSpinner.setAdapter(spinAdapter);
 
-
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,15 +100,6 @@ public class BudgetFragment extends Fragment {
                 if(!strAmount.equals("")) {
                     Double amount = Double.valueOf(strAmount);
                     postBudgetRequest(amount,duration);
-
-//                    Budget budget = new Budget(amount);
-//                    budget.setBalance(amount);
-//                    mDbHelper.addBudget(budget);
-
-//                    mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-//                    mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
-                    //mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-
                 }
                 //PREVIOUS VERSION
                 //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
@@ -117,8 +108,6 @@ public class BudgetFragment extends Fragment {
             }
         });
 
-//        getHerokuInfo();
-
         return rootView;
     }
 
@@ -126,19 +115,18 @@ public class BudgetFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-            //mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-            //mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
-            mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
-
+        MainActivity.getBudgetsRequest();
+        updateLayout();
     }
 
+    protected void updateLayout() {
+        mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
+    }
 
     private void postBudgetRequest(double budgetAmount, String duration) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
         User user = mDbHelper.getUser();
+
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(budgetAmount))
                 .add("duration", String.valueOf(duration))
@@ -157,9 +145,6 @@ public class BudgetFragment extends Fragment {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
@@ -177,13 +162,20 @@ public class BudgetFragment extends Fragment {
                             final Budget budget = new Budget(amount, id);
                             budget.setDuration(duration);
                             LocalData.budget = budget;
-//                            final String budgetsValue = getBudgetsValue(jsonData);
-//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
+
+//                            MainActivity.runOnUI(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(getContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
+//                                    updateLayout();
+//                                }
+//                            });
+//
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
-                                    mBudgetDisplay.setText(budget.getFormattedBudget());
+                                    updateLayout();
                                 }
                             });
 

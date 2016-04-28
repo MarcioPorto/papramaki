@@ -1,8 +1,11 @@
 package com.papramaki.papramaki.ui;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,15 +45,19 @@ public class MainActivity extends AppCompatActivity {
     MainFragmentAdapter mMainFragmentAdapter;
     ViewPager mViewPager;
     DatabaseHelper mDbHelper;
-    APIHelper mAPIHelper;
-    protected User user;
 
+    // Making these static so they can be accessed from the fragments
+    public static APIHelper mAPIHelper;
+    public static User user;
+    public static Handler UIHandler = new Handler(Looper.getMainLooper());
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MainActivity.context = getApplicationContext();
 
         // Creates an adapter that will return a fragment for each section
         mMainFragmentAdapter = new MainFragmentAdapter(this, getSupportFragmentManager());
@@ -89,27 +96,33 @@ public class MainActivity extends AppCompatActivity {
 //        }
         mAPIHelper = new APIHelper(MainActivity.this, this);
 
-        getBudgetsRequest();
-        getBalancesRequest();
-        getExpendituresRequest();
-        getCategoriesRequest();
+        retrieveAllData();
 
-//        for(Category category: LocalData.categories) {
-//            List<Expenditure> expenditures = category.getExpenditures();
-//            for (Expenditure expenditure : expenditures) {
-//                System.out.println("///////////category: " + category.getName() + " amount: " + expenditure.getAmount());
-//            }
-//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         user = mDbHelper.getUser();
+        retrieveAllData();
+    }
+
+    /**
+     * Makes all the get requests we need to show the initial data.
+     */
+    public static void retrieveAllData() {
         getBudgetsRequest();
         getBalancesRequest();
         getExpendituresRequest();
         getCategoriesRequest();
+    }
+
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+    }
+
+    public static Context getAppContext() {
+        return MainActivity.context;
     }
 
     @Override
@@ -149,11 +162,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     //HTTP Requests
-    private void getBudgetsRequest() {
+    public static void getBudgetsRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
+
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -167,10 +178,13 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
-                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                    MainActivity.runOnUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+//                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -179,18 +193,22 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-//                            final String budgetsValue = getBudgetsValue(jsonData);
                             final Budget budget = mAPIHelper.getLatestBudget(jsonData);
-                            runOnUiThread(new Runnable() {
+                            MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-                                    //mBudgetDisplay.setText(String.valueOf(budget.getBudget()));
                                     LocalData.budget = budget;
                                     BudgetFragment.mBudgetDisplay.setText(budget.getFormattedBudget());
-
                                 }
                             });
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    LocalData.budget = budget;
+//                                    BudgetFragment.mBudgetDisplay.setText(budget.getFormattedBudget());
+//
+//                                }
+//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -202,15 +220,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getExpendituresRequest() {
+    public static void getExpendituresRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
 
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
@@ -226,10 +241,12 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
-                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                    MainActivity.runOnUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
                 @Override
@@ -238,15 +255,15 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-//                            final String budgetsValue = getBudgetsValue(jsonData);
                             final List<Expenditure> history = mAPIHelper.getExpenditures(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-                                    LocalData.history.setExpenditures(history);
-                                }
-                            });
+                            LocalData.history.setExpenditures(history);
+
+//                            MainActivity.runOnUI(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    HistoryFragment.updateDisplay();
+//                                }
+//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -258,16 +275,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
 
-    private void getBalancesRequest() {
+    public static void getBalancesRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
+
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -281,10 +296,13 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
-                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                    MainActivity.runOnUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+                        }
+                    });
+//                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -295,13 +313,15 @@ public class MainActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
 //                            final String budgetsValue = getBudgetsValue(jsonData);
                             final double currentBalance = mAPIHelper.getLatestBalance(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-                                    LocalData.balance = currentBalance;
-                                }
-                            });
+                            LocalData.balance = currentBalance;
+
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+//                                    LocalData.balance = currentBalance;
+//                                }
+//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -313,15 +333,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void getCategoriesRequest(){
+    public static void getCategoriesRequest(){
         String apiUrl = "https://papramakiapi.herokuapp.com/api/categories";
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
+
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -335,10 +353,12 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
-                    Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                    MainActivity.runOnUI(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
                 @Override
@@ -347,15 +367,25 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-//                            final String budgetsValue = getBudgetsValue(jsonData);
                             final List<Category> categories = mAPIHelper.getCategories(jsonData);
-                            runOnUiThread(new Runnable() {
+                            LocalData.categories = categories;
+
+                            // Updates the graph and text in the AnalysisFragment
+                            MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-                                    LocalData.categories = categories;
+                                    AnalysisFragment.updateLayout();
                                 }
                             });
+//                            AnalysisFragment.updateLayout();
+
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+//                                    LocalData.categories = categories;
+//                                }
+//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -367,9 +397,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
+
     private void makeLogoutRequest(){
         String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_out";
         if (mAPIHelper.isNetworkAvailable()) {
@@ -419,6 +450,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
-
 
 }

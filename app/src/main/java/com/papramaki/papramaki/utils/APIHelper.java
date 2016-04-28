@@ -52,6 +52,12 @@ public class APIHelper {
     public void alertUserAboutError(String jsonData) throws JSONException{
         JSONObject response = new JSONObject(jsonData);
         final String errorText = response.getString("error");
+//        MainActivity.runOnUI(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+//            }
+//        });
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
