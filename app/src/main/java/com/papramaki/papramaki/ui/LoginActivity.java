@@ -144,7 +144,14 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            //mAPIHelper.alertUserAboutError();
+                            final String errorMessage = mAPIHelper.errorIdentifier(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);

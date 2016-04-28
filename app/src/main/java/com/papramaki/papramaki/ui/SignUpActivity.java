@@ -118,7 +118,14 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            // mAPIHelper.alertUserAboutError();
+                            final String errorMessage = mAPIHelper.signUpErrorIdentifier(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(SignUpActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);

@@ -44,6 +44,8 @@ public class DeductionActivity extends AppCompatActivity {
 
     private static final String TAG = DeductionActivity.class.getSimpleName();
 
+
+
     protected EditText mAmountInput;
     protected Spinner mUserCategoriesSpinner;
     protected EditText mCategoryInput;
