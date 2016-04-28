@@ -100,7 +100,7 @@ public class DeductionActivity extends AppCompatActivity {
     //                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
 
                     Log.i(TAG, LocalData.budget.toString());
-                    
+
                     //postExpenditureRequest(amount);
                     putBalanceRequest(amount);
 
