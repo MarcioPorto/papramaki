@@ -103,7 +103,7 @@ public class AnalysisFragment extends Fragment {
 //                            "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
 //                            Toast.LENGTH_LONG)
 //                            .show();
-                            "You spent " + formatAmount((double) categories.get(index).getSumCategory()) + " on " + String.valueOf(categories.get(index).getName()),
+                            "You spent " + formatAmount(categories.get(index).getSumCategory()) + " on " + String.valueOf(categories.get(index).getName()),
                             Toast.LENGTH_LONG)
                             .show();
                 } catch (ArrayIndexOutOfBoundsException exception) {
@@ -113,11 +113,12 @@ public class AnalysisFragment extends Fragment {
             }
         });
 
+        DecimalFormat formatter = new DecimalFormat("$0.00");
 
-        moneySpentView.setText("You've spent " + String.valueOf(LocalData.budget.getBudget() - LocalData.balance));
+        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
         //budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
-        balanceView.setText("You have " + LocalData.balance + " left in your budget.");
+        balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
 
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 //            mAnimateButton.setOnClickListener(new View.OnClickListener() {
