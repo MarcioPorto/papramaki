@@ -192,13 +192,15 @@ public class AnalysisFragment extends Fragment {
 //        }
         for (Category category : categories){
             if (!expensesMap.containsKey(category.getName())) {
-                System.out.println("//////////////////////////////////ANALYSIS1= " + category.getSumCategory());
                 expensesMap.put(category.getName(), category.getSumCategory());
             } else {
-                System.out.println("//////////////////////////////////ANALYSIS2");
                 expensesMap.put(category.getName(), expensesMap.get(category.getName()) + category.getSumCategory());
             }
         }
         return expensesMap;
+    }
+
+    public static void updatePieChart(){
+
     }
 }

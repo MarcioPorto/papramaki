@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.papramaki.papramaki.R;
+import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.utils.LocalData;
+
 import java.util.List;
 
 
@@ -16,11 +19,10 @@ import java.util.List;
  */
 public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
-    //TODO: Use categories instead of expenditures? This may bring expenditures from previous budget periods :(
+    //TODO: Use categories instead of expenditures?
 
     private Context context;
     private List<Expenditure> items;
-
     public HistoryListAdapter(Context context, List<Expenditure> items) {
         super(context, R.layout.history_item, items);
         this.context = context;
@@ -62,10 +64,17 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         holder.titleText.setText(expenditure.formatAmount());
-        holder.catText.setText(expenditure.getCategory());
         holder.dateText.setText(expenditure.dateToString());
 
+        for(Category category: LocalData.categories){
+            System.out.print("////////////////////////////////CAAAATEGORY :ID "+ expenditure.getCategoryId());
+            if(expenditure.getCategoryId() == category.getId()){
+                holder.catText.setText(category.getName());
+                break;
+            }
+        }
 
         return convertView;
     }

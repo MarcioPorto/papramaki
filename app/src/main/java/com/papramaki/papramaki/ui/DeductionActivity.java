@@ -332,7 +332,7 @@ public class DeductionActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     //Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-
+                                    AnalysisFragment.updatePieChart();
                                 }
                             });
                         } else {

@@ -40,13 +40,20 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mDbHelper = new DatabaseHelper(this);
 
+        if(mDbHelper.getUser().getUid() != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("caller", "LoginActivity");
+            startActivity(intent);
+        }
+        System.out.println("UID //////////////////////////////" + mDbHelper.getUser());
         mUsername = (EditText)findViewById(R.id.emailInput);
         mPassword = (EditText)findViewById(R.id.password);
         mLogInButton = (Button)findViewById(R.id.login);
         mSignUpButton = (Button)findViewById(R.id.signUp);
         mAPIHelper = new APIHelper(this, this);
-        mDbHelper = new DatabaseHelper(this);
+
 
         mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +69,19 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(mDbHelper.getUser().getUid() != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("caller", "LoginActivity");
+            startActivity(intent);
+        }
     }
     //Get request sign user
     private void getUser(String email, String password) {

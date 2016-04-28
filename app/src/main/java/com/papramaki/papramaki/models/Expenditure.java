@@ -8,23 +8,17 @@ import java.util.Date;
 public class Expenditure {
 
     private double amount;
-    private String category;
+    private int category_id;
     private Date date;
 
-    public Expenditure(double amount, String category, Date date) {
+    public Expenditure(double amount, int category_id, Date date) {
         this.amount = amount;
-        if(!(category.equals(""))) {
-            this.category = category;
-        }
-        else {
-            this.category = "Uncategorized";      // assigns all expenditures not given a category by user to "uncategorized"
-        }
+        this.category_id = category_id;
         this.date = date;
     }
 
     public Expenditure(){
         this.amount = 0;
-        this.category = "Uncategorized";
     }
 
 
@@ -36,10 +30,10 @@ public class Expenditure {
         this.amount = amount;
     }
 
-    public String getCategory() { return category; }
+    public int getCategoryId() { return category_id; }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(int category_id) {
+        this.category_id = category_id;
     }
 
     public Date getDate() {
@@ -51,14 +45,14 @@ public class Expenditure {
     }
 
 
-    public String toString() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy");
-        if (category.equals("")) {
-            return "$" + amount + " on " + simpleDateFormat.format(date) + ".";
-        } else {
-            return "$" + amount + " on " + category.toString() + " on " + simpleDateFormat.format(date) + ".";
-        }
-    }
+//    public String toString() {
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+//        if (category.equals("")) {
+//            return "$" + amount + " on " + simpleDateFormat.format(date) + ".";
+//        } else {
+//            return "$" + amount + " on " + category.toString() + " on " + simpleDateFormat.format(date) + ".";
+//        }
+//    }
 
     public String dateToString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");

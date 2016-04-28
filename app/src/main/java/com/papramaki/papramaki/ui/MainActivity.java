@@ -102,14 +102,15 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        user = mDbHelper.getUser();
-//        getBudgetsRequest();
-//        getBalancesRequest();
-//        getExpendituresRequest();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        user = mDbHelper.getUser();
+        getBudgetsRequest();
+        getBalancesRequest();
+        getExpendituresRequest();
+        getCategoriesRequest();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -353,7 +354,6 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
                                     LocalData.categories = categories;
-                                    AnalysisFragment.organizeHistory();
                                 }
                             });
                         } else {

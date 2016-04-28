@@ -99,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ExpenditureContract.Expenditure.COLUMN_NAME_AMOUNT, expenditure.getAmount());// expenditure amount
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_CATEGORY, expenditure.getCategory());
+        //values.put(ExpenditureContract.Expenditure.COLUMN_NAME_CATEGORY, expenditure.getCategory());
         values.put(ExpenditureContract.Expenditure.COLUMN_NAME_DATE, expenditure.getDate().getTime());
         values.put(ExpenditureContract.Expenditure.COLUMN_NAME_BUDGET_ID, this.getLatestBudgetId());
 
@@ -137,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     double amount = cursor.getDouble(2);
-                    String category = cursor.getString(3);
+                    int category = cursor.getInt(3);
                     long dateLong = cursor.getLong(4);
 
                     Date date = new Date();

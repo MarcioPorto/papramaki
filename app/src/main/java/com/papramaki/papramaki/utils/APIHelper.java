@@ -131,10 +131,10 @@ public class APIHelper {
                 for (int j = 0; j < expenditures.length(); j++) {
                     JSONObject currentExp = expenditures.getJSONObject(j);
                     double amount = currentExp.getDouble("amount");
-                    String category = currentExp.getString("category_id");
+                    int category_id = currentExp.getInt("category_id");
                     String dateString = currentExp.getString("created_at");
                     Date date = formatDate(dateString);
-                    expenditure = new Expenditure(amount, category, date);
+                    expenditure = new Expenditure(amount, category_id, date);
                     history.add(expenditure);
 
                 }
