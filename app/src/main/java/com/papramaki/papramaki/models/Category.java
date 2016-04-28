@@ -12,19 +12,36 @@ public class Category {
     private String color;
     private List<Expenditure> expenditures;
     private double sumCategory;
+    private int id;
 
 
 
-    public Category(String name, String color, List<Expenditure> expenditures){
+    public Category(String name, String color, List<Expenditure> expenditures, int id){
         this.name = name;
         this.color = color;
         this.expenditures = expenditures;
+        this.id = id;
+    }
+
+    public Category(String name, String color, int id){
+        this.name = name;
+        this.color = color;
+        this.expenditures = new ArrayList<Expenditure>();
+        this.id = id;
     }
 
     public Category(){
         this.name = "";
         this.color = "";
         expenditures = new ArrayList<Expenditure>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getSumCategory() {

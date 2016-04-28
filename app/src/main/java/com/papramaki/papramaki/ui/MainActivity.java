@@ -104,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
         getExpendituresRequest();
         getCategoriesRequest();
 
-        for(Category category: LocalData.categories) {
-            List<Expenditure> expenditures = category.getExpenditures();
-            for (Expenditure expenditure : expenditures) {
-                System.out.println("///////////category: " + category.getName() + " amount: " + expenditure.getAmount());
-            }
-        }
+//        for(Category category: LocalData.categories) {
+//            List<Expenditure> expenditures = category.getExpenditures();
+//            for (Expenditure expenditure : expenditures) {
+//                System.out.println("///////////category: " + category.getName() + " amount: " + expenditure.getAmount());
+//            }
+//        }
     }
 
 //    @Override
@@ -363,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
                                     LocalData.categories = categories;
+                                    AnalysisFragment.organizeHistory();
                                 }
                             });
                         } else {

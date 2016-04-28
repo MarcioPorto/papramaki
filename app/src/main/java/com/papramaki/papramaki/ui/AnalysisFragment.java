@@ -173,7 +173,7 @@ public class AnalysisFragment extends Fragment {
         else return null;
     }
 
-    public LinkedHashMap<String, Double> organizeHistory() {
+    public static LinkedHashMap<String, Double> organizeHistory() {
         LinkedHashMap<String, Double> expensesMap = new LinkedHashMap<>();
         //List<Expenditure> expenditures = LocalData.history.getExpenditures();
         //List<Expenditure> expenditures = mDbHelper.getLatestExpenditures();

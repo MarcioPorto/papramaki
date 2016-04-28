@@ -6,20 +6,30 @@ package com.papramaki.papramaki.models;
 public class User {
 
     private String uid;
+    private int user_id;
     private String client;
     private String accessToken;
 
 
-    public User(String uid, String client, String accessToken){
+    public User(String uid, String client, String accessToken, int user_id){
+        this.user_id = user_id;
         this.uid = uid;
         this.client = client;
         this.accessToken = accessToken;
 
     }
 
+
     public User(){}
 
 
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
 
     public String getUid() {
         return uid;

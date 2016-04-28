@@ -98,20 +98,23 @@ public class APIHelper {
         List<Expenditure> history = new ArrayList<Expenditure>();
         int value = 0;
 
-        for (int i = 0; i < 1; i++) {
-            JSONObject currentBudget = response.getJSONObject(i);
-            JSONArray expenditures = currentBudget.getJSONArray("expenditures");
-            Expenditure expenditure;
+        //TODO: If first time user, no budget exists so don't go through loop
+        if(!jsonData.equals("[]")) {
+            for (int i = 0; i < 1; i++) {
+                JSONObject currentBudget = response.getJSONObject(i);
+                JSONArray expenditures = currentBudget.getJSONArray("expenditures");
+                Expenditure expenditure;
 
-            for (int j = 0; j < expenditures.length(); j++) {
-                JSONObject currentExp = expenditures.getJSONObject(j);
-                double amount = currentExp.getDouble("amount");
-                String category = currentExp.getString("category_id");
-                String dateString = currentExp.getString("created_at");
-                Date date = formatDate(dateString);
-                expenditure = new Expenditure(amount,category,date);
-                history.add(expenditure);
+                for (int j = 0; j < expenditures.length(); j++) {
+                    JSONObject currentExp = expenditures.getJSONObject(j);
+                    double amount = currentExp.getDouble("amount");
+                    String category = currentExp.getString("category_id");
+                    String dateString = currentExp.getString("created_at");
+                    Date date = formatDate(dateString);
+                    expenditure = new Expenditure(amount, category, date);
+                    history.add(expenditure);
 
+                }
             }
         }
         return history;
@@ -124,25 +127,29 @@ public class APIHelper {
 
         List<Category> categoryList = new ArrayList<Category>();
 
-
-        for (int i = 0; i < response.length(); i++) {
-            JSONObject currentCategory = response.getJSONObject(i);
-            String name = currentCategory.getString("name");
-            String color = currentCategory.getString("color");
-            JSONArray expenditures = currentCategory.getJSONArray("expenditures");
-            List<Expenditure> expenditureList = new ArrayList<Expenditure>();
-            for(int j = 0; j < expenditures.length(); j++){
-                JSONObject currentExpenditure = expenditures.getJSONObject(j);
-                Expenditure expenditure = new Expenditure();
-                expenditure.setAmount(currentExpenditure.getDouble("amount"));
-                expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
-                expenditureList.add(expenditure);
+        //TODO: If first time user, no budget exists so don't go through loop
+        if(!jsonData.equals("[]")) {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject currentCategory = response.getJSONObject(i);
+                String name = currentCategory.getString("name");
+                String color = currentCategory.getString("color");
+                JSONArray expenditures = currentCategory.getJSONArray("expenditures");
+                List<Expenditure> expenditureList = new ArrayList<Expenditure>();
+                for (int j = 0; j < expenditures.length(); j++) {
+                    JSONObject currentExpenditure = expenditures.getJSONObject(j);
+                    if(currentExpenditure.getInt("budget_id") == LocalData.budget.getId()){
+                        Expenditure expenditure = new Expenditure();
+                        expenditure.setAmount(currentExpenditure.getDouble("amount"));
+                        expenditure.setDate(formatDate(currentExpenditure.getString("created_at")));
+                        expenditureList.add(expenditure);
+                    }
+                }
+                Category category = new Category();
+                category.setName(name);
+                category.setColor(color);
+                category.setExpenditures(expenditureList);
+                categoryList.add(category);
             }
-            Category category = new Category();
-            category.setName(name);
-            category.setColor(color);
-            category.setExpenditures(expenditureList);
-            categoryList.add(category);
         }
         return categoryList;
 

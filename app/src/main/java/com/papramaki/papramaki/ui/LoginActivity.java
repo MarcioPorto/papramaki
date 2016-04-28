@@ -101,8 +101,11 @@ public class LoginActivity extends AppCompatActivity {
                         final String Client = response.header("Client");
                         final String Uid = response.header("Uid");
 
+                        JSONObject jsonUser = mAPIHelper.getUserInfoFromResponse(jsonData);
+                        int User_id = jsonUser.getInt("id");
 
-                        User user = new User(Uid, Client, AccessToken);
+
+                        User user = new User(Uid, Client, AccessToken, User_id);
                         mDbHelper.addUser(user);
 
                         Log.v(TAG, jsonData);
