@@ -69,7 +69,6 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
         holder.dateText.setText(expenditure.dateToString());
 
         for(Category category: LocalData.categories){
-            System.out.print("////////////////////////////////CAAAATEGORY :ID "+ expenditure.getCategoryId());
             if(expenditure.getCategoryId() == category.getId()){
                 holder.catText.setText(category.getName());
                 break;

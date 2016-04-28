@@ -133,6 +133,7 @@ public class APIHelper {
                 JSONObject currentCategory = response.getJSONObject(i);
                 String name = currentCategory.getString("name");
                 String color = currentCategory.getString("color");
+                int id = currentCategory.getInt("id");
                 JSONArray expenditures = currentCategory.getJSONArray("expenditures");
                 List<Expenditure> expenditureList = new ArrayList<Expenditure>();
                 for (int j = 0; j < expenditures.length(); j++) {
@@ -148,6 +149,7 @@ public class APIHelper {
                 category.setName(name);
                 category.setColor(color);
                 category.setExpenditures(expenditureList);
+                category.setId(id);
                 categoryList.add(category);
             }
         }
