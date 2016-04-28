@@ -58,9 +58,20 @@ public class APIHelper {
         });
     }
 
-
+    public String errorIdentifier(String jsonData) throws JSONException{
+        JSONObject response = new JSONObject(jsonData);
+        JSONArray errorType = response.getJSONArray("errors");
+        final String errorText = errorType.getString(0);
+        return errorText;
+    }
     //Methods to retrieve data from JSON Objects
-
+    public String signUpErrorIdentifier(String jsonData) throws JSONException{
+        JSONObject response = new JSONObject(jsonData);
+        JSONObject errorType = response.getJSONObject("errors");
+        JSONArray fullMessage = errorType.getJSONArray("full_messages");
+        final String errorText = fullMessage.getString(0);
+        return errorText;
+    }
     public Budget getLatestBudget(String jsonData) throws JSONException {
 
         Budget budget = new Budget();
