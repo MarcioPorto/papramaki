@@ -1,16 +1,9 @@
 package com.papramaki.papramaki.ui;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.DatabaseUtils;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
-import com.papramaki.papramaki.database.BudgetContract;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
-import com.papramaki.papramaki.models.Category;
-import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
@@ -39,13 +29,10 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -201,7 +188,7 @@ public class BudgetFragment extends Fragment {
                             });
 
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);

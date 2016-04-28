@@ -1,10 +1,10 @@
 package com.papramaki.papramaki.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
@@ -14,9 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-import java.text.DateFormat;
-import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,31 +44,57 @@ public class APIHelper {
         return isAvailable;
     }
 
-    public void alertUserAboutError() {
+    /**
+     * More general errors, not related to login or signup
+     * @param jsonData - the json response in String format
+     * @throws JSONException
+     */
+    public void alertUserAboutError(String jsonData) throws JSONException{
+        JSONObject response = new JSONObject(jsonData);
+        final String errorText = response.getString("error");
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("There was an error processing your request").setTitle("Oops!");
-                builder.create();
+                Toast.makeText(activity, errorText, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public String errorIdentifier(String jsonData) throws JSONException{
+    /**
+     * Shows errors, if they exist, when the user tries to log in
+     * @param jsonData - the json response in String format
+     * @throws JSONException
+     */
+    public void showLogInErrors(String jsonData) throws JSONException{
         JSONObject response = new JSONObject(jsonData);
         JSONArray errorType = response.getJSONArray("errors");
         final String errorText = errorType.getString(0);
-        return errorText;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(activity, errorText, Toast.LENGTH_LONG).show();
+            }
+        });
     }
-    //Methods to retrieve data from JSON Objects
-    public String signUpErrorIdentifier(String jsonData) throws JSONException{
+
+    /**
+     * Shows errors, if they exist, when the user tries to sign up
+     * @param jsonData - the json response in String format
+     * @throws JSONException
+     */
+    public void showSignUpErrors(String jsonData) throws JSONException{
         JSONObject response = new JSONObject(jsonData);
         JSONObject errorType = response.getJSONObject("errors");
         JSONArray fullMessage = errorType.getJSONArray("full_messages");
         final String errorText = fullMessage.getString(0);
-        return errorText;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(activity, errorText, Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
     public Budget getLatestBudget(String jsonData) throws JSONException {
 
         Budget budget = new Budget();

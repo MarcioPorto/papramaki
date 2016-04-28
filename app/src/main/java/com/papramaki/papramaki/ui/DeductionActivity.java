@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
-import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.User;
@@ -34,7 +33,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -205,7 +203,7 @@ public class DeductionActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -267,7 +265,7 @@ public class DeductionActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
@@ -338,7 +336,7 @@ public class DeductionActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            mAPIHelper.alertUserAboutError();
+                            mAPIHelper.alertUserAboutError(jsonData);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
