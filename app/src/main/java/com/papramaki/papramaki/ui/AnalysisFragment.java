@@ -25,6 +25,7 @@ import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
@@ -39,6 +40,7 @@ public class AnalysisFragment extends Fragment {
     protected DatabaseHelper mDbHelper;
     protected TextView moneySpentView;
     protected TextView balanceView;
+    //protected List<Category> categories;
 
     protected APIHelper mAPIHelper;
     protected TextView budgetView;
@@ -78,15 +80,17 @@ public class AnalysisFragment extends Fragment {
         final LinkedHashMap<String, Double> expensesMap = organizeHistory();
         PieSlice slice;
 
+        List<Category> categories = organizeHistory1();
         Random random = new Random();
-        for (String category : expensesMap.keySet()) {
-            int color1Index = random.nextInt(mColors.length);
-            int color2Index = random.nextInt(mColors.length);
+        //for (String category : expensesMap.keySet()) {
+//            int color1Index = random.nextInt(mColors.length);
+//            int color2Index = random.nextInt(mColors.length);
+        for(Category category: categories){
             slice = new PieSlice();
-            slice.setColor(Color.parseColor(mColors[color1Index]));
-            slice.setSelectedColor(Color.parseColor(mColors[color2Index]));
-            slice.setValue(Float.parseFloat(String.valueOf(expensesMap.get(category))));
-            slice.setTitle(category);
+            slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
+            slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
+            slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
+            slice.setTitle(category.getName());
             mPieGraph.addSlice(slice);
         }
 
@@ -200,7 +204,13 @@ public class AnalysisFragment extends Fragment {
         return expensesMap;
     }
 
-    public static void updatePieChart(){
-
+    public List<Category> organizeHistory1(){
+        List<Category> categories = new ArrayList<Category>();
+        for(Category category: LocalData.categories){
+            if(!category.getExpenditures().isEmpty()){
+                categories.add(category);
+            }
+        }
+        return categories;
     }
 }
