@@ -80,7 +80,7 @@ public class AnalysisFragment extends Fragment {
         final LinkedHashMap<String, Double> expensesMap = organizeHistory();
         PieSlice slice;
 
-        List<Category> categories = organizeHistory1();
+        final List<Category> categories = organizeHistory1();
         Random random = new Random();
         //for (String category : expensesMap.keySet()) {
 //            int color1Index = random.nextInt(mColors.length);
@@ -100,7 +100,10 @@ public class AnalysisFragment extends Fragment {
             public void onClick(int index) {
                 try {
                     Toast.makeText(getActivity(),
-                            "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
+//                            "You spent " + formatAmount((double) expensesMap.values().toArray()[index]) + " on " + String.valueOf(expensesMap.keySet().toArray()[index]),
+//                            Toast.LENGTH_LONG)
+//                            .show();
+                            "You spent " + formatAmount((double) categories.get(index).getSumCategory()) + " on " + String.valueOf(categories.get(index).getName()),
                             Toast.LENGTH_LONG)
                             .show();
                 } catch (ArrayIndexOutOfBoundsException exception) {
