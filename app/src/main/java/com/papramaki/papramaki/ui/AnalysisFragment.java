@@ -208,4 +208,8 @@ public class AnalysisFragment extends Fragment {
         }
         return expensesMap;
     }
+
+    public static void updatePieChart(){
+
+    }
 }

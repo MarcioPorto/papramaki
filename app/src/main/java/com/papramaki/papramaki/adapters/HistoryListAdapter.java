@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
-    //TODO: Use categories instead of expenditures? This may bring expenditures from previous budget periods :(
+    //TODO: Use categories instead of expenditures?
 
     private Context context;
     private List<Expenditure> items;
