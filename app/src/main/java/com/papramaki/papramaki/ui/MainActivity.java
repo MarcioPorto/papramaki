@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     // Creates an instance of the MainFragmentAdapter and one
     // ViewPager (which basically is what allows you to flip
     // left and right
-    MainFragmentAdapter mMainFragmentAdapter;
-    ViewPager mViewPager;
+    static MainFragmentAdapter mMainFragmentAdapter;
+    static ViewPager mViewPager;
     DatabaseHelper mDbHelper;
 
     // Making these static so they can be accessed from the fragments
@@ -261,7 +261,9 @@ public class MainActivity extends AppCompatActivity {
 //                            MainActivity.runOnUI(new Runnable() {
 //                                @Override
 //                                public void run() {
-//                                    HistoryFragment.updateDisplay();
+//
+//                                    mMainFragmentAdapter.getItem(2)
+//                                    mMainFragmentAdapter.getItem(2).getClass();
 //                                }
 //                            });
                         } else {

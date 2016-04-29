@@ -33,6 +33,7 @@ public class AnalysisFragment extends Fragment {
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
 
+    public static TextView titleView;
     public static TextView moneySpentView;
     public static TextView balanceView;
     public static TextView budgetView;
@@ -61,6 +62,7 @@ public class AnalysisFragment extends Fragment {
         mPieGraph = (PieGraph) rootView.findViewById(R.id.piegraph);
         mPieGraph.setInnerCircleRatio(180);
         mDbHelper = new DatabaseHelper(getContext());
+        titleView = (TextView) rootView.findViewById(R.id.analysisTitle);
         moneySpentView = (TextView) rootView.findViewById(R.id.moneySpent);
         balanceView = (TextView) rootView.findViewById(R.id.textView3);
         budgetView = (TextView) rootView.findViewById(R.id.ofBudget);
@@ -132,6 +134,7 @@ public class AnalysisFragment extends Fragment {
 
         DecimalFormat formatter = new DecimalFormat("$0.00");
 
+        titleView.setText("Your Spending Analysis");
         moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
         //budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());

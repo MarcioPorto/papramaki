@@ -21,7 +21,7 @@ public class HistoryFragment extends ListFragment {
 
     public static final String TAG = HistoryFragment.class.getSimpleName();
 
-    protected List<Expenditure> expenditureHistory;
+    protected static List<Expenditure> expenditureHistory;
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
 
@@ -75,7 +75,7 @@ public class HistoryFragment extends ListFragment {
 //        }
 //    };
 
-    protected void updateLayout() {
+    public void updateLayout() {
         expenditureHistory = LocalData.history.getExpenditures();
         ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
         setListAdapter(histAdapter);
