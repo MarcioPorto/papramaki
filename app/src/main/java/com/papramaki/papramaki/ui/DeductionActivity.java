@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
+import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.User;
@@ -48,6 +49,7 @@ public class DeductionActivity extends AppCompatActivity {
     protected Button mAddButton;
     protected APIHelper mAPIHelper;
     protected int mCategoryId;
+    protected User user;
 
     protected DatabaseHelper mDbHelper;
     protected List<String> mCategoriesDropdownItems = new ArrayList<String>();
@@ -70,8 +72,9 @@ public class DeductionActivity extends AppCompatActivity {
         mAddButton = (Button)findViewById(R.id.add_button);
         mDbHelper = new DatabaseHelper(this);
         mAPIHelper = new APIHelper(this, this);
+        user = mDbHelper.getUser();
 
-        // Populates dropdown
+         //Populates dropdown
         for(Category category: LocalData.categories) {
             mCategoriesDropdownItems.add(category.getName());
         }
@@ -86,29 +89,46 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                double amount = Double.valueOf(mAmountInput.getText().toString());
-                String categoryName = mCategoryInput.getText().toString();
 
-                // If the category input field is not empty, use that to post a new category
-                // Else, add that expenditure to the category selected from the spinner
-                if (!categoryName.equals("")) {
-                    postCategoryRequest(categoryName, amount);
-                } else {
-                    String selectedCategory = mUserCategoriesSpinner.getSelectedItem().toString();
-                    for(Category category : LocalData.categories){
-                        if(selectedCategory.equals(category.getName())) {
-                            mCategoryId = category.getId();
-                            break;
+                if (!(mAmountInput.getText().toString().equals(""))){
+                    double amount = Double.valueOf(mAmountInput.getText().toString());
+                    String categoryName = mCategoryInput.getText().toString();
+
+    //                Expenditure expenditure = new Expenditure(amount, mCategoryInput.getText().toString(), date);
+    //
+    //                mDbHelper.addExpenditure(expenditure);
+    //                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
+
+                    Log.i(TAG, LocalData.budget.toString());
+
+                    //postExpenditureRequest(amount);
+                    putBalanceRequest(amount);
+
+                    if (!categoryName.equals("")) {
+                        postCategoryRequest(categoryName, amount);
+                    } else {
+                        String selectedCategory = mUserCategoriesSpinner.getSelectedItem().toString();
+                        for(Category category : LocalData.categories){
+                            if(selectedCategory.equals(category.getName())) {
+                                mCategoryId = category.getId();
+                                break;
+                            }
                         }
+                        postExpenditureRequest(amount);
                     }
-                    postExpenditureRequest(amount);
-                }
 
-                putBalanceRequest(amount);
+
+                    //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
+
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    intent.putExtra("caller", "DeductionActivity");
+                    startActivity(intent);
+                }
 
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 intent.putExtra("caller", "DeductionActivity");
                 startActivity(intent);
+
             }
         });
 
@@ -130,8 +150,18 @@ public class DeductionActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_log_out) {
             // TODO: Actually log the user out
+            //remove user from database
+            makeLogoutRequest();
+            mDbHelper.userLogout();
+            LocalData.balance = 0;
+            LocalData.budget = new Budget();
+            LocalData.history.getExpenditures().clear();
+            LocalData.categories = new ArrayList<Category>();
+
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            finish();
+
             return true;
         }
 
@@ -306,6 +336,56 @@ public class DeductionActivity extends AppCompatActivity {
                             Category category = new Category(categoryName, categoryColor, categoryId);
                             LocalData.categories.add(category);
                             postExpenditureRequest(expenditureAmount);
+                        } else {
+                            mAPIHelper.alertUserAboutError(jsonData);
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(DeductionActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void makeLogoutRequest(){
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_out";
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
+                    .addHeader("Accept", "application/json")
+                    .delete()
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // TODO: Handle this later
+
+                    //put in getActivity.runUiThread()
+                    Toast.makeText(DeductionActivity.this, "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(DeductionActivity.this, jsonData, Toast.LENGTH_LONG).show();
+
+                                }
+                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }

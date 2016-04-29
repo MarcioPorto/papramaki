@@ -100,6 +100,15 @@ public class BudgetFragment extends Fragment {
                 if(!strAmount.equals("")) {
                     Double amount = Double.valueOf(strAmount);
                     postBudgetRequest(amount,duration);
+                    resetBalanceRequest(amount);
+//                    Budget budget = new Budget(amount);
+//                    budget.setBalance(amount);
+//                    mDbHelper.addBudget(budget);
+
+//                    mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
+//                    mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
+                    //mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
+
                 }
                 //PREVIOUS VERSION
                 //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
@@ -179,6 +188,69 @@ public class BudgetFragment extends Fragment {
                                 }
                             });
 
+                        } else {
+                            mAPIHelper.alertUserAboutError(jsonData);
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void resetBalanceRequest(double expenditureAmount) {
+        User user = mDbHelper.getUser();
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/balances/" + String.valueOf(user.getUser_id());
+//        String budgetsEndpoint = "budgets";
+//        String finalUrl = apiUrl + budgetsEndpoint;
+        //mAPIHelper = new APIHelper(getContext(), getActivity());
+
+        RequestBody params = new FormEncodingBuilder()
+                .add("amount", String.valueOf(expenditureAmount))
+                .build();
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .put(params)
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
+                    .addHeader("Accept", "application/json")
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    // TODO: Handle this later
+
+                    //put in getActivity.runUiThread()
+                    Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            JSONObject object = new JSONObject(jsonData);
+                            final double balance = object.getDouble("amount");
+                            LocalData.balance = balance;
+////                            final String budgetsValue = getBudgetsValue(jsonData);
+//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
+
+                                }
+                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
