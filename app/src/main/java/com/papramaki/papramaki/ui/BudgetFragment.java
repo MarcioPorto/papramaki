@@ -1,6 +1,7 @@
 package com.papramaki.papramaki.ui;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,6 +46,7 @@ import java.io.IOException;
 public class BudgetFragment extends Fragment {
 
     private static final String TAG = BudgetFragment.class.getSimpleName();
+    private Calendar myCalendar;
 
     protected TextView mTextView;
     public static TextView mBudgetDisplay;
@@ -52,6 +56,7 @@ public class BudgetFragment extends Fragment {
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
     protected APIHelper mAPIHelper;
+    protected Button mDatePickerButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +72,8 @@ public class BudgetFragment extends Fragment {
         mAPIHelper = new APIHelper(getContext(), getActivity());
 
         mSpinner = (Spinner)rootView.findViewById(R.id.spinner);
+        myCalendar = Calendar.getInstance();
+        mDatePickerButton = (Button)rootView.findViewById(R.id.date_picker_button);
 
 
         mDbHelper = new DatabaseHelper(getContext());
@@ -101,6 +108,13 @@ public class BudgetFragment extends Fragment {
         Integer[] durationOptions = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
         ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
         mSpinner.setAdapter(spinAdapter);
+
+        mDatePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickDate();
+            }
+        });
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,6 +300,20 @@ public class BudgetFragment extends Fragment {
         if(activity.getCurrentFocus() != null) {
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            // TODO: Update budget with new expiration date
+        }
+    };
+
+    private void pickDate() {
+        new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
 }
