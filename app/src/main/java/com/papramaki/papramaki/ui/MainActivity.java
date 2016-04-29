@@ -1,6 +1,7 @@
 package com.papramaki.papramaki.ui;
 
-
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
@@ -32,6 +36,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public static User user;
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
     private static Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
