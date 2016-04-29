@@ -1,13 +1,16 @@
 package com.papramaki.papramaki.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,6 +78,16 @@ public class BudgetFragment extends Fragment {
 //            DecimalFormat formatter = new DecimalFormat("$0.00");
 //            mBudgetDisplay.setText(formatter.format(0.00));
 //        }
+
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if(event.getAction() == MotionEvent.ACTION_MOVE){
+                    hideSoftKeyboard(getActivity());
+                }
+                return true;
+            }
+        });
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,6 +277,11 @@ public class BudgetFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }
