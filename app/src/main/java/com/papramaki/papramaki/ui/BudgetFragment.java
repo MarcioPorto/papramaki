@@ -105,12 +105,14 @@ public class BudgetFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalData.history.getExpenditures().clear();
-                LocalData.balance = 0;
-                LocalData.categories.clear();
+
+
                 String strAmount = mBudget.getText().toString();
                 String duration = mSpinner.getSelectedItem().toString();
                 if(!strAmount.equals("")) {
+                    LocalData.history.getExpenditures().clear();
+                    LocalData.balance = 0;
+                    LocalData.categories.clear();
                     Double amount = Double.valueOf(strAmount);
                     postBudgetRequest(amount,duration);
                     resetBalanceRequest(amount);
@@ -281,7 +283,9 @@ public class BudgetFragment extends Fragment {
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        if(activity.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }
