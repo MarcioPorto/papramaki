@@ -59,6 +59,14 @@
                 android:text="Duration:"
                 android:id="@+id/textView5"/>
 
+            <Button
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="Edit Expiration Date"
+                android:textColor="@color/background_white"
+                android:id="@+id/date_picker_button"
+                android:background="@color/pink_a200"/>
+
             <Spinner
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -85,16 +93,8 @@
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="29dp"
-            android:background="@color/pink_a200"/>
+            android:background="@color/pink_a200" />
     </RelativeLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Expiration Date"
-        android:textColor="@color/background_white"
-        android:id="@+id/date_picker_button"
-        android:background="@color/pink_a200"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/FAB"
