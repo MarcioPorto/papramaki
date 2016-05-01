@@ -12,9 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import android.widget.RadioGroup;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+
 import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
@@ -31,6 +35,7 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
 
 import org.json.JSONException;
 
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     static MainFragmentAdapter mMainFragmentAdapter;
     static ViewPager mViewPager;
     DatabaseHelper mDbHelper;
+    RadioGroup mRadioGroup;
 
     // Making these static so they can be accessed from the fragments
     public static APIHelper mAPIHelper;
@@ -67,20 +73,32 @@ public class MainActivity extends AppCompatActivity {
 
         // Creates an adapter that will return a fragment for each section
         mMainFragmentAdapter = new MainFragmentAdapter(this, getSupportFragmentManager());
+        mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
+
 
         // Makes the Analysis fragment the default view
         // TODO: Lead to BydgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
             @Override
             public void onPageSelected(int position) {
-                super.onPageSelected(position);
+                mRadioGroup.check(mRadioGroup.getChildAt(position).getId());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 

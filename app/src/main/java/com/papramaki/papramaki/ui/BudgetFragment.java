@@ -36,6 +36,7 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -57,6 +58,8 @@ public class BudgetFragment extends Fragment {
     protected DatabaseHelper mDbHelper;
     protected APIHelper mAPIHelper;
     protected Button mDatePickerButton;
+    protected TextView mDurationLabel;
+    protected TextView mWeeksLabel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,9 +74,12 @@ public class BudgetFragment extends Fragment {
         mBudget = (EditText) rootView.findViewById(R.id.budget);
         mAPIHelper = new APIHelper(getContext(), getActivity());
 
+        // these all handle picking a budget's expiration date
         mSpinner = (Spinner)rootView.findViewById(R.id.spinner);
         myCalendar = Calendar.getInstance();
         mDatePickerButton = (Button)rootView.findViewById(R.id.date_picker_button);
+        mDurationLabel = (TextView)rootView.findViewById(R.id.textView5);
+        mWeeksLabel = (TextView)rootView.findViewById(R.id.textView6);
 
 
         mDbHelper = new DatabaseHelper(getContext());
@@ -115,6 +121,14 @@ public class BudgetFragment extends Fragment {
                 pickDate();
             }
         });
+
+        mDatePickerButton.setVisibility(View.GONE);
+        // TODO: when budget is not expired, uncomment this code and set mDatePickerButton to View.VISIBLE
+//        mSpinner.setVisibility(View.GONE);
+//        mDurationLabel.setVisibility(View.GONE);
+//        mWeeksLabel.setVisibility(View.GONE);
+//        mButton.setText("UPDATE");
+
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override

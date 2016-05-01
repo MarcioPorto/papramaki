@@ -8,89 +8,93 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.papramaki.papramaki.ui.AnalysisFragment">
-
-    <TextView
-        android:id="@+id/another_fragment_text"
-        android:text="Your Current Budget"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="0.0"
-        android:textSize="40dp"
-        android:id="@+id/budgetDisplay"
-        android:layout_below="@+id/another_fragment_text"
-        android:layout_centerHorizontal="true"/>
-
-    <EditText
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:ems="13"
-        android:id="@+id/budget"
-        android:hint="Enter or edit your budget"
-        android:inputType="numberDecimal"
-        android:layout_below="@+id/budgetDisplay"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="10dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/pink_a400"/>
-
-    <LinearLayout
-        android:id="@+id/linearDurationLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/budget">
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:id="@+id/another_fragment_text"
+            android:text="Your Current Budget"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="110dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Duration:"
-            android:id="@+id/textView5"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0.0"
+            android:textSize="40dp"
+            android:id="@+id/budgetDisplay"
+            android:layout_below="@+id/another_fragment_text"
+            android:layout_centerHorizontal="true"/>
 
-        <Spinner
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/spinner"/>
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:ems="13"
+            android:id="@+id/budget"
+            android:hint="Enter or edit your budget"
+            android:inputType="numberDecimal"
+            android:layout_below="@+id/budgetDisplay"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/pink_a400"/>
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/linearDurationLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="week(s)"
-            android:textColor="@color/black"
-            android:id="@+id/textView6"
-            android:layout_marginLeft="5dp"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/budget">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Duration:"
+                android:id="@+id/textView5"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:textColor="@color/background_white"
-        android:id="@+id/button2"
-        android:layout_below="@+id/linearDurationLayout"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="29dp"
-        android:background="@color/pink_a200"/>
+            <Button
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:text="Edit Expiration Date"
+                android:textColor="@color/background_white"
+                android:id="@+id/date_picker_button"
+                android:background="@color/pink_a200"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Expiration Date"
-        android:textColor="@color/background_white"
-        android:id="@+id/date_picker_button"
-        android:background="@color/pink_a200"/>
+            <Spinner
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/spinner"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="week(s)"
+                android:textColor="@color/black"
+                android:id="@+id/textView6"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@color/background_white"
+            android:id="@+id/button2"
+            android:layout_below="@+id/linearDurationLayout"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="29dp"
+            android:background="@color/pink_a200" />
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/FAB"
@@ -101,7 +105,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/button2"
         app:backgroundTint="@color/pink_a400"/>
 
 </RelativeLayout>
