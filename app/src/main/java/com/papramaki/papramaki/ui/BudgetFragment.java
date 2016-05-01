@@ -36,10 +36,13 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -47,19 +50,19 @@ import java.util.Calendar;
 public class BudgetFragment extends Fragment {
 
     private static final String TAG = BudgetFragment.class.getSimpleName();
-    private Calendar myCalendar;
+    protected static Calendar myCalendar;
 
     protected TextView mTextView;
     public static TextView mBudgetDisplay;
-    protected EditText mBudget;
-    protected Spinner mSpinner;
-    protected Button mButton;
+    protected static EditText mBudget;
+    protected static Spinner mSpinner;
+    protected static Button mButton;
     protected FloatingActionButton mFAB;
-    protected DatabaseHelper mDbHelper;
-    protected APIHelper mAPIHelper;
-    protected Button mDatePickerButton;
-    protected TextView mDurationLabel;
-    protected TextView mWeeksLabel;
+    protected static DatabaseHelper mDbHelper;
+    protected static APIHelper mAPIHelper;
+    protected static Button mDatePickerButton;
+    protected static TextView mDurationLabel;
+    protected static TextView mWeeksLabel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,24 +84,50 @@ public class BudgetFragment extends Fragment {
         mDurationLabel = (TextView)rootView.findViewById(R.id.textView5);
         mWeeksLabel = (TextView)rootView.findViewById(R.id.textView6);
 
-
         mDbHelper = new DatabaseHelper(getContext());
-
-            //mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-        mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
-
-//        else{
-//            DecimalFormat formatter = new DecimalFormat("$0.00");
-//            mBudgetDisplay.setText(formatter.format(0.00));
-//        }
 
         rootView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(event.getAction() == MotionEvent.ACTION_MOVE){
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     hideSoftKeyboard(getActivity());
                 }
                 return true;
+            }
+        });
+
+        // set up dropdown menu for user to select budget's duration
+        Integer[] durationOptions = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
+        ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
+        mSpinner.setAdapter(spinAdapter);
+
+        mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
+        mDatePickerButton.setVisibility(View.GONE);
+        mButton.setText("SAVE");
+
+        mDatePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickDate();
+            }
+        });
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String strAmount = mBudget.getText().toString();
+                String duration = mSpinner.getSelectedItem().toString();
+                if(!strAmount.equals("")) {
+                    LocalData.history.getExpenditures().clear();
+                    LocalData.balance = 0;
+                    LocalData.categories.clear();
+                    Double amount = Double.valueOf(strAmount);
+                    postBudgetRequest(amount,duration);
+                    resetBalanceRequest(amount);
+                }
+
+                mBudget.getText().clear();
             }
         });
 
@@ -110,56 +139,6 @@ public class BudgetFragment extends Fragment {
             }
         });
 
-        // set up dropdown menu for user to select budget's duration
-        Integer[] durationOptions = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
-        ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
-        mSpinner.setAdapter(spinAdapter);
-
-        mDatePickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickDate();
-            }
-        });
-
-        mDatePickerButton.setVisibility(View.GONE);
-        // TODO: when budget is not expired, uncomment this code and set mDatePickerButton to View.VISIBLE
-//        mSpinner.setVisibility(View.GONE);
-//        mDurationLabel.setVisibility(View.GONE);
-//        mWeeksLabel.setVisibility(View.GONE);
-//        mButton.setText("UPDATE");
-
-
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String strAmount = mBudget.getText().toString();
-                String duration = mSpinner.getSelectedItem().toString();
-                if(!strAmount.equals("")) {
-                    LocalData.history.getExpenditures().clear();
-                    LocalData.balance = 0;
-                    LocalData.categories.clear();
-                    Double amount = Double.valueOf(strAmount);
-                    postBudgetRequest(amount,duration);
-                    resetBalanceRequest(amount);
-//                    Budget budget = new Budget(amount);
-//                    budget.setBalance(amount);
-//                    mDbHelper.addBudget(budget);
-
-//                    mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-//                    mBalanceDisplay.setText(mDbHelper.getLatestBudget().getFormattedBalance());
-                    //mBudgetDisplay.setText(mDbHelper.getLatestBudget().getFormattedBudget());
-
-                }
-                //PREVIOUS VERSION
-                //mBudgetDisplay.setText("$ " + LocalData.budget.toString());
-
-                mBudget.getText().clear();
-            }
-        });
-
         return rootView;
     }
 
@@ -168,14 +147,45 @@ public class BudgetFragment extends Fragment {
         super.onResume();
 
         MainActivity.getBudgetsRequest();
-        updateLayout();
     }
 
-    protected void updateLayout() {
+    public static void updateLayout() {
         mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
+
+        Calendar today = Calendar.getInstance();
+        Date expirationDate = LocalData.budget.getExpirationDate();
+        if (expirationDate.compareTo(today.getTime()) > 0) {
+            // If the budget is not expired yet
+            mBudget.setText(String.valueOf(LocalData.budget.getBudget()));
+            mDatePickerButton.setVisibility(View.VISIBLE);
+            mSpinner.setVisibility(View.GONE);
+            mDurationLabel.setVisibility(View.GONE);
+            mWeeksLabel.setVisibility(View.GONE);
+            mButton.setText("UPDATE");
+
+            myCalendar.setTime(LocalData.budget.getExpirationDate());
+
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Date calendarDate = myCalendar.getTime();
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    String newDate = df.format(calendarDate);
+                    Log.d(TAG, newDate);
+                    putBudgetRequest(Double.parseDouble(mBudget.getText().toString()), newDate);
+                }
+            });
+        } else {
+            mDatePickerButton.setVisibility(View.GONE);
+            mSpinner.setVisibility(View.VISIBLE);
+            mDurationLabel.setVisibility(View.VISIBLE);
+            mWeeksLabel.setVisibility(View.VISIBLE);
+            mButton.setText("SAVE");
+        }
+
     }
 
-    private void postBudgetRequest(double budgetAmount, String duration) {
+    public static void postBudgetRequest(double budgetAmount, String duration) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
         User user = mDbHelper.getUser();
 
@@ -197,7 +207,7 @@ public class BudgetFragment extends Fragment {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -215,19 +225,10 @@ public class BudgetFragment extends Fragment {
                             budget.setDuration(duration);
                             LocalData.budget = budget;
 
-//                            MainActivity.runOnUI(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    Toast.makeText(getContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
-//                                    updateLayout();
-//                                }
-//                            });
-//
-                            getActivity().runOnUiThread(new Runnable() {
+                            MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
-                                    updateLayout();
+                                    MainActivity.getBudgetsRequest();
                                 }
                             });
 
@@ -242,16 +243,13 @@ public class BudgetFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void resetBalanceRequest(double expenditureAmount) {
+    public static void resetBalanceRequest(double expenditureAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances/" + String.valueOf(user.getUser_id());
-//        String budgetsEndpoint = "budgets";
-//        String finalUrl = apiUrl + budgetsEndpoint;
-        //mAPIHelper = new APIHelper(getContext(), getActivity());
 
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(expenditureAmount))
@@ -270,10 +268,7 @@ public class BudgetFragment extends Fragment {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
-                    Toast.makeText(getContext(), "There was an error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -285,15 +280,14 @@ public class BudgetFragment extends Fragment {
                             JSONObject object = new JSONObject(jsonData);
                             final double balance = object.getDouble("amount");
                             LocalData.balance = balance;
-////                            final String budgetsValue = getBudgetsValue(jsonData);
-//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
 
-                                }
-                            });
+//                            MainActivity.runOnUI(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    Toast.makeText(MainActivity.getAppContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
+//                                    updateLayout();
+//                                }
+//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -305,7 +299,7 @@ public class BudgetFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -327,7 +321,66 @@ public class BudgetFragment extends Fragment {
     };
 
     private void pickDate() {
-        new DatePickerDialog(getActivity(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(getActivity(), date,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public static void putBudgetRequest(double budgetAmount, String date) {
+        String budgetId = String.valueOf(LocalData.budget.getId());
+        String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets/" + budgetId;
+        User user = mDbHelper.getUser();
+
+        RequestBody params = new FormEncodingBuilder()
+                .add("amount", String.valueOf(budgetAmount))
+                .add("expiration_date", String.valueOf(date))
+                .build();
+        if (mAPIHelper.isNetworkAvailable()) {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(apiUrl)
+                    .put(params)
+                    .addHeader("Access-Token", user.getAccessToken())
+                    .addHeader("Uid", user.getUid())
+                    .addHeader("Client", user.getClient())
+                    .addHeader("Accept", "application/json")
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(final Response response) throws IOException {
+                    try {
+                        final String jsonData = response.body().string();
+
+                        Log.v(TAG, jsonData);
+                        if (response.isSuccessful()) {
+                            LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
+                            MainActivity.runOnUI(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateLayout();
+                                }
+                            });
+
+                        } else {
+                            mAPIHelper.alertUserAboutError(jsonData);
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

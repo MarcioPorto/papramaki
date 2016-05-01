@@ -14,11 +14,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by paulchery on 4/21/16.
@@ -111,10 +114,30 @@ public class APIHelper {
             int amount = currentBudget.getInt("amount");
             int duration = currentBudget.getInt("duration");
             int budgetId = currentBudget.getInt("id");
+            boolean budgetExpired = currentBudget.getBoolean("expired");
+            String budgetExpirationDate = currentBudget.getString("expiration_date");
+
+//            int year = Integer.parseInt(budgetExpirationDate.substring(0, 4));
+//            Log.d(TAG, String.valueOf(year));
+//            int month = Integer.parseInt(budgetExpirationDate.substring(5, 7));
+//            Log.d(TAG, String.valueOf(month));
+//            int day = Integer.parseInt(budgetExpirationDate.substring(8, 10));
+//            Log.d(TAG, String.valueOf(day));
+//            Date date = new Date(year, month, day);
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = new Date();
+            try {
+                date = df.parse(budgetExpirationDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             budget.setBudget(amount);
             budget.setId(budgetId);
             budget.setDuration(duration);
+            budget.setExpired(budgetExpired);
+            budget.setExpirationDate(date);
         }
         return budget;
     }

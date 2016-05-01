@@ -1,8 +1,7 @@
 package com.papramaki.papramaki.models;
 
-import android.content.Intent;
-
 import java.text.DecimalFormat;
+import java.util.Date;
 
 public class  Budget {
 
@@ -11,6 +10,8 @@ public class  Budget {
     private double moneySpent;
     private int duration;
     private int id;
+    private boolean expired;
+    private Date expirationDate;
 
     public Budget(double budget, int id) {
         this.budget = budget;
@@ -91,5 +92,19 @@ public class  Budget {
     }
 
 
+    public boolean isExpired() {
+        return expired;
+    }
 
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 }

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:ems="13"
             android:id="@+id/budget"
-            android:hint="Enter or edit your budget"
+            android:hint="Enter your budget"
             android:inputType="numberDecimal"
             android:layout_below="@+id/budgetDisplay"
             android:layout_marginTop="50dp"
