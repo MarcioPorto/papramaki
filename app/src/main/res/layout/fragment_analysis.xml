@@ -17,10 +17,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
-        android:text="Monthly Spending Analysis"
+        android:text="Your Spending Analysis"
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:id="@+id/textView8" />
 
     <com.echo.holographlibrary.PieGraph
         android:id="@+id/piegraph"
@@ -106,5 +107,16 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|right"
         app2:backgroundTint="@color/pink_a400"/>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Budget Duration"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_below="@+id/textView8"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

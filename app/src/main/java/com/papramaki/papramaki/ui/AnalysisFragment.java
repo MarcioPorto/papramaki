@@ -22,6 +22,8 @@ import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.utils.LocalData;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class AnalysisFragment extends Fragment {
     public static TextView moneySpentView;
     public static TextView balanceView;
     public static TextView budgetView;
+    public static TextView durationView;
 
     public static List<Category> mCategories;
     public static PieGraph mPieGraph;
@@ -66,6 +69,7 @@ public class AnalysisFragment extends Fragment {
         moneySpentView = (TextView) rootView.findViewById(R.id.moneySpent);
         balanceView = (TextView) rootView.findViewById(R.id.textView3);
         budgetView = (TextView) rootView.findViewById(R.id.ofBudget);
+        durationView = (TextView) rootView.findViewById(R.id.duration);
 
         updateLayout();
 
@@ -132,9 +136,11 @@ public class AnalysisFragment extends Fragment {
             mPieGraph.addSlice(slice);
         }
 
-        DecimalFormat formatter = new DecimalFormat("$0.00");
+        // // TODO: add calls to get current budget's creation date and expiration date here
+        durationView.setText("(from ___ to ___)");
 
         titleView.setText("Your Spending Analysis");
+        DecimalFormat formatter = new DecimalFormat("$0.00");
         moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
         //budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
