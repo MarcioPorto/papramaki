@@ -32,6 +32,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -261,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             final List<Expenditure> history = mAPIHelper.getExpenditures(jsonData);
+                            Collections.reverse(history);
                             LocalData.history.setExpenditures(history);
 
 //                            MainActivity.runOnUI(new Runnable() {

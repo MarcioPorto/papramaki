@@ -19,10 +19,9 @@ import java.util.List;
  */
 public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
-    //TODO: Use categories instead of expenditures?
-
     private Context context;
     private List<Expenditure> items;
+
     public HistoryListAdapter(Context context, List<Expenditure> items) {
         super(context, R.layout.history_item, items);
         this.context = context;
@@ -63,7 +62,6 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
 
         holder.titleText.setText(expenditure.formatAmount());
         holder.dateText.setText(expenditure.dateToString());

@@ -7,7 +7,6 @@ public class History {
 
     private List<Expenditure> expenditures;
 
-
     public History() {
         this.expenditures = new ArrayList<>();
     }

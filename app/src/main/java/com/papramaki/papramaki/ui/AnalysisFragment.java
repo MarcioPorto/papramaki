@@ -22,8 +22,6 @@ import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.utils.LocalData;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;

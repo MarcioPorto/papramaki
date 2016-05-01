@@ -20,8 +20,7 @@
         android:text="Your Spending Analysis"
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:id="@+id/textView8" />
+        android:layout_alignParentTop="true" />
 
     <com.echo.holographlibrary.PieGraph
         android:id="@+id/piegraph"
