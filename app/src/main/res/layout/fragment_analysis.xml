@@ -92,6 +92,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
+        android:gravity="center"
         android:layout_marginBottom="90dp"
         android:textColor="@color/black" />
 
@@ -115,7 +116,7 @@
         android:text="Budget Duration"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:layout_below="@+id/textView8"
+        android:layout_below="@+id/analysisTitle"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
