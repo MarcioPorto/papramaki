@@ -5,6 +5,11 @@
         <item name="android:colorPrimary">@color/green_500</item>
         <item name="android:colorPrimaryDark">@color/green_700</item>
         <item name="android:colorAccent">@color/pink_a400</item>
+
+        <!-- Changes colors under EditText -->
+        <item name="colorControlNormal">@color/green_500</item>
+        <item name="colorControlActivated">@color/pink_a400</item>
+        <item name="colorControlHighlight">@color/pink_a400</item>
     </style>
 
 </resources>
