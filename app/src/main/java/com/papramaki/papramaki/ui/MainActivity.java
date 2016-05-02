@@ -46,14 +46,13 @@ public class MainActivity extends AppCompatActivity {
     static MainFragmentAdapter mMainFragmentAdapter;
     static ViewPager mViewPager;
     DatabaseHelper mDbHelper;
-    RadioGroup mRadioGroup;
+    static RadioGroup mRadioGroup;
 
     // Making these static so they can be accessed from the fragments
     public static APIHelper mAPIHelper;
     public static User user;
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
     private static Context context;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
-
         // Makes the Analysis fragment the default view
-        // TODO: Lead to BydgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
+        mRadioGroup.check(mRadioGroup.getChildAt(1).getId());
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -265,14 +263,12 @@ public class MainActivity extends AppCompatActivity {
                             Collections.reverse(history);
                             LocalData.history.setExpenditures(history);
 
-//                            MainActivity.runOnUI(new Runnable() {
-//                                @Override
-//                                public void run() {
-//
-//                                    mMainFragmentAdapter.getItem(2)
-//                                    mMainFragmentAdapter.getItem(2).getClass();
-//                                }
-//                            });
+                            MainActivity.runOnUI(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HistoryFragment.updateLayout();
+                                }
+                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }

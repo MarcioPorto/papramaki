@@ -24,8 +24,7 @@ public class HistoryFragment extends ListFragment {
     protected static List<Expenditure> expenditureHistory;
     protected FloatingActionButton mFAB;
     protected DatabaseHelper mDbHelper;
-
-//    protected SwipeRefreshLayout mSwipeRefreshLayout;
+    public static HistoryFragment mCurrentHistoryFragmentInstance;
 
     public HistoryFragment() {}
 
@@ -34,6 +33,7 @@ public class HistoryFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
+        mCurrentHistoryFragmentInstance = this;
         updateLayout();
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
@@ -46,15 +46,6 @@ public class HistoryFragment extends ListFragment {
             }
         });
 
-//        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
-//        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
-//        mSwipeRefreshLayout.setColorSchemeResources(
-//                R.color.green_700,
-//                R.color.green_900,
-//                R.color.pink_a200,
-//                R.color.pink_a400
-//        );
-
         return rootView;
     }
 
@@ -62,23 +53,17 @@ public class HistoryFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         MainActivity.retrieveAllData();
-
-        updateLayout();
     }
 
-//    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-//        @Override
-//        public void onRefresh() {
-//            MainActivity.retrieveAllData();
-//
-//            updateLayout();
-//        }
-//    };
-
-    public void updateLayout() {
+    /**
+     * Updates the layout based on the data returned by the getExpendituresRequest()
+     * method in MainActivity.
+     */
+    public static void updateLayout() {
         expenditureHistory = LocalData.history.getExpenditures();
-        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(getContext(), expenditureHistory);
-        setListAdapter(histAdapter);
+        ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(MainActivity.getAppContext(), expenditureHistory);
+        new android.app.ListFragment().setListAdapter(histAdapter);
+        mCurrentHistoryFragmentInstance.setListAdapter(histAdapter);
         histAdapter.notifyDataSetChanged();
     }
 

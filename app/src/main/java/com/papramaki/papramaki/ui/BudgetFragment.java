@@ -176,6 +176,11 @@ public class BudgetFragment extends Fragment {
                 }
             });
         } else {
+            // Takes the user to the BudgetFragment so they can add a new budget.
+            MainActivity.mViewPager.setCurrentItem(0);
+            MainActivity.mRadioGroup.check(MainActivity.mRadioGroup.getChildAt(1).getId());
+            Toast.makeText(MainActivity.getAppContext(), "Please enter a new budget", Toast.LENGTH_LONG).show();
+            // Updates the layout.
             mDatePickerButton.setVisibility(View.GONE);
             mSpinner.setVisibility(View.VISIBLE);
             mDurationLabel.setVisibility(View.VISIBLE);
