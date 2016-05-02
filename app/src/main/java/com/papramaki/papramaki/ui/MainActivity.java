@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     static MainFragmentAdapter mMainFragmentAdapter;
     static ViewPager mViewPager;
     DatabaseHelper mDbHelper;
-    RadioGroup mRadioGroup;
+    static RadioGroup mRadioGroup;
 
     // Making these static so they can be accessed from the fragments
     public static APIHelper mAPIHelper;
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mMainFragmentAdapter);
 
         // Makes the Analysis fragment the default view
-        // TODO: Lead to BudgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
+        mRadioGroup.check(mRadioGroup.getChildAt(1).getId());
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
