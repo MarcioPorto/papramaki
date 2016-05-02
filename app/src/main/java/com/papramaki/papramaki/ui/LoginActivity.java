@@ -57,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         mSignUpButton = (Button)findViewById(R.id.signUp);
         mAPIHelper = new APIHelper(this, this);
 
-
         mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +73,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-
-
 
     @Override
     public void onResume(){
@@ -118,8 +115,6 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         final String jsonData = response.body().string();
 
-                        //get user id and save to database to use to get balances
-                        // TODO: HTTP header to store locally
                         final String AccessToken = response.header("Access-Token");
                         final String Client = response.header("Client");
                         final String Uid = response.header("Uid");

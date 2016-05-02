@@ -140,10 +140,11 @@ public class AnalysisFragment extends Fragment {
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");
         moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
-        //budgetView.setText(" of " + mDbHelper.getLatestBudget().getFormattedBudget());
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
+
         if(LocalData.balance >= 0) {
             balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+            balanceView.setTextColor(Color.BLACK);
         } else {
             balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
             balanceView.setTextColor(Color.RED);

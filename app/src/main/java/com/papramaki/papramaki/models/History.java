@@ -19,5 +19,4 @@ public class History {
         this.expenditures = expenditures;
     }
 
-
 }

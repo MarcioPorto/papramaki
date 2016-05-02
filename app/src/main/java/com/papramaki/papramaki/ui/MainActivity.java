@@ -46,14 +46,13 @@ public class MainActivity extends AppCompatActivity {
     static MainFragmentAdapter mMainFragmentAdapter;
     static ViewPager mViewPager;
     DatabaseHelper mDbHelper;
-    RadioGroup mRadioGroup;
+    static RadioGroup mRadioGroup;
 
     // Making these static so they can be accessed from the fragments
     public static APIHelper mAPIHelper;
     public static User user;
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
     private static Context context;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +69,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
-
         // Makes the Analysis fragment the default view
-        // TODO: Lead to BydgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
+        mRadioGroup.check(mRadioGroup.getChildAt(1).getId());
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -97,18 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intentGetter = getIntent();
         final String Caller = intentGetter.getStringExtra("caller");
-//        final String AccessToken = intentGetter.getStringExtra("Access-Token");
-//        final String Client = intentGetter.getStringExtra("Client");
-//        final String Uid = intentGetter.getStringExtra("Uid");
 
-//        if(Caller.equals("LoginActivity") || Caller.equals("SignUpActivity")) {
-//            user = new User(Uid, Client, AccessToken);
-//            mDbHelper.addUser(user);
-//            Toast.makeText(this, AccessToken + " " + Client + " " + Uid, Toast.LENGTH_LONG).show();
-//            //mDatabase = mDbHelper.getWritableDatabase();
-//        }else{
         user = mDbHelper.getUser();
-//        }
         mAPIHelper = new APIHelper(MainActivity.this, this);
 
         retrieveAllData();
@@ -120,6 +108,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         user = mDbHelper.getUser();
         retrieveAllData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        
+        // Quits the app when the user presses the back button
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -154,9 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_log_out) {
-            // TODO: Actually log the user out
             //remove user from database
             makeLogoutRequest();
             mDbHelper.userLogout();
@@ -199,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                         }
                     });
-//                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -265,14 +261,12 @@ public class MainActivity extends AppCompatActivity {
                             Collections.reverse(history);
                             LocalData.history.setExpenditures(history);
 
-//                            MainActivity.runOnUI(new Runnable() {
-//                                @Override
-//                                public void run() {
-//
-//                                    mMainFragmentAdapter.getItem(2)
-//                                    mMainFragmentAdapter.getItem(2).getClass();
-//                                }
-//                            });
+                            MainActivity.runOnUI(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HistoryFragment.updateLayout();
+                                }
+                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -311,7 +305,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                         }
                     });
-//                    Toast.makeText(MainActivity.getAppContext(), "There was an error", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
@@ -320,17 +313,7 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-//                            final String budgetsValue = getBudgetsValue(jsonData);
-                            final double currentBalance = mAPIHelper.getLatestBalance(jsonData);
-                            LocalData.balance = currentBalance;
-
-//                            runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-//                                    LocalData.balance = currentBalance;
-//                                }
-//                            });
+                            LocalData.balance = mAPIHelper.getLatestBalance(jsonData);
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -376,8 +359,7 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            final List<Category> categories = mAPIHelper.getCategories(jsonData);
-                            LocalData.categories = categories;
+                            LocalData.categories = mAPIHelper.getCategories(jsonData);
 
                             // Updates the graph and text in the AnalysisFragment
                             MainActivity.runOnUI(new Runnable() {
@@ -386,15 +368,7 @@ public class MainActivity extends AppCompatActivity {
                                     AnalysisFragment.updateLayout();
                                 }
                             });
-//                            AnalysisFragment.updateLayout();
 
-//                            runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-//                                    LocalData.categories = categories;
-//                                }
-//                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -426,9 +400,6 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(MainActivity.this, "There was an error", Toast.LENGTH_LONG).show();
                 }
 
