@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
     private static Context context;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +69,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mMainFragmentAdapter);
 
-
         // Makes the Analysis fragment the default view
-        // TODO: Lead to BydgetFragment if the most recent budget has expired
+        // TODO: Lead to BudgetFragment if the most recent budget has expired
         mViewPager.setCurrentItem(1);
 
         // This is the part that actually changes the fragments displayed when the user flips left or right
@@ -265,14 +263,12 @@ public class MainActivity extends AppCompatActivity {
                             Collections.reverse(history);
                             LocalData.history.setExpenditures(history);
 
-//                            MainActivity.runOnUI(new Runnable() {
-//                                @Override
-//                                public void run() {
-//
-//                                    mMainFragmentAdapter.getItem(2)
-//                                    mMainFragmentAdapter.getItem(2).getClass();
-//                                }
-//                            });
+                            MainActivity.runOnUI(new Runnable() {
+                                @Override
+                                public void run() {
+                                    HistoryFragment.updateLayout();
+                                }
+                            });
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
