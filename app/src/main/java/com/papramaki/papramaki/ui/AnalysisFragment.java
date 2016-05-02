@@ -135,7 +135,7 @@ public class AnalysisFragment extends Fragment {
         }
 
         // // TODO: add calls to get current budget's creation date and expiration date here
-        durationView.setText("(from ___ to ___)");
+        durationView.setText("(from " + LocalData.budget.getCreationDate() + " to " + LocalData.budget.getExpirationDate() + ")");
 
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");
