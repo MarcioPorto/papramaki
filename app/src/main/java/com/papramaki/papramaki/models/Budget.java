@@ -11,6 +11,7 @@ public class  Budget {
     private int duration;
     private int id;
     private boolean expired;
+    private Date creationDate;
     private Date expirationDate;
 
     public Budget(double budget, int id) {
@@ -23,6 +24,15 @@ public class  Budget {
         this.duration = 0;
         this.id = 0;
     }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public int getId() {
         return id;
     }

@@ -23,9 +23,7 @@ import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.utils.LocalData;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AnalysisFragment extends Fragment {
@@ -43,8 +41,6 @@ public class AnalysisFragment extends Fragment {
 
     public static List<Category> mCategories;
     public static PieGraph mPieGraph;
-
-    public static SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
 
     public AnalysisFragment() {
     }
@@ -138,9 +134,8 @@ public class AnalysisFragment extends Fragment {
             mPieGraph.addSlice(slice);
         }
 
-        String expirationDate = sdf.format(LocalData.budget.getExpirationDate());
         // // TODO: add calls to get current budget's creation date and expiration date here
-        durationView.setText("(from " + "___" + " to " + expirationDate + ")");
+        durationView.setText("(from ___ to ___)");
 
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");
@@ -227,5 +222,4 @@ public class AnalysisFragment extends Fragment {
         }
         return categories;
     }
-
 }
