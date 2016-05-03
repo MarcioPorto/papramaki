@@ -51,13 +51,14 @@ public class BudgetFragment extends Fragment {
 
     private static final String TAG = BudgetFragment.class.getSimpleName();
     protected static Calendar myCalendar;
+    public static BudgetFragment mCurrentBudgetFragmentInstance;
 
     protected TextView mTextView;
     public static TextView mBudgetDisplay;
     protected static EditText mBudget;
     protected static Spinner mSpinner;
     protected static Button mButton;
-    protected FloatingActionButton mFAB;
+    protected static FloatingActionButton mFAB;
     protected static DatabaseHelper mDbHelper;
     protected static APIHelper mAPIHelper;
     protected static Button mDatePickerButton;
@@ -68,6 +69,8 @@ public class BudgetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_budget, container, false);
+
+        mCurrentBudgetFragmentInstance = this;
 
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView)rootView.findViewById(R.id.budgetDisplay);
@@ -88,7 +91,6 @@ public class BudgetFragment extends Fragment {
 
         rootView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
-
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     hideSoftKeyboard(getActivity());
                 }
@@ -150,44 +152,75 @@ public class BudgetFragment extends Fragment {
     }
 
     public static void updateLayout() {
-        mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
-
         Calendar today = Calendar.getInstance();
         Date expirationDate = LocalData.budget.getExpirationDate();
-        if (expirationDate.compareTo(today.getTime()) > 0) {
-            // If the budget is not expired yet
-            mBudget.setText(String.valueOf(LocalData.budget.getBudget()));
-            mDatePickerButton.setVisibility(View.VISIBLE);
-            mSpinner.setVisibility(View.GONE);
-            mDurationLabel.setVisibility(View.GONE);
-            mWeeksLabel.setVisibility(View.GONE);
-            mButton.setText("UPDATE");
+        try {
+            if (expirationDate.compareTo(today.getTime()) > 0) {
+                // If the budget is not expired yet
+                mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
+                mBudget.setText(String.valueOf(LocalData.budget.getBudget()));
+                mDatePickerButton.setVisibility(View.VISIBLE);
+                mSpinner.setVisibility(View.GONE);
+                mDurationLabel.setVisibility(View.GONE);
+                mWeeksLabel.setVisibility(View.GONE);
+                mButton.setText("UPDATE");
 
-            myCalendar.setTime(LocalData.budget.getExpirationDate());
+                myCalendar.setTime(LocalData.budget.getExpirationDate());
 
-            mButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Date calendarDate = myCalendar.getTime();
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String newDate = df.format(calendarDate);
-                    Log.d(TAG, newDate);
-                    putBudgetRequest(Double.parseDouble(mBudget.getText().toString()), newDate);
-                }
-            });
-        } else {
-            // Takes the user to the BudgetFragment so they can add a new budget.
-            MainActivity.mViewPager.setCurrentItem(0);
-            MainActivity.mRadioGroup.check(MainActivity.mRadioGroup.getChildAt(1).getId());
-            Toast.makeText(MainActivity.getAppContext(), "Please enter a new budget", Toast.LENGTH_LONG).show();
-            // Updates the layout.
-            mDatePickerButton.setVisibility(View.GONE);
-            mSpinner.setVisibility(View.VISIBLE);
-            mDurationLabel.setVisibility(View.VISIBLE);
-            mWeeksLabel.setVisibility(View.VISIBLE);
-            mButton.setText("SAVE");
+                mButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Date calendarDate = myCalendar.getTime();
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        String newDate = df.format(calendarDate);
+                        Log.d(TAG, newDate);
+                        putBudgetRequest(Double.parseDouble(mBudget.getText().toString()), newDate);
+                    }
+                });
+
+                mCurrentBudgetFragmentInstance.resetFAB();
+            } else {
+                layoutForNewBudget();
+            }
+        } catch (NullPointerException e) {
+            // Catches the exception throw the first the time the user signs up.
+            layoutForNewBudget();
         }
+    }
 
+    public static void layoutForNewBudget() {
+        // Takes the user to the BudgetFragment so they can add a new budget.
+        MainActivity.mViewPager.setCurrentItem(0);
+        MainActivity.mRadioGroup.check(MainActivity.mRadioGroup.getChildAt(0).getId());
+        mBudgetDisplay.setText("$--.--");
+        Toast.makeText(MainActivity.getAppContext(), "Please enter a new budget", Toast.LENGTH_LONG).show();
+
+        // Updates the layout.
+        mDatePickerButton.setVisibility(View.GONE);
+        mSpinner.setVisibility(View.VISIBLE);
+        mDurationLabel.setVisibility(View.VISIBLE);
+        mWeeksLabel.setVisibility(View.VISIBLE);
+        mButton.setText("SAVE");
+
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(
+                        MainActivity.getAppContext(),
+                        "Please enter a budget before trying to add an expenditure",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void resetFAB() {
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.getAppContext(), DeductionActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public static void postBudgetRequest(double budgetAmount, String duration) {
