@@ -1,6 +1,7 @@
 package com.papramaki.papramaki.models;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class  Budget {
@@ -18,11 +19,16 @@ public class  Budget {
         this.budget = budget;
         this.moneySpent = budget - balance;
         this.id = id;
+        this.creationDate = Calendar.getInstance().getTime();
+        this.expirationDate = Calendar.getInstance().getTime();
     }
+
     public Budget(){
         this.budget = 0;
         this.duration = 0;
         this.id = 0;
+        this.creationDate = Calendar.getInstance().getTime();
+        this.expirationDate = Calendar.getInstance().getTime();
     }
 
     public Date getCreationDate() {

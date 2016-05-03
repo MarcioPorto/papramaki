@@ -117,13 +117,6 @@ public class APIHelper {
             boolean budgetExpired = currentBudget.getBoolean("expired");
             String budgetExpirationDate = currentBudget.getString("expiration_date");
             String budgetCreationDate = currentBudget.getString("created_at");
-//            int year = Integer.parseInt(budgetExpirationDate.substring(0, 4));
-//            Log.d(TAG, String.valueOf(year));
-//            int month = Integer.parseInt(budgetExpirationDate.substring(5, 7));
-//            Log.d(TAG, String.valueOf(month));
-//            int day = Integer.parseInt(budgetExpirationDate.substring(8, 10));
-//            Log.d(TAG, String.valueOf(day));
-//            Date date = new Date(year, month, day);
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             Date expirationDate = new Date();
