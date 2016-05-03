@@ -173,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    //HTTP Requests
     public static void getBudgetsRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
 
@@ -206,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
+                            LocalData.budgetWasRetrieved = true;
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
@@ -234,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(apiUrl)
-                    //.post("")
                     .addHeader("Access-Token", user.getAccessToken())
                     .addHeader("Uid", user.getUid())
                     .addHeader("Client", user.getClient())
@@ -282,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
-
 
     public static void getBalancesRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances";
@@ -361,12 +358,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             LocalData.categories = mAPIHelper.getCategories(jsonData);
-
-                            // Updates the graph and text in the AnalysisFragment
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AnalysisFragment.updateLayout();
+                                    if (LocalData.budgetWasRetrieved) {
+                                        AnalysisFragment.updateLayout();
+                                    }
                                 }
                             });
 
