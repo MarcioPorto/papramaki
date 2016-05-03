@@ -23,6 +23,7 @@ import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.utils.LocalData;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,8 +135,10 @@ public class AnalysisFragment extends Fragment {
             mPieGraph.addSlice(slice);
         }
 
-        // // TODO: add calls to get current budget's creation date and expiration date here
-        durationView.setText("(from ___ to ___)");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+        String creationDate = sdf.format(LocalData.budget.getCreationDate());
+        String expirationDate = sdf.format(LocalData.budget.getExpirationDate());
+        durationView.setText("(from " + creationDate + " to " + expirationDate + ")");
 
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");

@@ -144,6 +144,35 @@ public class APIHelper {
         return budget;
     }
 
+    public Budget getLatestBudgetFromPR(String jsonData) throws JSONException {
+
+        Budget budget = new Budget();
+
+        JSONObject currentBudget = new JSONObject(jsonData);
+        int amount = currentBudget.getInt("amount");
+        int duration = currentBudget.getInt("duration");
+        int budgetId = currentBudget.getInt("id");
+        boolean budgetExpired = currentBudget.getBoolean("expired");
+        String budgetExpirationDate = currentBudget.getString("expiration_date");
+        String budgetCreationDate = currentBudget.getString("created_at");
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date expirationDate = new Date();
+        try {
+            expirationDate = df.parse(budgetExpirationDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date creationDate = formatDate(budgetCreationDate);
+        budget.setBudget(amount);
+        budget.setId(budgetId);
+        budget.setDuration(duration);
+        budget.setExpired(budgetExpired);
+        budget.setExpirationDate(expirationDate);
+        budget.setCreationDate(creationDate);
+        return budget;
+    }
 
     public List<Expenditure> getExpenditures(String jsonData) throws JSONException {
 

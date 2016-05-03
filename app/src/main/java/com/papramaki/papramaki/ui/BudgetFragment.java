@@ -337,6 +337,9 @@ public class BudgetFragment extends Fragment {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets/" + budgetId;
         User user = mDbHelper.getUser();
 
+        Log.d(TAG, user.getAccessToken());
+        Log.d(TAG, user.getClient());
+        Log.d(TAG, user.getUid());
         RequestBody params = new FormEncodingBuilder()
                 .add("amount", String.valueOf(budgetAmount))
                 .add("expiration_date", String.valueOf(date))
@@ -365,11 +368,13 @@ public class BudgetFragment extends Fragment {
 
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
+                            LocalData.budget = mAPIHelper.getLatestBudgetFromPR(jsonData);
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
                                     updateLayout();
+                                    AnalysisFragment.updateLayout();
+                                    Toast.makeText(MainActivity.getAppContext(), "Budget updated!", Toast.LENGTH_LONG).show();
                                 }
                             });
 
