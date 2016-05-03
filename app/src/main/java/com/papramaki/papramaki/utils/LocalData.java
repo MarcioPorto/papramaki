@@ -11,7 +11,7 @@ public class LocalData {
 
     public static History history = new History();
     public static Budget budget = new Budget(0,0);
-    public static List<Category> categories = new ArrayList<Category>();
-    public static int userId = 0;
+    public static List<Category> categories = new ArrayList<>();
     public static double balance = 0;
+
 }

@@ -70,7 +70,7 @@ public class AnalysisFragment extends Fragment {
         budgetView = (TextView) rootView.findViewById(R.id.ofBudget);
         durationView = (TextView) rootView.findViewById(R.id.duration);
 
-        updateLayout();
+        renderDefaultLayout();
 
         mPieGraph.setOnSliceClickedListener(new PieGraph.OnSliceClickedListener() {
             @Override
@@ -86,20 +86,6 @@ public class AnalysisFragment extends Fragment {
 
             }
         });
-
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-//            mAnimateButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    for (PieSlice s : mPieGraph.getSlices())
-//                        s.setGoalValue((float) Math.random() * 10);
-//                    mPieGraph.setDuration(1000);//default if unspecified is 300 ms
-//                    mPieGraph.setInterpolator(new AccelerateDecelerateInterpolator());//default if unspecified is linear; constant speed
-//                    mPieGraph.setAnimationListener(getAnimationListener());
-//                    mPieGraph.animateToGoalValues();//animation will always overwrite. Pass true to call the onAnimationCancel Listener with onAnimationEnd
-//                }
-//            });
-//        }
 
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +105,36 @@ public class AnalysisFragment extends Fragment {
         super.onResume();
 
         MainActivity.retrieveAllData();
+    }
+
+    public static void renderDefaultLayout() {
+        mPieGraph.removeSlices();
+        PieSlice slice;
+        mCategories = retrieveCurrentCategories();
+
+        for(Category category : mCategories){
+            slice = new PieSlice();
+            slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
+            slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
+            slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
+            slice.setTitle(category.getName());
+            mPieGraph.addSlice(slice);
+        }
+
+        durationView.setText("(from ___ to ___)");
+
+        titleView.setText("Your Spending Analysis");
+        DecimalFormat formatter = new DecimalFormat("$0.00");
+        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
+        budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
+
+        if(LocalData.balance >= 0) {
+            balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+            balanceView.setTextColor(Color.BLACK);
+        } else {
+            balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
+            balanceView.setTextColor(Color.RED);
+        }
     }
 
     public static void updateLayout() {

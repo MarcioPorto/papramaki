@@ -207,7 +207,7 @@ public class BudgetFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(
                         MainActivity.getAppContext(),
-                        "Please enter a budget before trying to add an expenditure",
+                        "Please enter a budget before trying to add an expenditure.",
                         Toast.LENGTH_LONG).show();
             }
         });
