@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.models.History;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -174,12 +175,11 @@ public class APIHelper {
         return budget;
     }
 
-    public List<Expenditure> getExpenditures(String jsonData) throws JSONException {
+    public History getHistory(String jsonData) throws JSONException {
 
         JSONArray response = new JSONArray(jsonData);
-        String returnString = "";
-        List<Expenditure> history = new ArrayList<Expenditure>();
-        int value = 0;
+        History history = new History();
+        List<Expenditure> expenditureList = new ArrayList<Expenditure>();
 
         //TODO: If first time user, no budget exists so don't go through loop
         if(!jsonData.equals("[]")) {
@@ -195,9 +195,11 @@ public class APIHelper {
                     String dateString = currentExp.getString("created_at");
                     Date date = formatDate(dateString);
                     expenditure = new Expenditure(amount, category_id, date);
-                    history.add(expenditure);
+                    expenditureList.add(expenditure);
 
                 }
+                history.setExpenditureSum(currentBudget.getDouble("expenditure_sum_amount"));
+                history.setExpenditures(expenditureList);
             }
         }
         return history;

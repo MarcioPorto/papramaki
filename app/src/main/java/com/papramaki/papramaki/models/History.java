@@ -6,9 +6,11 @@ import java.util.List;
 public class History {
 
     private List<Expenditure> expenditures;
+    private double expenditureSum;
 
     public History() {
         this.expenditures = new ArrayList<>();
+        this.expenditureSum = 0;
     }
 
     public List<Expenditure> getExpenditures() {
@@ -19,4 +21,11 @@ public class History {
         this.expenditures = expenditures;
     }
 
+    public double getExpenditureSum() {
+        return expenditureSum;
+    }
+
+    public void setExpenditureSum(double expenditureSum) {
+        this.expenditureSum = expenditureSum;
+    }
 }

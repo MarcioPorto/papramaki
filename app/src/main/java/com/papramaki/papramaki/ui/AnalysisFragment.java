@@ -125,7 +125,7 @@ public class AnalysisFragment extends Fragment {
 
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");
-        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
+        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
 
         if(LocalData.balance >= 0) {
@@ -158,7 +158,7 @@ public class AnalysisFragment extends Fragment {
 
         titleView.setText("Your Spending Analysis");
         DecimalFormat formatter = new DecimalFormat("$0.00");
-        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.budget.getBudget() - LocalData.balance)));
+        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
         budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
 
         if(LocalData.balance >= 0) {

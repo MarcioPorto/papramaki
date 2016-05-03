@@ -175,6 +175,7 @@ public class BudgetFragment extends Fragment {
                         String newDate = df.format(calendarDate);
                         Log.d(TAG, newDate);
                         putBudgetRequest(Double.parseDouble(mBudget.getText().toString()), newDate);
+                        resetBalanceRequest(Double.parseDouble(mBudget.getText().toString()) - LocalData.history.getExpenditureSum());
                     }
                 });
 
@@ -255,13 +256,13 @@ public class BudgetFragment extends Fragment {
 
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            JSONObject object = new JSONObject(jsonData);
-                            final double amount = object.getDouble("amount");
-                            final int duration = object.getInt("duration");
-                            final int id = object.getInt("id");
-                            final Budget budget = new Budget(amount, id);
-                            budget.setDuration(duration);
-                            LocalData.budget = budget;
+//                            JSONObject object = new JSONObject(jsonData);
+//                            final double amount = object.getDouble("amount");
+//                            final int duration = object.getInt("duration");
+//                            final int id = object.getInt("id");
+//                            final Budget budget = new Budget(amount, id);
+//                            budget.setDuration(duration);
+                            LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
 
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
@@ -285,12 +286,12 @@ public class BudgetFragment extends Fragment {
         }
     }
 
-    public static void resetBalanceRequest(double expenditureAmount) {
+    public static void resetBalanceRequest(double budgetAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances/" + String.valueOf(user.getUser_id());
 
         RequestBody params = new FormEncodingBuilder()
-                .add("amount", String.valueOf(expenditureAmount))
+                .add("amount", String.valueOf(budgetAmount))
                 .build();
         if (mAPIHelper.isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();

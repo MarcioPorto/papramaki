@@ -19,6 +19,7 @@ import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.Expenditure;
+import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
@@ -257,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            final List<Expenditure> history = mAPIHelper.getExpenditures(jsonData);
-                            Collections.reverse(history);
-                            LocalData.history.setExpenditures(history);
+                            final History history = mAPIHelper.getHistory(jsonData);
+                            Collections.reverse(history.getExpenditures());
+                            LocalData.history = history;
 
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
