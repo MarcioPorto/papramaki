@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:screenOrientation="portrait"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/papramaki_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity

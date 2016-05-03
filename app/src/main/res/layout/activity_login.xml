@@ -10,15 +10,25 @@
     android:paddingBottom="16dp"
     tools:context="com.papramaki.papramaki.ui.LoginActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:id="@+id/logo"
+        android:src="@mipmap/papramaki_logo"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="24dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Welcome to Papramaki!"
+        android:layout_below="@+id/logo"
         android:textStyle="bold"
         android:id="@+id/welcomeText"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -37,9 +47,10 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="Email"
-        android:ems="13"
+        android:ems="14"
+        android:layout_marginTop="15dp"
         android:id="@+id/emailInput"
-        android:paddingTop="180dp"
+        android:layout_below="@+id/textView4"
         android:layout_alignLeft="@+id/password"
         android:layout_alignStart="@+id/password" />
 
@@ -48,7 +59,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="Password"
-        android:ems="13"
+        android:ems="14"
         android:id="@+id/password"
         android:layout_below="@+id/emailInput"
         android:layout_centerVertical="true"
@@ -66,24 +77,26 @@
         android:textColor="@color/background_white"
         android:background="@color/pink_a200"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="10dp"
+        android:text="New to Papramaki?"
+        android:layout_below="@+id/login"
+        android:id="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:id="@+id/signUp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="7dp"
         android:textColor="@color/background_white"
         android:background="@color/pink_a200" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="New to Papramaki?"
-        android:id="@+id/textView2"
-        android:layout_above="@+id/signUp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"/>
 </RelativeLayout>
