@@ -18,7 +18,6 @@ import com.papramaki.papramaki.adapters.MainFragmentAdapter;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.Category;
-import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
@@ -34,7 +33,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -204,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
-                            LocalData.budgetWasRetrieved = true;
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
@@ -361,9 +358,7 @@ public class MainActivity extends AppCompatActivity {
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (LocalData.budgetWasRetrieved) {
-                                        AnalysisFragment.updateLayout();
-                                    }
+                                    AnalysisFragment.updateLayout();
                                 }
                             });
 
