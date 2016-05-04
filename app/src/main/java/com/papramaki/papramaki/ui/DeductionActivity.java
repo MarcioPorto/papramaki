@@ -41,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DeductionActivity extends AppCompatActivity {
 
@@ -151,6 +152,10 @@ public class DeductionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Adds a new expenditure to the database.
+     * @param expenditureAmount     the amount of the expenditure, in dollars
+     */
     private void postExpenditureRequest(double expenditureAmount) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/expenditures";
 
@@ -188,7 +193,7 @@ public class DeductionActivity extends AppCompatActivity {
                             final double amount = object.getDouble("amount");
                             final String dateString = object.getString("created_at");
                             System.out.println("//////////////DATESTRING: "+ dateString);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
                             System.out.println("//////////////SIMPLEDATEFORMAT: "+ sdf.toString());
                             final Expenditure expenditure = new Expenditure();
                             expenditure.setAmount(amount);
@@ -271,7 +276,11 @@ public class DeductionActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Adds a new category to the User's profile
+     * @param categoryName          the name of the category
+     * @param expenditureAmount     the amount of the expenditure, used to call postExpenditureRequest()
+     */
     private void postCategoryRequest(String categoryName, final double expenditureAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/categories";
@@ -329,6 +338,9 @@ public class DeductionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Logs the User out
+     */
     private void makeLogoutRequest(){
         String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_out";
         if (mAPIHelper.isNetworkAvailable()) {
@@ -377,6 +389,7 @@ public class DeductionActivity extends AppCompatActivity {
             Toast.makeText(DeductionActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         hideSoftKeyboard(DeductionActivity.this);
@@ -389,6 +402,5 @@ public class DeductionActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
-
 
 }

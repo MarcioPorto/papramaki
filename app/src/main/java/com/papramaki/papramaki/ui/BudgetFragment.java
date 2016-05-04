@@ -43,9 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class BudgetFragment extends Fragment {
 
     private static final String TAG = BudgetFragment.class.getSimpleName();
@@ -99,7 +96,7 @@ public class BudgetFragment extends Fragment {
 
         // set up dropdown menu for user to select budget's duration
         Integer[] durationOptions = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
-        ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
+        ArrayAdapter<Integer> spinAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, durationOptions);
         mSpinner.setAdapter(spinAdapter);
 
         mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
@@ -150,6 +147,9 @@ public class BudgetFragment extends Fragment {
         MainActivity.getBudgetsRequest();
     }
 
+    /**
+     * Updates the layout based on the data returned from the API
+     */
     public static void updateLayout() {
         Calendar today = Calendar.getInstance();
         Date expirationDate = LocalData.budget.getExpirationDate();
@@ -188,6 +188,10 @@ public class BudgetFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the layout for when the current budget is not expired
+     * or when there isn't a current budget.
+     */
     public static void layoutForNewBudget() {
         // Takes the user to the BudgetFragment so they can add a new budget.
         MainActivity.mViewPager.setCurrentItem(0);
@@ -213,6 +217,9 @@ public class BudgetFragment extends Fragment {
         });
     }
 
+    /**
+     * Allows the user to go to the DeductionActivity if there's a current budget.
+     */
     public void resetFAB() {
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +230,11 @@ public class BudgetFragment extends Fragment {
         });
     }
 
+    /**
+     * Adds a new budget to the database.
+     * @param budgetAmount      the amount of the budget, in dollars
+     * @param duration          the duration of the budget, in weeks
+     */
     public static void postBudgetRequest(double budgetAmount, String duration) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
         User user = mDbHelper.getUser();
@@ -279,6 +291,10 @@ public class BudgetFragment extends Fragment {
         }
     }
 
+    /**
+     * Updates the User's balance on the database
+     * @param budgetAmount      the amount of the budget, in dollars, which will become the current balance
+     */
     public static void resetBalanceRequest(double budgetAmount) {
         User user = mDbHelper.getUser();
         String apiUrl = "https://papramakiapi.herokuapp.com/api/balances/" + String.valueOf(user.getUser_id());
@@ -310,16 +326,7 @@ public class BudgetFragment extends Fragment {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             JSONObject object = new JSONObject(jsonData);
-                            final double balance = object.getDouble("amount");
-                            LocalData.balance = balance;
-
-//                            MainActivity.runOnUI(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    Toast.makeText(MainActivity.getAppContext(), String.valueOf(budget.getBudget()), Toast.LENGTH_LONG).show();
-//                                    updateLayout();
-//                                }
-//                            });
+                            LocalData.balance = object.getDouble("amount");
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -348,7 +355,6 @@ public class BudgetFragment extends Fragment {
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            // TODO: Update budget with new expiration date
         }
     };
 
@@ -359,6 +365,11 @@ public class BudgetFragment extends Fragment {
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    /**
+     * Edits the current budget, if there is one.
+     * @param budgetAmount      the amount, in dollars
+     * @param date              the expiration date, in YYYY-MM-DD format
+     */
     public static void putBudgetRequest(double budgetAmount, String date) {
         String budgetId = String.valueOf(LocalData.budget.getId());
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets/" + budgetId;

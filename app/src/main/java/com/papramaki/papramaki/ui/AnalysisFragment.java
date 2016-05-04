@@ -1,10 +1,7 @@
 package com.papramaki.papramaki.ui;
 
-import android.animation.Animator;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -26,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AnalysisFragment extends Fragment {
 
@@ -107,6 +105,9 @@ public class AnalysisFragment extends Fragment {
         MainActivity.retrieveAllData();
     }
 
+    /**
+     * Renders the default layout when the data is not available yet.
+     */
     public static void renderDefaultLayout() {
         mPieGraph.removeSlices();
         PieSlice slice;
@@ -137,6 +138,9 @@ public class AnalysisFragment extends Fragment {
         }
     }
 
+    /**
+     * Updates the layout based on the data retrieved from the API.
+     */
     public static void updateLayout() {
         mPieGraph.removeSlices();
         PieSlice slice;
@@ -151,7 +155,7 @@ public class AnalysisFragment extends Fragment {
             mPieGraph.addSlice(slice);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         String creationDate = sdf.format(LocalData.budget.getCreationDate());
         String expirationDate = sdf.format(LocalData.budget.getExpirationDate());
         durationView.setText("(from " + creationDate + " to " + expirationDate + ")");
@@ -171,33 +175,10 @@ public class AnalysisFragment extends Fragment {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
-    public Animator.AnimatorListener getAnimationListener(){
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1)
-            return new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    Log.d("piefrag", "anim end");
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {//you might want to call slice.setvalue(slice.getGoalValue)
-                    Log.d("piefrag", "anim cancel");
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            };
-        else return null;
-    }
-
+    /**
+     * Retrieves the categories that the User has added before
+     * @return      the categories
+     */
     public static List<Category> retrieveCurrentCategories(){
         List<Category> categories = new ArrayList<>();
         for(Category category : LocalData.categories){
