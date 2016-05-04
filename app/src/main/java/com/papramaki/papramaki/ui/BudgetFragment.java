@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.database.DatabaseHelper;
-import com.papramaki.papramaki.models.Budget;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
 import com.papramaki.papramaki.utils.LocalData;
@@ -158,7 +157,7 @@ public class BudgetFragment extends Fragment {
             if (expirationDate.compareTo(today.getTime()) > 0) {
                 // If the budget is not expired yet
                 mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
-                mBudget.setText(String.valueOf(LocalData.budget.getBudget()));
+                mBudget.setText(String.valueOf(LocalData.budget.getBudget()) + "0");
                 mDatePickerButton.setVisibility(View.VISIBLE);
                 mSpinner.setVisibility(View.GONE);
                 mDurationLabel.setVisibility(View.GONE);
@@ -256,12 +255,6 @@ public class BudgetFragment extends Fragment {
 
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-//                            JSONObject object = new JSONObject(jsonData);
-//                            final double amount = object.getDouble("amount");
-//                            final int duration = object.getInt("duration");
-//                            final int id = object.getInt("id");
-//                            final Budget budget = new Budget(amount, id);
-//                            budget.setDuration(duration);
                             LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
 
                             MainActivity.runOnUI(new Runnable() {

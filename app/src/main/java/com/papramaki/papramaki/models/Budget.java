@@ -55,17 +55,6 @@ public class  Budget {
         this.duration = duration;
     }
 
-//    /**
-//     * Option to create a budget with a duration (in weeks)
-//     * @param budget
-//     * @param duration
-//     */
-//    public Budget(double budget, int duration) {
-//        this.budget = budget;
-//        this.duration = duration;
-//        this.moneySpent = budget - balance;
-//    }
-
     public double getBudget() {
         return budget;
     }
@@ -102,12 +91,6 @@ public class  Budget {
         return formatter.format(getMoneySpent());
     }
 
-    @Override
-    public String toString() {
-        return Double.toString(budget) + "0";
-    }
-
-
     public boolean isExpired() {
         return expired;
     }
@@ -123,4 +106,10 @@ public class  Budget {
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    @Override
+    public String toString() {
+        return Double.toString(budget) + "0";
+    }
+
 }

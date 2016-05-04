@@ -112,7 +112,7 @@ public class APIHelper {
             JSONArray response = new JSONArray(jsonData);
 
             JSONObject currentBudget = response.getJSONObject(0);
-            int amount = currentBudget.getInt("amount");
+            double amount = currentBudget.getDouble("amount");
             int duration = currentBudget.getInt("duration");
             int budgetId = currentBudget.getInt("id");
             boolean budgetExpired = currentBudget.getBoolean("expired");
@@ -143,7 +143,7 @@ public class APIHelper {
         Budget budget = new Budget();
 
         JSONObject currentBudget = new JSONObject(jsonData);
-        int amount = currentBudget.getInt("amount");
+        double amount = currentBudget.getDouble("amount");
         int duration = currentBudget.getInt("duration");
         int budgetId = currentBudget.getInt("id");
         boolean budgetExpired = currentBudget.getBoolean("expired");
