@@ -92,22 +92,22 @@ public class DeductionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String categoryName = mCategoryInput.getText().toString();
 
-                if (!(mAmountInput.getText().toString().equals(""))){
+                if (!mAmountInput.getText().toString().equals("") && categoryName.equals("") && mCategoriesDropdownItems.size() == 0) {
+                    // If there is an amount, but no category from the spinner or input:
+                    Toast.makeText(
+                            DeductionActivity.this,
+                            "Please select a category.",
+                            Toast.LENGTH_LONG).show();
+                } else if (!mAmountInput.getText().toString().equals("")){
+                    // If there is an amount and there is a category:
+
                     double amount = Double.valueOf(mAmountInput.getText().toString());
-                    String categoryName = mCategoryInput.getText().toString();
-
-    //                Expenditure expenditure = new Expenditure(amount, mCategoryInput.getText().toString(), date);
-    //
-    //                mDbHelper.addExpenditure(expenditure);
-    //                mDbHelper.updateBalance(mDbHelper.getLatestBudget().getBalance() - expenditure.getAmount());
-
-                    Log.i(TAG, LocalData.budget.toString());
-
-                    //postExpenditureRequest(amount);
                     putBalanceRequest(amount);
 
                     if (!categoryName.equals("")) {
+                        // this will also post the new expenditure if successful
                         postCategoryRequest(categoryName, amount);
                     } else {
                         String selectedCategory = mUserCategoriesSpinner.getSelectedItem().toString();
@@ -119,18 +119,11 @@ public class DeductionActivity extends AppCompatActivity {
                         }
                         postExpenditureRequest(amount);
                     }
-
-
-                    //TODO: Create new category object and add it to server and LocalData when user inputs expenditure
-
+                } else {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     intent.putExtra("caller", "DeductionActivity");
                     startActivity(intent);
                 }
-
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                intent.putExtra("caller", "DeductionActivity");
-                startActivity(intent);
 
             }
         });
@@ -208,15 +201,10 @@ public class DeductionActivity extends AppCompatActivity {
                             }
                             LocalData.history.getExpenditures().add(expenditure);
 
-////                            final String budgetsValue = getBudgetsValue(jsonData);
-//                            final Budget budget = mAPIHelper.getLatestBudget(jsonData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Toast.makeText(getContext(), budgetsValue, Toast.LENGTH_LONG).show();
-
-                                }
-                            });
+                            // Goes back to Main
+                            Intent intent = new Intent(DeductionActivity.this, MainActivity.class);
+                            intent.putExtra("caller", "DeductionActivity");
+                            startActivity(intent);
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
