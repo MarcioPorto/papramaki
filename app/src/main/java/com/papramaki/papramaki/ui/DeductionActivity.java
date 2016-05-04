@@ -1,7 +1,6 @@
 package com.papramaki.papramaki.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -151,21 +150,8 @@ public class DeductionActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_log_out) {
-            // TODO: Actually log the user out
-            //remove user from database
             makeLogoutRequest();
-            mDbHelper.userLogout();
-            LocalData.balance = 0;
-            LocalData.budget = new Budget();
-            LocalData.history.getExpenditures().clear();
-            LocalData.categories = new ArrayList<Category>();
-
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-
             return true;
         }
 
@@ -371,9 +357,6 @@ public class DeductionActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    // TODO: Handle this later
-
-                    //put in getActivity.runUiThread()
                     Toast.makeText(DeductionActivity.this, "There was an error", Toast.LENGTH_LONG).show();
                 }
 
@@ -383,13 +366,15 @@ public class DeductionActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(DeductionActivity.this, jsonData, Toast.LENGTH_LONG).show();
+                            mDbHelper.userLogout();
+                            LocalData.balance = 0;
+                            LocalData.budget = new Budget();
+                            LocalData.history.getExpenditures().clear();
+                            LocalData.categories = new ArrayList<>();
 
-                                }
-                            });
+                            Intent intent = new Intent(DeductionActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }

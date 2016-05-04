@@ -153,18 +153,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_log_out) {
-            //remove user from database
             makeLogoutRequest();
-            mDbHelper.userLogout();
-            LocalData.balance = 0;
-            LocalData.budget = new Budget();
-            LocalData.history.getExpenditures().clear();
-            LocalData.categories = new ArrayList<Category>();
-
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-
             return true;
         }
 
@@ -402,13 +391,15 @@ public class MainActivity extends AppCompatActivity {
                         final String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this, jsonData, Toast.LENGTH_LONG).show();
+                            mDbHelper.userLogout();
+                            LocalData.balance = 0;
+                            LocalData.budget = new Budget();
+                            LocalData.history.getExpenditures().clear();
+                            LocalData.categories = new ArrayList<Category>();
 
-                                }
-                            });
+                            Intent intent = new Intent(MainActivity.getAppContext(), LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }

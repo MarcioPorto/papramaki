@@ -198,40 +198,6 @@ public class AnalysisFragment extends Fragment {
         else return null;
     }
 
-//    public static LinkedHashMap<String, Double> organizeHistory() {
-//        LinkedHashMap<String, Double> expensesMap = new LinkedHashMap<>();
-//        List<Expenditure> expenditures = LocalData.history.getExpenditures();
-//        List<Expenditure> expenditures = mDbHelper.getLatestExpenditures();
-//        List<Expenditure> expenditures = LocalData.history.getExpenditures();
-//        List<Category> categories = LocalData.categories;
-//        List<String> categories = mDbHelper.getCategories();
-//        for(int i = 0; i < expenditures.size(); i++){
-//            String category = categories.get(i);
-//            Double amount = expenditures.get(i);
-//
-//            if (!expensesMap.containsKey(category)){
-//                expensesMap.put(category , amount);
-//            } else {
-//                expensesMap.put(category, expensesMap.get(category) + amount);
-//            }
-//        }
-//        for (Expenditure expenditure : expenditures){
-//            if (!expensesMap.containsKey(expenditure.getCategory())) {
-//                expensesMap.put(expenditure.getCategory(), expenditure.getAmount());
-//            } else {
-//                expensesMap.put(expenditure.getCategory(), expensesMap.get(expenditure.getCategory()) + expenditure.getAmount());
-//            }
-//        }
-//        for (Category category : categories){
-//            if (!expensesMap.containsKey(category.getName())) {
-//                expensesMap.put(category.getName(), category.getSumCategory());
-//            } else {
-//                expensesMap.put(category.getName(), expensesMap.get(category.getName()) + category.getSumCategory());
-//            }
-//        }
-//        return expensesMap;
-//    }
-
     public static List<Category> retrieveCurrentCategories(){
         List<Category> categories = new ArrayList<>();
         for(Category category : LocalData.categories){
