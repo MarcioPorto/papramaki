@@ -68,7 +68,7 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
         for(Category category: LocalData.categories){
             if(expenditure.getCategoryId() == category.getId()){
-                holder.catText.setText(category.getName());
+                holder.catText.setText("on " + category.getName());
                 break;
             }
         }

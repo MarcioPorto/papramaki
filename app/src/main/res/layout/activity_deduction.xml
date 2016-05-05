@@ -17,36 +17,23 @@
         android:id="@+id/page_title"
         android:layout_alignParentTop="true"
         android:textStyle="bold"
-        android:paddingTop="110dp"
-        android:paddingBottom="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:ems="13"
         android:hint="Amount ($)"
         android:id="@+id/amount_input"
-        android:layout_below="@+id/page_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <!--<Spinner-->
-        <!--android:id="@+id/user_categories_spinner"-->
-        <!--android:layout_below="@+id/amount_input"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@android:drawable/btn_dropdown"-->
-        <!--android:prompt="@string/categories_prompt"-->
-        <!--android:spinnerMode="dropdown" />-->
+        android:layout_below="@+id/page_title" />
 
     <RelativeLayout
         android:id="@+id/spinner_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/amount_input"
-        android:layout_marginRight="3dp"
         android:layout_weight=".28"
         android:background="@drawable/spinner_background"
         android:orientation="horizontal">
@@ -88,19 +75,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/category_input"
         android:hint="New category (Optional)"
-        android:ems="13"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="Add"
         android:textColor="@color/background_white"
         android:background="@color/pink_a400"
         android:id="@+id/add_button"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/category_input"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

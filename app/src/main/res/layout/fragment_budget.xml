@@ -3,22 +3,24 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/analysis_horizontal_margin"
+                android:paddingRight="@dimen/analysis_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.papramaki.papramaki.ui.AnalysisFragment">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
+
         <TextView
             android:id="@+id/another_fragment_text"
             android:text="Your Current Budget"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -33,9 +35,10 @@
             android:layout_centerHorizontal="true"/>
 
         <EditText
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="13"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
             android:id="@+id/budget"
             android:hint="Enter your budget"
             android:inputType="numberDecimal"
@@ -50,6 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
             android:layout_below="@+id/budget">
 
             <TextView
@@ -92,8 +97,8 @@
             android:layout_below="@+id/linearDurationLayout"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="29dp"
             android:background="@color/pink_a200" />
+
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton

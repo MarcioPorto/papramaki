@@ -4,8 +4,8 @@
                 xmlns:app2="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/analysis_horizontal_margin"
+                android:paddingRight="@dimen/analysis_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:orientation="vertical"
@@ -22,11 +22,22 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
 
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Budget Duration"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_below="@+id/analysisTitle"
+        android:layout_centerHorizontal="true" />
+
     <com.echo.holographlibrary.PieGraph
         android:id="@+id/piegraph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="70dp"
         app:pieInnerCircleRatio="180"
         app:pieSlicePadding="0dip" />
 
@@ -50,50 +61,15 @@
         android:layout_below="@+id/moneySpent"
         android:text="of Budget"/>
 
-    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="vertical" >
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </LinearLayout>
-
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Animate to random values"-->
-        <!--android:id="@+id/animatePieButton"-->
-        <!--android:layout_weight="0"/>-->
-
     <TextView
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Amount Remaining"
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center"
         android:gravity="center"
-        android:layout_marginBottom="90dp"
+        android:layout_above="@+id/FAB"
         android:textColor="@color/black" />
 
     <android.support.design.widget.FloatingActionButton
@@ -105,18 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         app2:backgroundTint="@color/pink_a400"/>
-
-    <TextView
-        android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Budget Duration"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_below="@+id/analysisTitle"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
-    tools:context="com.papramaki.papramaki.ui.LoginActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="com.papramaki.papramaki.ui.LoginActivity">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="130dp"
         android:id="@+id/logo"
         android:src="@mipmap/papramaki_logo"
+        android:contentDescription="Logo"
         android:layout_marginLeft="100dp"
         android:layout_marginRight="100dp"
         android:layout_alignParentTop="true"
@@ -43,37 +44,32 @@
         android:layout_centerHorizontal="true"/>
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:hint="Email"
-        android:ems="14"
         android:layout_marginTop="15dp"
         android:id="@+id/emailInput"
-        android:layout_below="@+id/textView4"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password" />
+        android:layout_below="@+id/textView4" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="Password"
-        android:ems="14"
         android:id="@+id/password"
         android:layout_below="@+id/emailInput"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Log In"
         android:id="@+id/login"
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:ems="13"
         android:textColor="@color/background_white"
         android:background="@color/pink_a200"/>
 
