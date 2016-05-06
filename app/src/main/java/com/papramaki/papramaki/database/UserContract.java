@@ -6,6 +6,9 @@ public class UserContract {
 
     public UserContract(){}
 
+    /**
+     * Defines the schema of the user table in the database
+     */
     public static abstract class User implements BaseColumns {
         public static final String TABLE_NAME = "user";
         public static final String ID = "id";

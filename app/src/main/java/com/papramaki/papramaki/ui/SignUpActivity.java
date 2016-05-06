@@ -134,12 +134,19 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Checks to see if user clicks on background and hides soft keyboard if there is one.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         hideSoftKeyboard(SignUpActivity.this);
         return false;
     }
 
+    /**
+     * Hides the soft keyboard.
+     */
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         if (activity.getCurrentFocus() != null) {

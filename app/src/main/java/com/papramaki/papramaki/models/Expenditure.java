@@ -5,6 +5,12 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+/**
+ * Defines the expenditure model.
+ * An expenditure has an amount, creation date, and a category id which links
+ * it to the category of the expenditure
+ */
 public class Expenditure {
 
     private double amount;

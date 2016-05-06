@@ -3,6 +3,11 @@ package com.papramaki.papramaki.models;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * A History corresponds to a list of the expenditures made during the current budget period.
+ * It also contains the total sum of these expenditures.
+ */
 public class History {
 
     private List<Expenditure> expenditures;

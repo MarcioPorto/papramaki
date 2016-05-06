@@ -3,6 +3,13 @@ package com.papramaki.papramaki.models;
 /**
  * Created by paulchery on 4/21/16.
  */
+
+
+/**
+ * Defines the user model.
+ * The user has a uid (email), user_id from the API, and two other identifying strings:
+ * the client and accessTokens. These string are used to make http requests.
+ */
 public class User {
 
     private String uid;

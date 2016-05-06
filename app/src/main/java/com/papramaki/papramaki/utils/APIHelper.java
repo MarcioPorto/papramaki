@@ -194,7 +194,6 @@ public class APIHelper {
         History history = new History();
         List<Expenditure> expenditureList = new ArrayList<>();
 
-        // TODO: If first time user, no budget exists so don't go through loop
         if(!jsonData.equals("[]")) {
             for (int i = 0; i < 1; i++) {
                 JSONObject currentBudget = response.getJSONObject(i);
@@ -231,7 +230,6 @@ public class APIHelper {
 
         List<Category> categoryList = new ArrayList<>();
 
-        //TODO: If first time user, no budget exists so don't go through loop
         if(!jsonData.equals("[]")) {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject currentCategory = response.getJSONObject(i);

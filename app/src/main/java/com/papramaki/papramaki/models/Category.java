@@ -6,6 +6,12 @@ import java.util.List;
 /**
  * Created by paulchery on 4/24/16.
  */
+
+/**
+ * Defines the category model.
+ * A category has a name, color, a list of expenditures, a sum that corresponds to the total
+ * sum of the expenditures, and an id number.
+ */
 public class Category {
 
     private String name;
@@ -14,14 +20,6 @@ public class Category {
     private double sumCategory;
     private int id;
 
-
-
-    public Category(String name, String color, List<Expenditure> expenditures, int id){
-        this.name = name;
-        this.color = color;
-        this.expenditures = expenditures;
-        this.id = id;
-    }
 
     public Category(String name, String color, int id){
         this.name = name;
@@ -52,9 +50,6 @@ public class Category {
         return sumCategory;
     }
 
-    public void setSumCategory(double sumCategory) {
-        this.sumCategory = sumCategory;
-    }
     public List<Expenditure> getExpenditures() {
         return expenditures;
     }
