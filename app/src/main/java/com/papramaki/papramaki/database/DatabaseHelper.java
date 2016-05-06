@@ -3,22 +3,11 @@ package com.papramaki.papramaki.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.SystemClock;
 
-import com.papramaki.papramaki.models.Budget;
-import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.models.User;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-/**
- * Created by paulchery on 3/20/16.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Budget.db";
@@ -27,28 +16,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
-
     @Override
     public void onCreate(SQLiteDatabase database){
         database.execSQL(UserContract.User.SQL_CREATE_ENTRIES);
 
     }
+
     @Override
     public void onConfigure(SQLiteDatabase db){
         db.setForeignKeyConstraintsEnabled(true);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL(UserContract.User.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
+
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-
+    /**
+     * Adds User to a local database on the phone.
+     * This is used to maintain the Auth-Token, Client and Uid in order to persist the session.
+     * @param user      the User to be added
+     */
     public void addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -62,8 +56,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.insert(UserContract.User.TABLE_NAME, null, values);
         }
         db.close(); // Closing database connection
-
     }
+
+    /**
+     * Gets User from the local SQL database.
+     * @return          the User
+     */
     public User getUser(){
         String query =
                 "SELECT * FROM " + UserContract.User.TABLE_NAME +
@@ -85,14 +83,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
         return user;
-
     }
 
+    /**
+     * Deletes the User info saved above from the local database.
+     */
     public void userLogout(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(UserContract.User.TABLE_NAME, null, null);
         db.close();
     }
-
 
 }

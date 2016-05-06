@@ -13,10 +13,6 @@ import com.papramaki.papramaki.utils.LocalData;
 
 import java.util.List;
 
-
-/**
- * Created by djdmfd on 3/20/16.
- */
 public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
 
     private Context context;
@@ -42,11 +38,11 @@ public class HistoryListAdapter extends ArrayAdapter<Expenditure> {
     }
 
     /**
-     *
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * Adapts the data for the object at a specific position in the list of expenditures.
+     * @param position          position of the item
+     * @param convertView       a View that might be reused
+     * @param parent            parent of the item
+     * @return                  a View for the item
      */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

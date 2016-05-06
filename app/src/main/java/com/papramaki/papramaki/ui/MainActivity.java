@@ -17,7 +17,6 @@ import com.papramaki.papramaki.R;
 import com.papramaki.papramaki.adapters.MainFragmentAdapter;
 import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Budget;
-import com.papramaki.papramaki.models.Category;
 import com.papramaki.papramaki.models.History;
 import com.papramaki.papramaki.models.User;
 import com.papramaki.papramaki.utils.APIHelper;
@@ -34,7 +33,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -42,16 +40,17 @@ public class MainActivity extends AppCompatActivity {
     // Creates an instance of the MainFragmentAdapter and one
     // ViewPager (which basically is what allows you to flip
     // left and right
-    static MainFragmentAdapter mMainFragmentAdapter;
-    static ViewPager mViewPager;
-    DatabaseHelper mDbHelper;
-    static RadioGroup mRadioGroup;
+    protected static MainFragmentAdapter mMainFragmentAdapter;
+    protected static ViewPager mViewPager;
 
     // Making these static so they can be accessed from the fragments
     public static APIHelper mAPIHelper;
     public static User user;
     public static Handler UIHandler = new Handler(Looper.getMainLooper());
     private static Context context;
+    public static RadioGroup mRadioGroup;
+
+    private DatabaseHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +74,7 @@ public class MainActivity extends AppCompatActivity {
         // This is the part that actually changes the fragments displayed when the user flips left or right
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
@@ -85,21 +82,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         mDbHelper = new DatabaseHelper(this);
-
-        Intent intentGetter = getIntent();
-        final String Caller = intentGetter.getStringExtra("caller");
 
         user = mDbHelper.getUser();
         mAPIHelper = new APIHelper(MainActivity.this, this);
 
         retrieveAllData();
-
     }
 
     @Override
@@ -113,29 +104,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        // Quits the app when the user presses the back button
+        // Quits the app when the user presses the back button (instead of going to LoginActivity
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-    /**
-     * Makes all the get requests we need to show the initial data.
-     */
-    public static void retrieveAllData() {
-        getBudgetsRequest();
-        getBalancesRequest();
-        getExpendituresRequest();
-        getCategoriesRequest();
-    }
-
-    public static void runOnUI(Runnable runnable) {
-        UIHandler.post(runnable);
-    }
-
-    public static Context getAppContext() {
-        return MainActivity.context;
     }
 
     @Override
@@ -160,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * GETS the the budgets that belong to the current User from the API.
+     */
     public static void getBudgetsRequest() {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/budgets";
 
@@ -366,6 +342,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Destroys the current User's session.
+     */
     private void makeLogoutRequest(){
         String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_out";
         if (mAPIHelper.isNetworkAvailable()) {
@@ -395,8 +374,9 @@ public class MainActivity extends AppCompatActivity {
                             LocalData.balance = 0;
                             LocalData.budget = new Budget();
                             LocalData.history.getExpenditures().clear();
-                            LocalData.categories = new ArrayList<Category>();
+                            LocalData.categories = new ArrayList<>();
 
+                            // redirects to Login
                             Intent intent = new Intent(MainActivity.getAppContext(), LoginActivity.class);
                             startActivity(intent);
                             finish();
@@ -413,6 +393,32 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this, "Network is unavailable", Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Enables the requests methods to run code on the UI thread.
+     * @param runnable
+     */
+    public static void runOnUI(Runnable runnable) {
+        UIHandler.post(runnable);
+    }
+
+    /**
+     * Gets the context of the MainActivity.
+     * @return      the context
+     */
+    public static Context getAppContext() {
+        return MainActivity.context;
+    }
+
+    /**
+     * Makes all the GET requests we need to show the initial data when the User opens the app.
+     */
+    public static void retrieveAllData() {
+        getBudgetsRequest();
+        getBalancesRequest();
+        getExpendituresRequest();
+        getCategoriesRequest();
     }
 
 }

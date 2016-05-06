@@ -2,15 +2,10 @@ package com.papramaki.papramaki.database;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by paulchery on 4/21/16.
- */
 public class UserContract {
 
+    public UserContract(){}
 
-    public UserContract(){
-
-    }
     public static abstract class User implements BaseColumns {
         public static final String TABLE_NAME = "user";
         public static final String ID = "id";
@@ -32,4 +27,5 @@ public class UserContract {
                 "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
+
 }

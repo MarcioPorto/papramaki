@@ -56,15 +56,9 @@ public class  Budget {
         return budget;
     }
 
-    public String getFormattedBudget() {
-        DecimalFormat formatter = new DecimalFormat("$0.00");
-        return formatter.format(budget);
-    }
-
     public void setBudget(double budget) {
         this.budget = budget;
     }
-
 
     public boolean isExpired() {
         return expired;
@@ -80,6 +74,11 @@ public class  Budget {
 
     public void setExpirationDate(Date expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getFormattedBudget() {
+        DecimalFormat formatter = new DecimalFormat("$0.00");
+        return formatter.format(budget);
     }
 
     @Override

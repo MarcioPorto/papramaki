@@ -10,7 +10,7 @@ import com.papramaki.papramaki.ui.BudgetFragment;
 import com.papramaki.papramaki.ui.HistoryFragment;
 
 /**
- * This is the file that handles all the fragments we will
+ * This is the file that handles all the fragments we
  * display in the main arch of the app.
  */
 public class MainFragmentAdapter extends FragmentPagerAdapter {
@@ -30,7 +30,7 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
     /**
      * Makes sure to display the correct fragment on the screen.
      * @param position      the position of the fragment (index swiping left or right)
-     * @return              the correct fragment
+     * @return              the fragment to be displayed
      */
     @Override
     public Fragment getItem(int position) {
@@ -57,7 +57,6 @@ public class MainFragmentAdapter extends FragmentPagerAdapter {
 
     /**
      * Returns an appropriate title for each fragment.
-     * We will change this method later once we actually have titles
      * @param position      the position of the fragment
      * @return              the title
      */

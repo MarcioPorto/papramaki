@@ -51,12 +51,12 @@ public class DeductionActivity extends AppCompatActivity {
     protected Spinner mUserCategoriesSpinner;
     protected EditText mCategoryInput;
     protected Button mAddButton;
-    protected APIHelper mAPIHelper;
     protected int mCategoryId;
     protected User user;
+    protected List<String> mCategoriesDropdownItems = new ArrayList<String>();
 
     protected DatabaseHelper mDbHelper;
-    protected List<String> mCategoriesDropdownItems = new ArrayList<String>();
+    protected APIHelper mAPIHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

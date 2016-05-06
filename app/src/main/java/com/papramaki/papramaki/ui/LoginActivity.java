@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText mPassword;
     protected Button mLogInButton;
     protected Button mSignUpButton;
+
     protected DatabaseHelper mDbHelper;
     protected APIHelper mAPIHelper;
 
@@ -43,24 +44,25 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mDbHelper = new DatabaseHelper(this);
 
+        mAPIHelper = new APIHelper(this, this);
+        mDbHelper = new DatabaseHelper(this);
         if(mDbHelper.getUser().getUid() != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("caller", "LoginActivity");
             startActivity(intent);
         }
-        System.out.println("UID //////////////////////////////" + mDbHelper.getUser());
+        Log.d(TAG, "UID //////////////////////////////" + mDbHelper.getUser());
+
         mUsername = (EditText)findViewById(R.id.emailInput);
         mPassword = (EditText)findViewById(R.id.password);
         mLogInButton = (Button)findViewById(R.id.login);
         mSignUpButton = (Button)findViewById(R.id.signUp);
-        mAPIHelper = new APIHelper(this, this);
 
         mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getUser(mUsername.getText().toString(), mPassword.getText().toString());
+                newUserSession(mUsername.getText().toString(), mPassword.getText().toString());
             }
         });
 
@@ -83,8 +85,13 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-    //Get request sign user
-    private void getUser(String email, String password) {
+
+    /**
+     * Makes a POST request to create a new User session.
+     * @param email         the email of the User
+     * @param password      the password of the User
+     */
+    private void newUserSession(String email, String password) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/auth/sign_in";
         RequestBody params = new FormEncodingBuilder()
                 .add("email", email)
@@ -158,7 +165,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        if(activity.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }

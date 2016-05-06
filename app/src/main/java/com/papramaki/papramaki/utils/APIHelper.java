@@ -24,9 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by paulchery on 4/21/16.
- */
 public class APIHelper {
 
     private Context context;
@@ -37,7 +34,10 @@ public class APIHelper {
         this.activity = activity;
     }
 
-
+    /**
+     * Checks if the User is connected to the internet.
+     * @return      true or false
+     */
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -72,7 +72,7 @@ public class APIHelper {
 
     /**
      * Shows errors, if they exist, when the user tries to log in
-     * @param jsonData - the json response in String format
+     * @param jsonData          the json response in String format
      * @throws JSONException
      */
     public void showLogInErrors(String jsonData) throws JSONException{
@@ -89,7 +89,7 @@ public class APIHelper {
 
     /**
      * Shows errors, if they exist, when the user tries to sign up
-     * @param jsonData - the json response in String format
+     * @param jsonData          the json response in String format
      * @throws JSONException
      */
     public void showSignUpErrors(String jsonData) throws JSONException{
@@ -105,8 +105,14 @@ public class APIHelper {
         });
     }
 
+    /**
+     * Parses JSON data from the API to retrieve the most recent budget.
+     * It creates a Budget object using the JSON data and returns it.
+     * @param jsonData          JSON data from GET#budgets
+     * @return                  Budget object from data
+     * @throws JSONException
+     */
     public Budget getLatestBudget(String jsonData) throws JSONException {
-
         Budget budget = new Budget();
         if(!jsonData.equals("[]")) {
             JSONArray response = new JSONArray(jsonData);
@@ -138,6 +144,13 @@ public class APIHelper {
         return budget;
     }
 
+    /**
+     * Parses JSON data from the API to retrieve the most recent budget AFTER A PUT REQUEST.
+     * It creates a Budget object using the JSON data and returns it.
+     * @param jsonData          JSON data from PUT#budgets/:id
+     * @return                  Budget object from data
+     * @throws JSONException
+     */
     public Budget getLatestBudgetFromPR(String jsonData) throws JSONException {
 
         Budget budget = new Budget();
@@ -168,13 +181,20 @@ public class APIHelper {
         return budget;
     }
 
+    /**
+     * Parses JSON data from the API to retrieve the expenditures that belong to the most recent budget.
+     * It creates a History object using the JSON data and returns it.
+     * @param jsonData          JSON data from GET#budgets
+     * @return                  History object from data
+     * @throws JSONException
+     */
     public History getHistory(String jsonData) throws JSONException {
 
         JSONArray response = new JSONArray(jsonData);
         History history = new History();
-        List<Expenditure> expenditureList = new ArrayList<Expenditure>();
+        List<Expenditure> expenditureList = new ArrayList<>();
 
-        //TODO: If first time user, no budget exists so don't go through loop
+        // TODO: If first time user, no budget exists so don't go through loop
         if(!jsonData.equals("[]")) {
             for (int i = 0; i < 1; i++) {
                 JSONObject currentBudget = response.getJSONObject(i);
@@ -199,11 +219,17 @@ public class APIHelper {
 
     }
 
+    /**
+     * Parses JSON data from the API to retrieve the categories that belong to the current User.
+     * @param jsonData          JSON data from GET#categories
+     * @return                  a list of categories that have been previously entered by the User
+     * @throws JSONException
+     */
     public List<Category> getCategories(String jsonData) throws JSONException {
 
         JSONArray response = new JSONArray(jsonData);
 
-        List<Category> categoryList = new ArrayList<Category>();
+        List<Category> categoryList = new ArrayList<>();
 
         //TODO: If first time user, no budget exists so don't go through loop
         if(!jsonData.equals("[]")) {
@@ -213,7 +239,7 @@ public class APIHelper {
                 String color = currentCategory.getString("color");
                 int id = currentCategory.getInt("id");
                 JSONArray expenditures = currentCategory.getJSONArray("expenditures");
-                List<Expenditure> expenditureList = new ArrayList<Expenditure>();
+                List<Expenditure> expenditureList = new ArrayList<>();
                 for (int j = 0; j < expenditures.length(); j++) {
                     JSONObject currentExpenditure = expenditures.getJSONObject(j);
                     if(currentExpenditure.getInt("budget_id") == LocalData.budget.getId()){
@@ -235,27 +261,36 @@ public class APIHelper {
 
     }
 
-
+    /**
+     * Parses JSON data from the API to retrieve the balance that belong to the current User.
+     * @param jsonData          JSON data from GET#balances
+     * @return                  the balance amount as a double
+     * @throws JSONException
+     */
     public double getLatestBalance(String jsonData) throws JSONException {
-
         JSONObject object = new JSONObject(jsonData);
         return object.getDouble("amount");
-
     }
 
+    /**
+     * Parses JSON data from the API to retrieve info from the current User.
+     * @param jsonData          JSON data
+     * @return                  a JSONObject
+     * @throws JSONException
+     */
     public JSONObject getUserInfoFromResponse(String jsonData) throws JSONException {
-
         JSONObject response = new JSONObject(jsonData);
-        JSONObject data = response.getJSONObject("data");
-
-        return data;
+        return response.getJSONObject("data");
     }
 
+    /**
+     * Converts a String to a Date object
+     * @param dateString        date as a String
+     * @return                  date as Date
+     */
     public Date formatDate(String dateString){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date date = sdf.parse(dateString, new ParsePosition(0));
-        return date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        return sdf.parse(dateString, new ParsePosition(0));
     }
-
 
 }

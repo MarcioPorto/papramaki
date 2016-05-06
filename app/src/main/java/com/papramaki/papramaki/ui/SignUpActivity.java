@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected EditText mPassword;
     protected EditText mPasswordConfirmation;
     protected Button mSignUpButton;
+
     protected DatabaseHelper mDbHelper;
     protected APIHelper mAPIHelper;
 
@@ -44,12 +45,13 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        mDbHelper = new DatabaseHelper(this);
+        mAPIHelper = new APIHelper(this, this);
+
         mUsername = (EditText)findViewById(R.id.emailInput);
         mPassword = (EditText)findViewById(R.id.password);
         mPasswordConfirmation = (EditText)findViewById(R.id.password_confirmation);
         mSignUpButton = (Button)findViewById(R.id.sign_up_button);
-        mDbHelper = new DatabaseHelper(this);
-        mAPIHelper = new APIHelper(this, this);
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +61,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Makes a POST request to create a new User
+     * @param email                     the email of the User to be created
+     * @param password                  the password
+     * @param passwordConfirmation      the password confirmation
+     */
     private void createNewUser(String email, String password, String passwordConfirmation) {
         String apiUrl = "https://papramakiapi.herokuapp.com/api/auth";
         RequestBody params = new FormEncodingBuilder()
@@ -90,7 +98,6 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onResponse(Response response) throws IOException {
                     try {
                         final String jsonData = response.body().string();
-                        // TODO: HTTP header to store locally
                         final String AccessToken = response.header("Access-Token");
                         final String Client = response.header("Client");
                         final String Uid = response.header("Uid");
@@ -107,12 +114,8 @@ public class SignUpActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Toast.makeText(SignUpActivity.this, resp.toString() + AccessToken + " " + Client + " " + Uid, Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                     intent.putExtra("caller", "SignUpActivity");
-//                                    intent.putExtra("Access-Token", AccessToken);
-//                                    intent.putExtra("Client", Client);
-//                                    intent.putExtra("Uid", Uid);
                                     startActivity(intent);
                                 }
                             });
@@ -139,7 +142,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        if (activity.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }
