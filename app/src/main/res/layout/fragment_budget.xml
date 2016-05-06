@@ -44,7 +44,6 @@
             android:inputType="numberDecimal"
             android:layout_below="@+id/budgetDisplay"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="0dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/pink_a400"/>
 
@@ -56,8 +55,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginRight="40dp"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="290dp">
-            //android:layout_below="@+id/budget">
+            android:layout_below="@+id/budget">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,8 +105,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_attach_money_white_24dp"
         android:clickable="true"
-        android:layout_marginTop="470dp"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         app:backgroundTint="@color/pink_a400"/>
 
