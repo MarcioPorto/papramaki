@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -73,6 +74,7 @@ public class BudgetFragment extends Fragment {
         mBudgetDisplay = (TextView)rootView.findViewById(R.id.budgetDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
         mEditDate = (EditText)rootView.findViewById(R.id.edit_date);
+        mEditDate.setInputType(InputType.TYPE_NULL);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
 
         mBudget = (EditText) rootView.findViewById(R.id.budget);
@@ -219,6 +221,7 @@ public class BudgetFragment extends Fragment {
         mSpinner.setVisibility(View.VISIBLE);
         mDurationLabel.setVisibility(View.VISIBLE);
         mWeeksLabel.setVisibility(View.VISIBLE);
+        mBudget.setText("");
         mButton.setText("SAVE");
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -231,7 +234,7 @@ public class BudgetFragment extends Fragment {
                     LocalData.balance = 0;
                     LocalData.categories.clear();
                     Double amount = Double.valueOf(strAmount);
-                    postBudgetRequest(amount,duration);
+                    postBudgetRequest(amount, duration);
                     resetBalanceRequest(amount);
                 }
 
@@ -297,18 +300,15 @@ public class BudgetFragment extends Fragment {
                 public void onResponse(final Response response) throws IOException {
                     try {
                         final String jsonData = response.body().string();
-
                         Log.v(TAG, jsonData);
-                        if (response.isSuccessful()) {
-                            LocalData.budget = mAPIHelper.getLatestBudget(jsonData);
 
+                        if (response.isSuccessful()) {
                             MainActivity.runOnUI(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MainActivity.getBudgetsRequest();
+                                    MainActivity.retrieveAllData();
                                 }
                             });
-
                         } else {
                             mAPIHelper.alertUserAboutError(jsonData);
                         }
@@ -375,33 +375,6 @@ public class BudgetFragment extends Fragment {
         }
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if(activity.getCurrentFocus() != null) {
-            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
-    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            Date calendarDate = myCalendar.getTime();
-            DateFormat df = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
-            String newDate = df.format(calendarDate);
-            mEditDate.setText(newDate);
-        }
-    };
-
-    private void pickDate() {
-        new DatePickerDialog(getActivity(), date,
-                myCalendar.get(Calendar.YEAR),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
     /**
      * Edits the current budget, if there is one.
      * @param budgetAmount      the amount, in dollars
@@ -448,8 +421,8 @@ public class BudgetFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     updateLayout();
-                                    AnalysisFragment.updateLayout();
                                     Toast.makeText(MainActivity.getAppContext(), "Budget updated!", Toast.LENGTH_LONG).show();
+                                    MainActivity.retrieveAllData();
                                 }
                             });
 
@@ -466,6 +439,33 @@ public class BudgetFragment extends Fragment {
         } else {
             Toast.makeText(MainActivity.getAppContext(), "Network is unavailable", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if(activity.getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            Date calendarDate = myCalendar.getTime();
+            DateFormat df = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+            String newDate = df.format(calendarDate);
+            mEditDate.setText(newDate);
+        }
+    };
+
+    private void pickDate() {
+        new DatePickerDialog(getActivity(), date,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
 }

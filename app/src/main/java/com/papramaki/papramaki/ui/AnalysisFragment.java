@@ -110,69 +110,81 @@ public class AnalysisFragment extends Fragment {
      */
     public static void renderDefaultLayout() {
         mPieGraph.removeSlices();
-        PieSlice slice;
-        mCategories = retrieveCurrentCategories();
+        DecimalFormat formatter = new DecimalFormat("$0.00");
 
-        for(Category category : mCategories){
-            slice = new PieSlice();
-            slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
-            slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
-            slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
-            slice.setTitle(category.getName());
-            mPieGraph.addSlice(slice);
+        if (!LocalData.budget.isExpired()) {
+            PieSlice slice;
+            mCategories = retrieveCurrentCategories();
+
+            for(Category category : mCategories){
+                slice = new PieSlice();
+                slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
+                slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
+                slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
+                slice.setTitle(category.getName());
+                mPieGraph.addSlice(slice);
+            }
+
+            moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
+            budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
+
+            if(LocalData.balance >= 0) {
+                balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+                balanceView.setTextColor(Color.BLACK);
+            } else {
+                balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
+                balanceView.setTextColor(Color.RED);
+            }
+        } else {
+            moneySpentView.setText("You've spent $0.00");
+            budgetView.setText(" of $0.00");
+            balanceView.setText("You have exceeded your budget by $0.00");
         }
 
         durationView.setText("(from ___ to ___)");
 
         titleView.setText("Your Spending Analysis");
-        DecimalFormat formatter = new DecimalFormat("$0.00");
-        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
-        budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
 
-        if(LocalData.balance >= 0) {
-            balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
-            balanceView.setTextColor(Color.BLACK);
-        } else {
-            balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
-            balanceView.setTextColor(Color.RED);
-        }
     }
 
     /**
      * Updates the layout based on the data retrieved from the API.
      */
     public static void updateLayout() {
-        mPieGraph.removeSlices();
-        PieSlice slice;
-        mCategories = retrieveCurrentCategories();
+        if (!LocalData.budget.isExpired()) {
+            mPieGraph.removeSlices();
+            PieSlice slice;
+            mCategories = retrieveCurrentCategories();
 
-        for(Category category : mCategories){
-            slice = new PieSlice();
-            slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
-            slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
-            slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
-            slice.setTitle(category.getName());
-            mPieGraph.addSlice(slice);
-        }
+            for(Category category : mCategories){
+                slice = new PieSlice();
+                slice.setColor(Color.parseColor(category.getColor()));//mColors[color1Index]));
+                slice.setSelectedColor(Color.parseColor(category.getColor()));//mColors[color2Index]));
+                slice.setValue(Float.parseFloat(String.valueOf(category.getSumCategory())));//Float.parseFloat(String.valueOf(expensesMap.get(category))));
+                slice.setTitle(category.getName());
+                mPieGraph.addSlice(slice);
+            }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
-        String creationDate = sdf.format(LocalData.budget.getCreationDate());
-        String expirationDate = sdf.format(LocalData.budget.getExpirationDate());
-        durationView.setText("(from " + creationDate + " to " + expirationDate + ")");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+            String creationDate = sdf.format(LocalData.budget.getCreationDate());
+            String expirationDate = sdf.format(LocalData.budget.getExpirationDate());
+            durationView.setText("(from " + creationDate + " to " + expirationDate + ")");
 
-        titleView.setText("Your Spending Analysis");
-        DecimalFormat formatter = new DecimalFormat("$0.00");
-        moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
-        budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
+            titleView.setText("Your Spending Analysis");
+            DecimalFormat formatter = new DecimalFormat("$0.00");
+            moneySpentView.setText("You've spent " + String.valueOf(formatter.format(LocalData.history.getExpenditureSum())));
+            budgetView.setText(" of " + LocalData.budget.getFormattedBudget());
 
-        if(LocalData.balance >= 0) {
-            balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
-            balanceView.setTextColor(Color.BLACK);
+            if(LocalData.balance >= 0) {
+                balanceView.setText("You have " + formatter.format(LocalData.balance) + " left in your budget.");
+                balanceView.setTextColor(Color.BLACK);
+            } else {
+                balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
+                balanceView.setTextColor(Color.RED);
+            }
         } else {
-            balanceView.setText("You have exceeded your budget by " + formatter.format(-1 * LocalData.balance));
-            balanceView.setTextColor(Color.RED);
+            renderDefaultLayout();
         }
-
     }
 
     /**
