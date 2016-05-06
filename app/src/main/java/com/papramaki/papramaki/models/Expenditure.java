@@ -45,15 +45,6 @@ public class Expenditure {
     }
 
 
-//    public String toString() {
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy");
-//        if (category.equals("")) {
-//            return "$" + amount + " on " + simpleDateFormat.format(date) + ".";
-//        } else {
-//            return "$" + amount + " on " + category.toString() + " on " + simpleDateFormat.format(date) + ".";
-//        }
-//    }
-
     public String dateToString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy");
         return sdf.format(date);

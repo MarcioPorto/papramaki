@@ -7,8 +7,6 @@ import java.util.Date;
 public class  Budget {
 
     private double budget;
-    private double balance;
-    private double moneySpent;
     private int duration;
     private int id;
     private boolean expired;
@@ -17,7 +15,6 @@ public class  Budget {
 
     public Budget(double budget, int id) {
         this.budget = budget;
-        this.moneySpent = budget - balance;
         this.id = id;
         this.creationDate = Calendar.getInstance().getTime();
         this.expirationDate = Calendar.getInstance().getTime();
@@ -68,28 +65,6 @@ public class  Budget {
         this.budget = budget;
     }
 
-    public double getBalance(){
-        return balance;
-    }
-
-    public String getFormattedBalance () {
-        DecimalFormat formatter = new DecimalFormat("$0.00");
-        return formatter.format(balance);
-    }
-
-    public void setBalance(double balance){
-        this.balance = balance;
-    }
-
-    public double getMoneySpent() {
-        this.moneySpent = this.budget - this.balance;
-        return moneySpent;
-    }
-
-    public String getFormattedMoneySpent() {
-        DecimalFormat formatter = new DecimalFormat("$0.00");
-        return formatter.format(getMoneySpent());
-    }
 
     public boolean isExpired() {
         return expired;

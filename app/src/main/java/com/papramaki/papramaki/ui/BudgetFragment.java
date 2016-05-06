@@ -205,6 +205,23 @@ public class BudgetFragment extends Fragment {
         mDurationLabel.setVisibility(View.VISIBLE);
         mWeeksLabel.setVisibility(View.VISIBLE);
         mButton.setText("SAVE");
+//        mButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String strAmount = mBudget.getText().toString();
+//                String duration = mSpinner.getSelectedItem().toString();
+//                if(!strAmount.equals("")) {
+//                    LocalData.history.getExpenditures().clear();
+//                    LocalData.balance = 0;
+//                    LocalData.categories.clear();
+//                    Double amount = Double.valueOf(strAmount);
+//                    postBudgetRequest(amount,duration);
+//                    resetBalanceRequest(amount);
+//                }
+//
+//                mBudget.getText().clear();
+//            }
+//        });
 
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override

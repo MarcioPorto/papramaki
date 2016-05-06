@@ -31,8 +31,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database){
-        database.execSQL(BudgetContract.Budget.SQL_CREATE_ENTRIES);
-        database.execSQL(ExpenditureContract.Expenditure.SQL_CREATE_ENTRIES);
         database.execSQL(UserContract.User.SQL_CREATE_ENTRIES);
 
     }
@@ -42,134 +40,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        db.execSQL(BudgetContract.Budget.SQL_DELETE_ENTRIES);
-        db.execSQL(ExpenditureContract.Expenditure.SQL_DELETE_ENTRIES);
         db.execSQL(UserContract.User.SQL_DELETE_ENTRIES);
         onCreate(db);
     }
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
-    }
-
-    public int getLatestBudgetId(){
-        String LATEST_ID =
-                "SELECT " + BudgetContract.Budget.COLUMN_NAME_BUDGET_ID +
-                        " FROM " + BudgetContract.Budget.TABLE_NAME +
-                        " WHERE " + BudgetContract.Budget.COLUMN_NAME_BUDGET_ID +
-                        " = (SELECT MAX(" + BudgetContract.Budget.COLUMN_NAME_BUDGET_ID + ") FROM " +
-                        BudgetContract.Budget.TABLE_NAME + ");";
-
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(LATEST_ID, null);
-        int id = -1;
-        if(cursor != null && cursor.moveToLast()){
-            id = cursor.getInt(0);
-        }
-        db.close();
-        return id;
-    }
-
-    public void addBudget(Budget budget){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(BudgetContract.Budget.COLUMN_NAME_AMOUNT, budget.getBudget());// budget amount
-        values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, budget.getBalance()); // budget balance
-
-        if(values != null) {
-            // Inserting Row
-            db.insert(BudgetContract.Budget.TABLE_NAME, null, values);
-        }
-        db.close(); // Closing database connection
-    }
-
-
-    public void updateBalance(double balance){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(BudgetContract.Budget.COLUMN_NAME_BALANCE, balance);
-        String selection = "id = (SELECT MAX(id) FROM " + BudgetContract.Budget.TABLE_NAME + ")";
-        db.update(BudgetContract.Budget.TABLE_NAME, values, selection, null);
-        db.close();
-    }
-
-    public void addExpenditure(Expenditure expenditure){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_AMOUNT, expenditure.getAmount());// expenditure amount
-        //values.put(ExpenditureContract.Expenditure.COLUMN_NAME_CATEGORY, expenditure.getCategory());
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_DATE, expenditure.getDate().getTime());
-        values.put(ExpenditureContract.Expenditure.COLUMN_NAME_BUDGET_ID, this.getLatestBudgetId());
-
-
-        if(values != null) {
-            // Inserting Row
-            db.insert(ExpenditureContract.Expenditure.TABLE_NAME, null, values);
-        }
-        db.close(); // Closing database connection
-
-    }
-    public int count(String table){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String count =  "SELECT COUNT(*) FROM " + table + ";";
-        Cursor mCursor = db.rawQuery(count, null);
-        mCursor.moveToFirst();
-        int iCount = mCursor.getInt(0);
-        db.close();
-        return iCount;
-    }
-
-    public List<Expenditure> getLatestExpenditures(){
-        List<Expenditure> history = new ArrayList<Expenditure>();
-        if(count(ExpenditureContract.Expenditure.TABLE_NAME) > 0 ) {
-            String selectQuery = "SELECT * FROM " + ExpenditureContract.Expenditure.TABLE_NAME +
-                    " WHERE " + ExpenditureContract.Expenditure.COLUMN_NAME_BUDGET_ID +
-                    "=" + getLatestBudgetId() +
-                    ";";
-
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cursor = db.rawQuery(selectQuery, null);
-
-            Expenditure expenditure;
-            // looping through all rows and adding to list
-            if (cursor.moveToFirst()) {
-                do {
-                    double amount = cursor.getDouble(2);
-                    int category = cursor.getInt(3);
-                    long dateLong = cursor.getLong(4);
-
-                    Date date = new Date();
-                    date.setTime(dateLong);
-                    expenditure = new Expenditure(amount, category, date);
-
-                    history.add(expenditure);
-                } while (cursor.moveToNext());
-            }
-            db.close();
-        }
-
-        return history;
-    }
-    public Budget getLatestBudget(){
-        String latestBudget =
-                "SELECT * FROM " + BudgetContract.Budget.TABLE_NAME +
-                        " WHERE id = (SELECT MAX(id) FROM " +
-                        BudgetContract.Budget.TABLE_NAME + ");";
-
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(latestBudget, null);
-        Budget budget = new Budget(0,0);
-        if(cursor != null && cursor.moveToLast()) {
-            double amount = cursor.getDouble(1);
-            double balance = cursor.getDouble(2);
-            budget.setBudget(amount);
-            budget.setBalance(balance);
-        }
-        db.close();
-        return budget;
     }
 
 
@@ -198,11 +74,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User user = new User();
         if(cursor != null && cursor.moveToLast()){
             String uid = cursor.getString(1);
-            System.out.println("////////////////////////UID: " + uid);
             String accessToken = cursor.getString(2);
-            System.out.println("////////////////////////ACCESSTOKEN: " + accessToken);
             String client = cursor.getString(3);
-            System.out.println("////////////////////////CLIENT: " + client);
             int user_id = cursor.getInt(0);
             user.setAccessToken(accessToken);
             user.setClient(client);
