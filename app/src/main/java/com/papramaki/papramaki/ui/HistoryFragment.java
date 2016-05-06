@@ -15,6 +15,7 @@ import com.papramaki.papramaki.database.DatabaseHelper;
 import com.papramaki.papramaki.models.Expenditure;
 import com.papramaki.papramaki.utils.LocalData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryFragment extends ListFragment {
@@ -60,13 +61,17 @@ public class HistoryFragment extends ListFragment {
      * method in MainActivity.
      */
     public static void updateLayout() {
+        ArrayAdapter<Expenditure> histAdapter;
         if (!LocalData.budget.isExpired()) {
             expenditureHistory = LocalData.history.getExpenditures();
-            ArrayAdapter<Expenditure> histAdapter = new HistoryListAdapter(MainActivity.getAppContext(), expenditureHistory);
-            new android.app.ListFragment().setListAdapter(histAdapter);
-            mCurrentHistoryFragmentInstance.setListAdapter(histAdapter);
-            histAdapter.notifyDataSetChanged();
+            histAdapter = new HistoryListAdapter(MainActivity.getAppContext(), expenditureHistory);
+        } else {
+            List<Expenditure> empty = new ArrayList<>();
+            histAdapter = new HistoryListAdapter(MainActivity.getAppContext(), empty);
         }
+        new android.app.ListFragment().setListAdapter(histAdapter);
+        mCurrentHistoryFragmentInstance.setListAdapter(histAdapter);
+        histAdapter.notifyDataSetChanged();
     }
 
 }

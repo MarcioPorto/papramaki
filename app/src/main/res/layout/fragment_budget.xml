@@ -34,6 +34,18 @@
             android:layout_below="@+id/another_fragment_text"
             android:layout_centerHorizontal="true"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_budget_text"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:gravity="center"
+            android:layout_below="@id/budgetDisplay"
+            android:layout_marginTop="25dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Edit the amount and expiration date below:"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +55,7 @@
             android:hint="Enter your budget"
             android:inputType="numberDecimal"
             android:layout_below="@+id/budgetDisplay"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/pink_a400"/>
 

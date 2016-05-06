@@ -62,6 +62,7 @@ public class BudgetFragment extends Fragment {
     protected static APIHelper mAPIHelper;
     protected static TextView mDurationLabel;
     protected static TextView mWeeksLabel;
+    protected static TextView mEditBudgetText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +76,7 @@ public class BudgetFragment extends Fragment {
         mButton = (Button)rootView.findViewById(R.id.button2);
         mEditDate = (EditText)rootView.findViewById(R.id.edit_date);
         mEditDate.setInputType(InputType.TYPE_NULL);
+        mEditBudgetText = (TextView)rootView.findViewById(R.id.edit_budget_text);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
 
         mBudget = (EditText) rootView.findViewById(R.id.budget);
@@ -106,6 +108,7 @@ public class BudgetFragment extends Fragment {
         mButton.setText("SAVE");
         mEditDate.setText("");
         mEditDate.setVisibility(View.GONE);
+        mEditBudgetText.setVisibility(View.GONE);
 
         mEditDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +169,7 @@ public class BudgetFragment extends Fragment {
                 Date d = LocalData.budget.getExpirationDate();
                 DateFormat df = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
                 mEditDate.setText(df.format(d));
+                mEditBudgetText.setVisibility(View.VISIBLE);
 
                 mSpinner.setVisibility(View.GONE);
                 mDurationLabel.setVisibility(View.GONE);
@@ -217,6 +221,7 @@ public class BudgetFragment extends Fragment {
 
         // Updates the layout.
         mEditDate.setVisibility(View.GONE);
+        mEditBudgetText.setVisibility(View.GONE);
 
         mSpinner.setVisibility(View.VISIBLE);
         mDurationLabel.setVisibility(View.VISIBLE);
