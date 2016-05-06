@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a halper class that temporarily stores data retrieved from the API.
+ * This is a helper class that temporarily stores data retrieved from the API.
  */
 public class LocalData {
 

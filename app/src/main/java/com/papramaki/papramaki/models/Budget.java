@@ -4,6 +4,12 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Defines the budget model.
+ * A Budget has an amount, duration, id number, creation and expiration date,
+ * and boolean to check if it is expired.
+ */
+
 public class  Budget {
 
     private double budget;
