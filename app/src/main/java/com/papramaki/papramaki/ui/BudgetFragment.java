@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,10 +55,10 @@ public class BudgetFragment extends Fragment {
     protected static EditText mBudget;
     protected static Spinner mSpinner;
     protected static Button mButton;
+    protected static EditText mEditDate;
     protected static FloatingActionButton mFAB;
     protected static DatabaseHelper mDbHelper;
     protected static APIHelper mAPIHelper;
-    protected static Button mDatePickerButton;
     protected static TextView mDurationLabel;
     protected static TextView mWeeksLabel;
 
@@ -71,6 +72,7 @@ public class BudgetFragment extends Fragment {
         mTextView = (TextView)rootView.findViewById(R.id.another_fragment_text);
         mBudgetDisplay = (TextView)rootView.findViewById(R.id.budgetDisplay);
         mButton = (Button)rootView.findViewById(R.id.button2);
+        mEditDate = (EditText)rootView.findViewById(R.id.edit_date);
         mFAB = (FloatingActionButton)rootView.findViewById(R.id.FAB);
 
         mBudget = (EditText) rootView.findViewById(R.id.budget);
@@ -79,7 +81,6 @@ public class BudgetFragment extends Fragment {
         // these all handle picking a budget's expiration date
         mSpinner = (Spinner)rootView.findViewById(R.id.spinner);
         myCalendar = Calendar.getInstance();
-        mDatePickerButton = (Button)rootView.findViewById(R.id.date_picker_button);
         mDurationLabel = (TextView)rootView.findViewById(R.id.textView5);
         mWeeksLabel = (TextView)rootView.findViewById(R.id.textView6);
 
@@ -100,10 +101,11 @@ public class BudgetFragment extends Fragment {
         mSpinner.setAdapter(spinAdapter);
 
         mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
-        mDatePickerButton.setVisibility(View.GONE);
         mButton.setText("SAVE");
+        mEditDate.setText("");
+        mEditDate.setVisibility(View.GONE);
 
-        mDatePickerButton.setOnClickListener(new View.OnClickListener() {
+        mEditDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickDate();
@@ -158,7 +160,11 @@ public class BudgetFragment extends Fragment {
                 // If the budget is not expired yet
                 mBudgetDisplay.setText(String.valueOf(LocalData.budget.getFormattedBudget()));
                 mBudget.setText(String.valueOf(LocalData.budget.getBudget()) + "0");
-                mDatePickerButton.setVisibility(View.VISIBLE);
+                mEditDate.setVisibility(View.VISIBLE);
+                Date d = LocalData.budget.getExpirationDate();
+                DateFormat df = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+                mEditDate.setText(df.format(d));
+
                 mSpinner.setVisibility(View.GONE);
                 mDurationLabel.setVisibility(View.GONE);
                 mWeeksLabel.setVisibility(View.GONE);
@@ -169,10 +175,18 @@ public class BudgetFragment extends Fragment {
                 mButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Date calendarDate = myCalendar.getTime();
+                        String calendarDate = mEditDate.getText().toString();
+                        DateFormat format = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+                        Date date = Calendar.getInstance().getTime();
+                        try {
+                            date = format.parse(calendarDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                        String newDate = df.format(calendarDate);
+                        String newDate = df.format(date);
                         Log.d(TAG, newDate);
+
                         putBudgetRequest(Double.parseDouble(mBudget.getText().toString()), newDate);
                         resetBalanceRequest(Double.parseDouble(mBudget.getText().toString()) - LocalData.history.getExpenditureSum());
                     }
@@ -200,7 +214,8 @@ public class BudgetFragment extends Fragment {
         Toast.makeText(MainActivity.getAppContext(), "Please enter a new budget", Toast.LENGTH_LONG).show();
 
         // Updates the layout.
-        mDatePickerButton.setVisibility(View.GONE);
+        mEditDate.setVisibility(View.GONE);
+
         mSpinner.setVisibility(View.VISIBLE);
         mDurationLabel.setVisibility(View.VISIBLE);
         mWeeksLabel.setVisibility(View.VISIBLE);
@@ -355,6 +370,10 @@ public class BudgetFragment extends Fragment {
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            Date calendarDate = myCalendar.getTime();
+            DateFormat df = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+            String newDate = df.format(calendarDate);
+            mEditDate.setText(newDate);
         }
     };
 

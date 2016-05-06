@@ -44,13 +44,14 @@
             android:inputType="numberDecimal"
             android:layout_below="@+id/budgetDisplay"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="0dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/pink_a400"/>
 
         <LinearLayout
             android:id="@+id/linearDurationLayout"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="40dp"
@@ -64,13 +65,11 @@
                 android:text="Duration:"
                 android:id="@+id/textView5"/>
 
-            <Button
-                android:layout_width="180dp"
+            <EditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Edit Expiration Date"
-                android:textColor="@color/background_white"
-                android:id="@+id/date_picker_button"
-                android:background="@color/pink_a200"/>
+                android:id="@+id/edit_date"
+                android:inputType="date" />
 
             <Spinner
                 android:layout_width="50dp"

@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:hint="Amount ($)"
         android:id="@+id/amount_input"
         android:layout_below="@+id/page_title" />
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:textColor="@color/background_white"
-        android:background="@color/pink_a400"
+        android:background="@color/pink_a200"
         android:id="@+id/add_button"
         android:layout_below="@id/category_input"
         android:layout_marginTop="10dp"
